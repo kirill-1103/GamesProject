@@ -10,6 +10,5 @@ public interface PlayerDao {
     Optional<Player> getOneById(Long id);
     Set<Player> getAll();
     Optional<Player> getOneByLogin(String login);
-
     Optional<Player> getOneByEmail(String email);
 }

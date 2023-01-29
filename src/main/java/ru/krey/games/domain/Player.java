@@ -14,7 +14,7 @@ import java.util.Collection;
 @Builder
 @EqualsAndHashCode
 @NoArgsConstructor
-public class Player implements UserDetails {
+public class Player {
     private Long id;
     private String login;
     private String email;
@@ -25,34 +25,4 @@ public class Player implements UserDetails {
     private String photo;
     private Boolean enabled;
     private String Role;
-
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
-    }
-
-    @Override
-    public String getUsername() {
-        return null;
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return false;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return false;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return false;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return false;
-    }
 }

@@ -1,13 +1,23 @@
 package ru.krey.games.dao;
 
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
 import ru.krey.games.dao.interfaces.TttGameDao;
 import ru.krey.games.domain.TttGame;
 import ru.krey.games.mapper.TttGameMapper;
 
+import java.sql.PreparedStatement;
+import java.sql.Statement;
+import java.sql.Timestamp;
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 
 @Component
 @RequiredArgsConstructor
@@ -16,11 +26,78 @@ public class TttGameJdbcTemplate implements TttGameDao {
     private final TttGameMapper gameMapper;
     private final JdbcTemplate jdbcTemplate;
 
+    private static final Logger log = LoggerFactory.getLogger(TttGameJdbcTemplate.class);
+
     @Override
     public Optional<TttGame> getOneById(Long id) {
         String query = "SELECT * FROM ttt_game WHERE id = ?";
-        return jdbcTemplate.query(query,this.gameMapper,id)
+        return jdbcTemplate.query(query, this.gameMapper, id)
                 .stream()
                 .findAny();
+    }
+
+    @Override
+    public Set<TttGame> getAll() {
+        String query = "SELECT * FROM ttt_game";
+        return new HashSet<>(jdbcTemplate.query(query, this.gameMapper));
+    }
+
+    @Override
+    public TttGame saveOrUpdate(TttGame game) {
+        if (game == null) throw new IllegalArgumentException("TttGame object is null");
+
+        final Long player2Id = game.getPlayer2() == null ? null : game.getPlayer2().getId();
+        final Long winnerId  = game.getWinner()  == null ? null : game.getWinner().getId();
+
+        if (game.getId() != null && getOneById(game.getId()).isPresent()) {
+            /*update*/
+            log.info("Update TttGame: " + game);
+
+            String query = "UPDATE ttt_game SET " +
+                    "player1_id=?, player2_id=?, start_time=?,end_time=?," +
+                    "winner_id=?, size_field=?, base_duration=?, actual_duration=?," +
+                    "victory_reason_code=? WHERE id=? ";
+
+
+            int rows = jdbcTemplate.update(query, game.getPlayer1().getId(), player2Id,
+                    game.getStartTime(), game.getEndTime(), winnerId, game.getSizeField(),
+                    game.getBaseDuration(), game.getActualDuration(), game.getVictoryReasonCode(), game.getId());
+            if (rows!=1){
+                throw new RuntimeException("Invalid request to sql: "+query);
+            }
+            return game;
+        } else {
+            /*save*/
+            log.info("Save TttGame: " + game);
+
+            KeyHolder keyHolder = new GeneratedKeyHolder();
+
+            String query = "INSERT INTO ttt_game (player1_id,player2_id,start_time," +
+                    "end_time,winner_id,size_field,base_duration,actual_duration," +
+                    "victory_reason_code)" +
+                    "VALUES(?,?,?,?,?,?,?,?,?) RETURNING id";
+
+            jdbcTemplate.update(connection -> {
+                PreparedStatement ps = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+                int index = 1;
+                ps.setLong(index++, game.getPlayer1().getId());
+                ps.setLong(index++,player2Id);
+                ps.setTimestamp(index++, Timestamp.valueOf(game.getStartTime()));
+                ps.setTimestamp(index++,Timestamp.valueOf(game.getEndTime()));
+                ps.setLong(index++, winnerId);
+                ps.setInt(index++, game.getSizeField());
+                ps.setInt(index++, game.getBaseDuration());
+                ps.setInt(index++, game.getActualDuration());
+                ps.setInt(index, game.getVictoryReasonCode());
+                return ps;
+            },keyHolder);
+            return getOneById(keyHolder.getKey().longValue()).orElseThrow(()->new RuntimeException("TttGame must exist in this context"));
+        }
+    }
+
+    @Override
+    public Set<TttGame> getAllByPlayerId(Long playerId) {
+        String query = "SELECT * FROM ttt_game WHERE player1_id = ? OR player2_id = ?";
+        return new HashSet<>(jdbcTemplate.query(query, this.gameMapper, playerId, playerId));
     }
 }

@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 @Builder
 @EqualsAndHashCode
 @NoArgsConstructor
+@ToString
 public class GameMessage {
 
     @NonNull

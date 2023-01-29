@@ -14,6 +14,7 @@ import java.util.Collection;
 @Builder
 @EqualsAndHashCode
 @NoArgsConstructor
+@ToString
 public class Player {
     @NonNull
     private Long id;

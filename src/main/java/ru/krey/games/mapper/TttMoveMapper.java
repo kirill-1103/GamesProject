@@ -2,6 +2,7 @@ package ru.krey.games.mapper;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.stereotype.Component;
 import ru.krey.games.dao.interfaces.PlayerDao;
 import ru.krey.games.dao.interfaces.TttGameDao;
 import ru.krey.games.domain.Player;
@@ -13,6 +14,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 @RequiredArgsConstructor
+@Component
 public class TttMoveMapper implements RowMapper<TttMove> {
     private final PlayerDao playerDao;
     private final TttGameDao gameDao;

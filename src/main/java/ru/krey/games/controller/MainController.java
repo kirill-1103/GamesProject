@@ -4,7 +4,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import ru.krey.games.handler.auth.AuthFailureHandler;
 
 @Controller("/")
 public class MainController {

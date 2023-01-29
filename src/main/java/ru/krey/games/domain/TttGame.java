@@ -13,6 +13,7 @@ import java.util.Set;
 @Builder
 @EqualsAndHashCode
 @NoArgsConstructor
+@ToString
 public class TttGame implements Game {
 
     @NonNull

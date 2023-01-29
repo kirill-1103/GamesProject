@@ -6,7 +6,7 @@ import java.util.Optional;
 import java.util.Set;
 
 public interface PlayerDao {
-    void saveOrUpdate(Player player);
+    Player saveOrUpdate(Player player);
     Optional<Player> getOneById(Long id);
     Set<Player> getAll();
     Optional<Player> getOneByLogin(String login);

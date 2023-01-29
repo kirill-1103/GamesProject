@@ -14,16 +14,32 @@ import java.util.Set;
 @EqualsAndHashCode
 @NoArgsConstructor
 public class TttGame implements Game {
+
+    @NonNull
     private Long id;
+
+    @NonNull
     private Player player1;
+
     private Player player2;
+
+    @NonNull
     private LocalDateTime startTime;
+
     private LocalDateTime endTime;
+
     private Player winner;
-    private int size_field;
-    private int base_duration;
-    private int actual_duration;
-    private byte victory_reason_code;
+
+    @NonNull
+    private Integer sizeField;
+
+    @NonNull
+    private Integer baseDuration;
+
+    private Integer actualDuration;
+
+    @NonNull
+    private Byte victoryReasonCode;
 
     @Override
     public Set<Player> getPlayers() {
@@ -42,6 +58,6 @@ public class TttGame implements Game {
 
     @Override
     public int getDurationInMillis() {
-        return base_duration;
+        return baseDuration;
     }
 }

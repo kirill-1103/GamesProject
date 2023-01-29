@@ -11,10 +11,21 @@ import java.time.LocalDateTime;
 @EqualsAndHashCode
 @NoArgsConstructor
 public class GameMessage {
+
+    @NonNull
     private Long id;
-    private int gameId;
-    private int gameCode;
+
+    @NonNull
+    private Long gameId;
+
+    @NonNull
+    private Integer gameCode;
+
     private Player sender;
+
+    @NonNull
     private LocalDateTime time;
+
+    @NonNull
     private String message;
 }

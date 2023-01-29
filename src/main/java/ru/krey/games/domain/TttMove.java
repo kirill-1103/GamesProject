@@ -11,11 +11,23 @@ import java.time.LocalDateTime;
 @EqualsAndHashCode
 @NoArgsConstructor
 public class TttMove {
+    @NonNull
     private Long id;
-    private LocalDateTime absolute_time;
-    private Integer game_time_millis;
-    private int x_coordinate;
-    private int y_coordinate;
+
+    @NonNull
+    private LocalDateTime absoluteTime;
+
+    @NonNull
+    private Integer gameTimeMillis;
+
+    @NonNull
+    private Integer xCoordinate;
+
+    @NonNull
+    private Integer yCoordinate;
+
     private Player player;
+
+    @NonNull
     private TttGame game;
 }

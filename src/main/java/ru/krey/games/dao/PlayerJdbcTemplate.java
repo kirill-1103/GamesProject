@@ -14,8 +14,10 @@ import ru.krey.games.mapper.PlayerMapper;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.sql.Timestamp;
+import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
@@ -27,35 +29,34 @@ public class PlayerJdbcTemplate implements PlayerDao {
 
     @Override
     public Player saveOrUpdate(Player player) {
+        if (player == null) throw new IllegalArgumentException("Player object is null");
+
         if (player.getId() != null && getOneById(player.getId()).isPresent()) {
             /*update*/
-            log.info("Update player: "+player);
+            log.info("Update player: " + player);
 
             String sql = "UPDATE player SET login=?, email=?, sign_up_time=?, last_sign_in_time=?," +
                     " rating=?, role=?, photo=?, enabled=? WHERE id = ?";
             int rows = jdbcTemplate.update(sql, player.getLogin(), player.getEmail(), player.getSignUpTime(), player.getLastSignInTime(),
                     player.getRating(), player.getRole(), player.getPhoto(), player.getEnabled(), player.getId());
-            if (rows!=1){
-                throw new RuntimeException("Invalid request to sql: "+sql);
+            if (rows != 1) {
+                throw new RuntimeException("Invalid request to sql: " + sql);
             }
             return player;
         } else {
             /*save*/
-            log.info("Save player: "+player);
+            log.info("Save player: " + player);
             KeyHolder keyHolder = new GeneratedKeyHolder();
 
 
             String sql = "INSERT INTO player (login, password, email, sign_up_time, last_sign_in_time," +
                     "rating, role, photo, enabled) VALUES (?,?,?,?,?,?,?,?,?) RETURNING id";
-            jdbcTemplate.update(sql, player.getLogin(), player.getPassword(), player.getEmail(), player.getSignUpTime(), player.getLastSignInTime(),
-                    player.getRating(), player.getRole(), player.getPhoto(), player.getEnabled());
 
-
-            jdbcTemplate.update(connection->{
+            jdbcTemplate.update(connection -> {
                 int index = 1;
 
                 PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-                ps.setString(index++,player.getLogin());
+                ps.setString(index++, player.getLogin());
                 ps.setString(index++, player.getPassword());
                 ps.setString(index++, player.getEmail());
                 ps.setTimestamp(index++, Timestamp.valueOf(player.getSignUpTime()));
@@ -65,10 +66,10 @@ public class PlayerJdbcTemplate implements PlayerDao {
                 ps.setString(index++, player.getPhoto());
                 ps.setBoolean(index, player.getEnabled());
                 return ps;
-            },keyHolder);
+            }, keyHolder);
 
             return getOneById(keyHolder.getKey().longValue())
-                    .orElseThrow(()->new RuntimeException("Player must exist in this context!"));
+                    .orElseThrow(() -> new RuntimeException("Player must exist in this context!"));
         }
     }
 
@@ -82,7 +83,8 @@ public class PlayerJdbcTemplate implements PlayerDao {
 
     @Override
     public Set<Player> getAll() {
-        return null;
+        String query = "SELECT * FROM player";
+        return new HashSet<>(jdbcTemplate.query(query, this.playerMapper));
     }
 
     @Override
@@ -96,7 +98,7 @@ public class PlayerJdbcTemplate implements PlayerDao {
     @Override
     public Optional<Player> getOneByEmail(String email) {
         String query = "SELECT * FROM player WHERE email=?";
-        return jdbcTemplate.query(query, this.playerMapper,email)
+        return jdbcTemplate.query(query, this.playerMapper, email)
                 .stream()
                 .findAny();
     }

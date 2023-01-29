@@ -13,7 +13,6 @@ import java.time.LocalDateTime;
 @ToString
 public class GameMessage {
 
-    @NonNull
     private Long id;
 
     @NonNull

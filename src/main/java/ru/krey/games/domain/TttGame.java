@@ -16,7 +16,6 @@ import java.util.Set;
 @ToString
 public class TttGame implements Game {
 
-    @NonNull
     private Long id;
 
     @NonNull

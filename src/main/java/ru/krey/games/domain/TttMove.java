@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @EqualsAndHashCode
 @NoArgsConstructor
 public class TttMove {
-    @NonNull
+
     private Long id;
 
     @NonNull

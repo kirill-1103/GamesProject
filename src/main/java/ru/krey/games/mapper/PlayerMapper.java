@@ -21,6 +21,8 @@ public class PlayerMapper implements RowMapper<Player> {
                 .rating(rs.getInt("rating"))
                 .lastSignInTime(rs.getTimestamp("last_sign_in_time").toLocalDateTime())
                 .signUpTime(rs.getTimestamp("sign_up_time").toLocalDateTime())
+                .password(rs.getString("password"))
+                .Role(rs.getString("role"))
                 .build();
     }
 }

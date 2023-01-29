@@ -16,7 +16,6 @@ import java.util.Collection;
 @NoArgsConstructor
 @ToString
 public class Player {
-    @NonNull
     private Long id;
 
     @NonNull

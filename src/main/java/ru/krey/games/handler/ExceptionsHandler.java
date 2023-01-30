@@ -9,6 +9,8 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import ru.krey.games.domain.ExceptionResponse;
 import ru.krey.games.error.BadRequestException;
 
+import javax.servlet.ServletException;
+
 @ControllerAdvice
 public class ExceptionsHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(BadRequestException.class)
@@ -16,4 +18,5 @@ public class ExceptionsHandler extends ResponseEntityExceptionHandler {
         ExceptionResponse response = new ExceptionResponse(e.getMessage());
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
+
 }

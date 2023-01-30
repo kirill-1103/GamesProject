@@ -17,6 +17,10 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import ru.krey.games.handler.auth.AuthFilter;
 import ru.krey.games.handler.auth.AuthSuccessHandler;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
@@ -26,25 +30,31 @@ public class SecurityConfig {
             "/error", "/login**","/auth", "/register", "/logout","/registration"
     };
 
+    private static final String[] FOR_AUTHORIZED = new String[]{
+            "/me**", "/rating**","/chat**","/game_list**","/player_list**"
+    };
+
+
+
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                     .authorizeRequests()
                     .antMatchers(PUBLIC).permitAll()
-                    .anyRequest()
-                    .authenticated()
+                    .antMatchers(FOR_AUTHORIZED).authenticated()
                 .and()
                     .formLogin()
                     .loginPage("/auth")
 //                    .failureUrl("/auth?error=true")
-                    .defaultSuccessUrl("/")
+                    .defaultSuccessUrl("/me")
                     .loginProcessingUrl("/login")
                     .usernameParameter("login")
                     .passwordParameter("password")
                 .and()
                     .logout()
                     .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-                    .logoutSuccessUrl("/")
+                    .logoutSuccessUrl("/auth")
                     .permitAll()
                 .and()
                     .exceptionHandling()

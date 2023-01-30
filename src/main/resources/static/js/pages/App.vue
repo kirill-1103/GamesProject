@@ -1,13 +1,22 @@
 <template>
-  <div id="app">
-    <div class="head">
-      <form action="/logout" method="POST">
-        <input type="submit" value="logout">
-      </form>
-    </div>
-    Starting...
+  <div id="app" class="main-div">
+    <Nav></Nav>
 
     <router-view>
     </router-view>
   </div>
 </template>
+
+<script>
+import Nav from "components/Nav.vue"
+
+export default {
+  components: {
+    Nav
+  }
+}
+
+</script>
+
+<style>
+</style>

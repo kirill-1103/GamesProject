@@ -35,6 +35,26 @@ module.exports = {
                     'vue-style-loader',
                     'css-loader'
                 ]
+            },
+            {
+                test: /\.scss$/,
+                use: [
+                    'vue-style-loader',
+                    'css-loader',
+                    'sass-loader'
+                ]
+            },
+            {
+                test: /\.(png|jpg|gif)$/i,
+                use:[
+                    {
+                        loader: 'file-loader',
+                        options: {
+                            limit:8192
+                        }
+                    },
+
+                ]
             }
         ]
     },
@@ -46,5 +66,8 @@ module.exports = {
             path.join(__dirname, 'src', 'main', 'resources', 'static', 'js'),
             path.join(__dirname, 'node_modules'),
         ],
+        // alias: {
+        //     vue$: 'vue/dist/vue.esm.js'
+        // }
     }
 }

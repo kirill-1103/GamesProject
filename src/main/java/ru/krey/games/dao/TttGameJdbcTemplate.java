@@ -81,10 +81,18 @@ public class TttGameJdbcTemplate implements TttGameDao {
                 PreparedStatement ps = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
                 int index = 1;
                 ps.setLong(index++, game.getPlayer1().getId());
-                ps.setLong(index++,player2Id);
+                if (player2Id == null) {
+                    ps.setObject(index++, player2Id);
+                } else {
+                    ps.setLong(index++, player2Id);
+                }
                 ps.setTimestamp(index++, Timestamp.valueOf(game.getStartTime()));
                 ps.setTimestamp(index++,Timestamp.valueOf(game.getEndTime()));
-                ps.setLong(index++, winnerId);
+                if (winnerId == null) {
+                    ps.setObject(index++, winnerId);
+                } else {
+                    ps.setLong(index++, winnerId);
+                }
                 ps.setInt(index++, game.getSizeField());
                 ps.setInt(index++, game.getBaseDuration());
                 ps.setInt(index++, game.getActualDuration());

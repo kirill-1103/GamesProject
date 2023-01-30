@@ -90,7 +90,11 @@ public class TttMoveJdbcTemplate implements TttMoveDao {
                 ps.setLong(index++, move.getGameTimeMillis());
                 ps.setInt(index++, move.getXCoordinate());
                 ps.setInt(index++, move.getYCoordinate());
-                ps.setLong(index++,playerId);
+                if(playerId==null){
+                    ps.setObject(index++,playerId);
+                }else{
+                    ps.setLong(index++,playerId);
+                }
                 ps.setLong(index, move.getGame().getId());
                 return ps;
             },keyHolder);

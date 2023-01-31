@@ -23,12 +23,19 @@ export default {
         login:'',
         password:'',
         email:'',
-        photo:null
+        img_file:null
       },
       errorMessage:'',
-      config:{
+      badFileRequest:false,
+      config1:{
         headers: {
           'Content-Type': 'application/json;charset=UTF-8',
+          "Access-Control-Allow-Origin": "*",
+        }
+      },
+      config2:{
+        headers:{
+         'Content-Type':'multipart/form-data;application/json',
           "Access-Control-Allow-Origin": "*",
         }
       }
@@ -38,13 +45,44 @@ export default {
   methods:{
     submitForm(){
     /*TODO: check data before request*/
-
-      axios.post("/registration",this.form,this.config).then((result)=>{
-        this.$router.push({name:LOGIN_PAGE_NAME})
-        // console.log(result.data)
-      }).catch(error=>{
-        this.errorMessage = 'Failed to register from server. '+error.response.data.message
+      console.log(this.form.img_file)
+      let img = this.form.img_file;
+      this.form.img_file = null;
+      axios.post("/registration",
+          {login:this.form.login,password:this.form.password,email:this.form.email,player_img:img}
+          ,this.config2)
+          .then(result=>{
+            this.$router.push({name:LOGIN_PAGE_NAME});
+          }).catch(error=>{
         console.log(error)
+        this.errorMessage = 'Failed to register from server. '+error.response.data.message
+      })
+      // axios.post("/registration",this.form,this.config1).then((result)=>{
+      //   if(this.form.img_file){
+      //     this.form.img_file
+      //     console.log(this.form.img_file)
+      //     this.saveImg({image:this.form.img_file,player_id:result.data.id}).then(()=>{
+      //       if(this.badFileRequest){
+      //         this.badFileRequest=false;
+      //         alert("Не удалось загрузить фотографию. Попробуйте позже - в разделе профиль.")
+      //       }
+      //       this.$router.push({name:LOGIN_PAGE_NAME})
+      //     });
+      //   }else{
+      //     this.$router.push({name:LOGIN_PAGE_NAME})
+      //   }
+      //   // console.log(result.data)
+      // }).catch(error=>{
+      //   console.log(error)
+      //   this.errorMessage = 'Failed to register from server. '+error.response.data.message
+      // })
+    },
+    saveImg(img_file){
+      return axios.post("/api/file/player_image",img_file,this.config2).then((result)=>{
+
+      }).catch((error)=>{
+        this.badFileRequest=true;
+        console.log(error);
       })
     }
   }

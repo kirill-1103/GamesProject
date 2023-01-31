@@ -6,7 +6,7 @@
     <label for="password">Пароль:</label>
     <input type="password" id="password" name="password" v-model="form.password">
 
-    <button type="submit">Войти</button>
+    <button  type="submit">Войти</button>
 
     <button @click="goToSignUp">Регистрация</button>
 

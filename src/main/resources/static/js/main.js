@@ -9,6 +9,7 @@ import "bootstrap"
 import '../css/main.scss'
 import '../css/form.scss'
 import '../css/w3.css'
+import '../css/table.scss'
 
 const app = createApp(App)
     .use(router)

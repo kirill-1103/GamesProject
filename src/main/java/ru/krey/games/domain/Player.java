@@ -24,7 +24,6 @@ public class Player {
     @NonNull
     private String email;
 
-    @NonNull
     private String password;
 
     @NonNull

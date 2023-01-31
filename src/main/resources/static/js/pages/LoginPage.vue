@@ -40,8 +40,9 @@ export default {
       axios.post('/login', this.form).then(({data}) => {
         console.log(data);
       }).catch((error) => {
-        this.errorMessage = error.message
+        this.errorMessage = error.message;
         console.log(this.errorMessage);
+
       })
     }
   }

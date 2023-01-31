@@ -2,10 +2,8 @@ package ru.krey.games.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import ru.krey.games.domain.Player;
 import ru.krey.games.error.BadRequestException;
 import ru.krey.games.dao.interfaces.PlayerDao;
@@ -21,33 +19,44 @@ public class AuthController {
     private final PlayerDao playerDao;
 
     @PostMapping("/registration")
-    public void createPlayer(@RequestBody Player player){
-        if(player.getLogin() == null || player.getLogin().isBlank() ||
-                player.getEmail() == null || player.getEmail().isBlank() ||
-                player.getPassword() == null || player.getPassword().isBlank()){
+    public Player createPlayer(@RequestParam(value = "player_img", required = false) MultipartFile image,
+                               @RequestParam("login") String login,
+                               @RequestParam("email") String email,
+                               @RequestParam("password") String password
+    ) {
+
+        if (login == null || login.isBlank() ||
+                email == null || email.isBlank() ||
+                password == null || password.isBlank()) {
             throw new BadRequestException("Не все поля заполнены.");
         }
-        player.setLastSignInTime(LocalDateTime.now());
-        player.setSignUpTime(LocalDateTime.now());
-        player.setEnabled(true);
-        player.setRating(0);
-        player.setRole(RoleService.ROLE_USER);
-        player.setPassword(bCryptPasswordEncoder.encode(player.getPassword()));
 
-        if(playerLoginAlreadyExists(player.getLogin())){
+        Player player = Player.builder()
+                        .login(login)
+                        .email(email)
+                        .password(bCryptPasswordEncoder.encode(password))
+                        .lastSignInTime(LocalDateTime.now())
+                        .signUpTime(LocalDateTime.now())
+                        .enabled(true)
+                        .rating(0)
+                        .Role(RoleService.ROLE_USER)
+                        .build();
+
+
+        if (playerLoginAlreadyExists(player.getLogin())) {
             throw new BadRequestException("Пользователь с таким логином уже существует.");
         }
-        if(playerEmailAlreadyExists(player.getEmail())){
+        if (playerEmailAlreadyExists(player.getEmail())) {
             throw new BadRequestException("Пользователь с таким email уже существует.");
         }
-        playerDao.saveOrUpdate(player);
+        return playerDao.saveOrUpdate(player);
     }
 
-    private boolean playerLoginAlreadyExists(String login){
+    private boolean playerLoginAlreadyExists(String login) {
         return playerDao.getOneByLogin(login).isPresent();
     }
 
-    private boolean playerEmailAlreadyExists(String email){
+    private boolean playerEmailAlreadyExists(String email) {
         return playerDao.getOneByEmail(email).isPresent();
     }
 }

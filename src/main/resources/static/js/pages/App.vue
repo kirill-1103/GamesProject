@@ -9,10 +9,15 @@
 
 <script>
 import Nav from "components/Nav.vue"
+import axios from "axios";
+import updateAuthUserInLocalStorage from "../service/auth.js";
 
 export default {
   components: {
     Nav
+  },
+  created() {
+    updateAuthUserInLocalStorage();
   }
 }
 

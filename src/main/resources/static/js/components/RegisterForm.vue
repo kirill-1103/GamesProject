@@ -17,7 +17,7 @@
     <br>
 
     <label for="photo">Фото:</label>
-    <input type="text" id="photo" name="photo" v-model="form.photo">
+    <input type="file" id="photo" name="photo" v-on:change="fileChange">
     <br>
 
     <button type="submit">Регистрация</button>
@@ -72,6 +72,9 @@ export default {
       else{
         this.submitForm();
       }
+    },
+    fileChange(e){
+      this.form.img_file = e.target.files[0];
     }
   }
 }

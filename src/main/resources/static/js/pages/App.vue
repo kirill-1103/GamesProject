@@ -1,6 +1,6 @@
 <template>
   <div id="app" class="main-div">
-    <Nav></Nav>
+    <Nav :player="player"></Nav>
 
     <router-view>
     </router-view>
@@ -16,8 +16,32 @@ export default {
   components: {
     Nav
   },
+  data:function (){
+    return{
+      player:null
+    }
+  },
+  mounted() {
+    updateAuthUserInLocalStorage().then(()=> {
+          if (localStorage.getItem('player')) {
+            this.player = localStorage.getItem('player');
+          } else {
+            this.player = null;
+          }
+          console.log(this.player)
+        }
+    )
+  },
   created() {
-    updateAuthUserInLocalStorage();
+    updateAuthUserInLocalStorage().then(()=> {
+          if (localStorage.getItem('player')) {
+            this.player = localStorage.getItem('player');
+          } else {
+            this.player = null;
+          }
+          console.log(this.player)
+        }
+    )
   }
 }
 

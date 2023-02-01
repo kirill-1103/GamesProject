@@ -2,7 +2,8 @@
   <div style="width:100%;" class="card ">
     <div class="card-body">
       <div class="d-flex flex-column align-items-center text-center">
-        <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="Admin" class="rounded-circle" width="150">
+        <img v-if="!player.photo" src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="img" class="rounded-circle" width="150">
+        <img v-if="player.photo" src={{imgSrc}} id = "player_photo" alt="img" class="rounded-circle" width="150"/>
         <div class="mt-3">
           <h4>{{player.login}}</h4>
           <p class="text-secondary mb-1">Логин: {{player.login}}</p>
@@ -40,104 +41,7 @@
               <table>
 
                 <tbody  >
-                <tr>
-                  <th scope="row">1</th>
-                  <td>TTT</td>
-                  <td>KIRILL_KIRILL_KIRILL_KIRILL</td>
-                  <td>Победа</td>
-                  <td>11.03.2001 03:00:55</td>
-                </tr>
-                <tr>
-                  <th scope="row">2</th>
-                  <td>TTT</td>
-                  <td>KIRILL_KIRILL_KIRILL_KIRILL</td>
-                  <td>Победа</td>
-                  <td>11.03.2001 03:00:55</td>
-                </tr>
-                <tr>
-                  <th scope="row">3</th>
-                  <td>TTT</td>
-                  <td>KIRILL_KIRILL</td>
-                  <td>Победа</td>
-                  <td>11.03.2001 03:00:55</td>
-                </tr>
-                <tr>
-                  <th scope="row">3</th>
-                  <td>TTT</td>
-                  <td>KIRILL_KIRILL</td>
-                  <td>Победа</td>
-                  <td>11.03.2001 03:00:55</td>
-                </tr>
-                <tr>
-                  <th scope="row">3</th>
-                  <td>TTT</td>
-                  <td>KIRILL_KIRILL</td>
-                  <td>Победа</td>
-                  <td>11.03.2001 03:00:55</td>
-                </tr>
-                <tr>
-                  <th scope="row">3</th>
-                  <td>TTT</td>
-                  <td>KIRILL_KIRILL</td>
-                  <td>Победа</td>
-                  <td>11.03.2001 03:00:55</td>
-                </tr>
-                <tr>
-                  <th scope="row">3</th>
-                  <td>TTT</td>
-                  <td>KIRILL_KIRILL</td>
-                  <td>Победа</td>
-                  <td>11.03.2001 03:00:55</td>
-                </tr>
-                <tr>
-                  <th scope="row">3</th>
-                  <td>TTT</td>
-                  <td>KIRILL_KIRILL</td>
-                  <td>Победа</td>
-                  <td>11.03.2001 03:00:55</td>
-                </tr>
-                <tr>
-                  <th scope="row">3</th>
-                  <td>TTT</td>
-                  <td>KIRILL_KIRILL</td>
-                  <td>Победа</td>
-                  <td>11.03.2001 03:00:55</td>
-                </tr>
-                <tr>
-                  <th scope="row">3</th>
-                  <td>TTT</td>
-                  <td>KIRILL_KIRILL</td>
-                  <td>Победа</td>
-                  <td>11.03.2001 03:00:55</td>
-                </tr>
-                <tr>
-                  <th scope="row">3</th>
-                  <td>TTT</td>
-                  <td>KIRILL_KIRILL</td>
-                  <td>Победа</td>
-                  <td>11.03.2001 03:00:55</td>
-                </tr>
-                <tr>
-                  <th scope="row">3</th>
-                  <td>TTT</td>
-                  <td>KIRILL_KIRILL</td>
-                  <td>Победа</td>
-                  <td>11.03.2001 03:00:55</td>
-                </tr>
-                <tr>
-                  <th scope="row">3</th>
-                  <td>TTT</td>
-                  <td>KIRILL_KIRILL</td>
-                  <td>Победа</td>
-                  <td>11.03.2001 03:00:55</td>
-                </tr>
-                <tr>
-                  <th scope="row">3</th>
-                  <td>TTT</td>
-                  <td>KIRILL_KIRILL</td>
-                  <td>Победа</td>
-                  <td>11.03.2001 03:00:55</td>
-                </tr>
+
                 <tr>
                   <th scope="row">3</th>
                   <td>TTT</td>
@@ -170,14 +74,30 @@ export default {
   data:function(){
     return {
       player:{},
-      signUpTime:''
+      signUpTime:'',
+      config:{
+        headers:{
+          'Content-Type':'multipart/form-data;application/json',
+          "Access-Control-Allow-Origin": "*",
+        }
+      },
+      imgSrc:''
     }
-  },
-  beforeCreate() {
+    },
+  created() {
     updateAuthUserInLocalStorage().then(()=>{//get player
       this.player = JSON.parse(localStorage.getItem("player"));
       this.signUpTime = fromArrayToDate(this.player.signUpTime);
       console.log(this.player);
+      axios.post("/api/player/image",{img_name:this.player.photo}, this.config).then((result)=>{
+        console.log(result);
+        console.log(typeof(result.data))
+        this.imgSrc = "data:image/png;base64, "+result.data;
+        let img = document.getElementById("player_photo");
+        img['src'] = this.imgSrc;
+
+        // console.log(this.imgSrc)
+      }).catch(err=>{console.log("ERR:");console.log(err)})
     })
   }
 }

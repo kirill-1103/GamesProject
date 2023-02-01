@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.util.unit.DataSize;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.multipart.support.StandardServletMultipartResolver;
+import ru.krey.games.service.LocalImageService;
 
 import javax.servlet.MultipartConfigElement;
 
@@ -25,7 +26,7 @@ public class FileConfig {
     @Bean(name = "multipartResolver")
     public CommonsMultipartResolver multipartResolver() {
         CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver();
-        multipartResolver.setMaxUploadSize(5000000);
+        multipartResolver.setMaxUploadSize(LocalImageService.max_size);
         return multipartResolver;
     }
 //

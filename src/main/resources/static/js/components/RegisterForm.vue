@@ -17,7 +17,8 @@
     <br>
 
     <label for="photo">Фото:</label>
-    <input type="file" id="photo" name="photo" v-on:change="fileChange">
+    <input type="file" id="photo" name="photo" v-on:change="fileChange"
+      accept=".jpg, .jpeg, .png, .bmp">
     <br>
 
     <button type="submit">Регистрация</button>

@@ -11,27 +11,24 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.AuthenticationFailureHandler;
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-import ru.krey.games.handler.auth.AuthFilter;
 import ru.krey.games.handler.auth.AuthSuccessHandler;
+import ru.krey.games.service.RoleService;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
 
+    private final AuthSuccessHandler authSuccessHandler;
+
     private static final String[] PUBLIC = new String[]{
-            "/error", "/login**","/auth", "/register", "/logout","/registration"
+            "/error", "/login**","/auth", "/register", "/logout","/registration","/api/player/authenticated","/api/settings/**"
     };
 
     private static final String[] FOR_AUTHORIZED = new String[]{
-            "/me**", "/rating**","/chat**","/game_list**","/player_list**"
+            "/me**", "/rating**","/chat**","/game_list**","/player_list**","/api/**"
     };
 
 
@@ -41,16 +38,21 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                     .authorizeRequests()
-                    .antMatchers(PUBLIC).permitAll()
-                    .antMatchers(FOR_AUTHORIZED).authenticated()
+                        .antMatchers(PUBLIC)
+                            .permitAll()
+                        .antMatchers(FOR_AUTHORIZED)
+                            .hasAnyAuthority(RoleService.getRoleForConfig(RoleService.ROLE_USER),
+                            RoleService.getRoleForConfig(RoleService.ROLE_ADMIN))
+                        .anyRequest()
+                            .hasAuthority(RoleService.ROLE_ADMIN)
                 .and()
                     .formLogin()
                     .loginPage("/auth")
-//                    .failureUrl("/auth?error=true")
                     .defaultSuccessUrl("/me")
                     .loginProcessingUrl("/login")
                     .usernameParameter("login")
                     .passwordParameter("password")
+                    .successHandler(authSuccessHandler)
                 .and()
                     .logout()
                     .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
@@ -58,7 +60,7 @@ public class SecurityConfig {
                     .permitAll()
                 .and()
                     .exceptionHandling()
-                    .accessDeniedPage("/access-denies")
+                    .accessDeniedPage("/access-denied")
                 .and()
                     .csrf().disable()
                 .build();
@@ -78,6 +80,7 @@ public class SecurityConfig {
     public PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
     }
+
 
 
 }

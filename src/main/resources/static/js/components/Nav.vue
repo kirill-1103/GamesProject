@@ -39,9 +39,14 @@
             </li>
           </ul>
 
-          <a class="nav-link" href="/logout">
-            Выход
-          </a>
+<!--          <a class="nav-link" href="/logout">-->
+<!--            Выход-->
+<!--          </a>-->
+          <div v-if="player">
+            <button @click="exit" >
+              Выход
+            </button>
+          </div>
         </div>
       </div>
     </nav>
@@ -49,7 +54,25 @@
 </template>
 
 <script>
+import axios from "axios";
+import {LOGIN_PAGE_NAME} from "../router/component_names.js";
+import updateAuthUserInLocalStorage from "../service/auth.js";
+
 export default {
-  name:"Nav"
+  name:"Nav",
+  props:['player'],
+  methods:{
+    exit(){
+      if(!localStorage.getItem("player")){
+        alert("Вы еще не авторизованы!");
+        return;
+      }
+      console.log('exit')
+      axios.post("/logout").then(()=>{
+        updateAuthUserInLocalStorage();
+        this.$router.push({name:LOGIN_PAGE_NAME});
+      });
+    }
+  }
 }
 </script>

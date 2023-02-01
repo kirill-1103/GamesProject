@@ -27,6 +27,7 @@ export default {
       },
       errorMessage:'',
       badFileRequest:false,
+      max_file_size:0,
       config1:{
         headers: {
           'Content-Type': 'application/json;charset=UTF-8',
@@ -42,20 +43,35 @@ export default {
     }
   },
 
+  created() {
+    axios.get("/api/settings/img_size").then(result=>{
+      console.log('max file size:', result.data);
+      this.max_file_size = result.data;
+    })
+  },
+
   methods:{
     submitForm(){
-    /*TODO: check data before request*/
-      console.log(this.form.img_file)
+      if(this.form.img_file){
+        if(this.form.img_file.size>this.max_file_size){
+          alert("Слишком большой файл!");
+          return;
+        }
+      }
       let img = this.form.img_file;
       this.form.img_file = null;
       axios.post("/registration",
           {login:this.form.login,password:this.form.password,email:this.form.email,player_img:img}
           ,this.config2)
           .then(result=>{
+            if(result.data.error){
+              this.errorMessage = 'Failed to register from server. '+result.data.message
+              return;
+            }
             this.$router.push({name:LOGIN_PAGE_NAME});
           }).catch(error=>{
-        console.log(error)
-        this.errorMessage = 'Failed to register from server. '+error.response.data.message
+          console.log(error)
+          this.errorMessage = 'Failed to register from server. '+error.response.data.message
       })
       // axios.post("/registration",this.form,this.config1).then((result)=>{
       //   if(this.form.img_file){

@@ -8,8 +8,11 @@ import ru.krey.games.domain.Player;
 import ru.krey.games.error.BadRequestException;
 import ru.krey.games.dao.interfaces.PlayerDao;
 import ru.krey.games.service.RoleService;
+import ru.krey.games.service.interfaces.ImageService;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @RestController
 @RequiredArgsConstructor
@@ -17,6 +20,8 @@ import java.time.LocalDateTime;
 public class AuthController {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final PlayerDao playerDao;
+
+    private final ImageService imageService;
 
     @PostMapping("/registration")
     public Player createPlayer(@RequestParam(value = "player_img", required = false) MultipartFile image,
@@ -49,7 +54,19 @@ public class AuthController {
         if (playerEmailAlreadyExists(player.getEmail())) {
             throw new BadRequestException("Пользователь с таким email уже существует.");
         }
-        return playerDao.saveOrUpdate(player);
+
+        player = playerDao.saveOrUpdate(player);
+
+        if(!Objects.isNull(image)){
+            try{
+                imageService.savePlayerImage(image,player.getId());
+            }catch (IOException e){
+                throw new RuntimeException("Не удалось загрузить фото. Попробуйте снова в профиле.",e);
+            }
+        }
+
+
+        return player;
     }
 
     private boolean playerLoginAlreadyExists(String login) {

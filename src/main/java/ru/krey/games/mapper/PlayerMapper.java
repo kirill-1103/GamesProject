@@ -14,6 +14,7 @@ public class PlayerMapper implements RowMapper<Player> {
     public Player mapRow(ResultSet rs, int rowNum) throws SQLException {
         return Player.builder()
                 .id(rs.getLong("id"))
+                .password(rs.getString("password"))
                 .login(rs.getString("login"))
                 .email(rs.getString("email"))
                 .enabled(rs.getBoolean("enabled"))

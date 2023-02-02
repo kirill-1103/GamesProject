@@ -19,7 +19,7 @@ public class MainController {
 
     private static final Logger log = LoggerFactory.getLogger(MainController.class);
     @GetMapping(value = {"/css/*","/me**", "/rating**","/chat**","/game_list**","/player_list**",
-            "/error", "/login**","/auth", "/register", "/logout","/registration"})
+            "/error", "/login**","/auth", "/register", "/logout","/registration","/game/**"})
     public String main(Model model){
         return "index";
     }

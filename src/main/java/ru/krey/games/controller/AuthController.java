@@ -64,8 +64,7 @@ public class AuthController {
                 throw new RuntimeException("Не удалось загрузить фото. Попробуйте снова в профиле.",e);
             }
         }
-
-
+        player.setPassword(null);
         return player;
     }
 

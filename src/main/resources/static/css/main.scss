@@ -76,3 +76,27 @@ input, textarea {
   font-family: inherit;
   font-size: inherit;
 }
+
+.label_file{
+  width: 100%;
+  cursor:pointer;
+  background: none;
+  border-radius: 10px;
+  padding: 10px;
+  box-shadow: 0 0 15px 5px rgba(0, 0, 0, 0.05);
+  border: 1px solid $head-color;
+  outline: none;
+  text-align: center;
+}
+
+.label_file:hover, .label_file:active, .label_file:focus {
+  box-shadow: 0 0 15px 5px rgba(0, 0, 0, 0.1);
+}
+
+.label_file:focus {
+  border-color: $input-focus-color;
+}
+input[type="file"]{
+  display: none;
+}
+

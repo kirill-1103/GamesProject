@@ -28,7 +28,7 @@ public class SecurityConfig {
     };
 
     private static final String[] FOR_AUTHORIZED = new String[]{
-            "/me**", "/rating**","/chat**","/game_list**","/player_list**","/api/**"
+            "/me**", "/rating**","/chat**","/game_list**","/player_list**","/api/**","/game/**","/game/ttt"
     };
 
 
@@ -62,7 +62,7 @@ public class SecurityConfig {
                     .exceptionHandling()
                     .accessDeniedPage("/access-denied")
                 .and()
-                    .csrf().disable()
+                .csrf().disable()
                 .build();
     }
     @Bean

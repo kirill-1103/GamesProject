@@ -1,6 +1,7 @@
 -- drop table player cascade;
 -- drop table authority;
 -- drop table game_chat;
+-- delete from player;
 
 CREATE TABLE IF NOT EXISTS player
 (

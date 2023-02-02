@@ -36,13 +36,13 @@ public class PlayerJdbcTemplate implements PlayerDao {
             log.info("Update player: " + player);
 
             String sql = "UPDATE player SET login=?, email=?, sign_up_time=?, last_sign_in_time=?," +
-                    " rating=?, role=?, photo=?, enabled=? WHERE id = ?";
+                    " rating=?, role=?, photo=?, enabled=?, password=? WHERE id = ?";
             int rows = jdbcTemplate.update(sql, player.getLogin(), player.getEmail(), player.getSignUpTime(), player.getLastSignInTime(),
-                    player.getRating(), player.getRole(), player.getPhoto(), player.getEnabled(), player.getId());
+                    player.getRating(), player.getRole(), player.getPhoto(), player.getEnabled(), player.getPassword(), player.getId());
             if (rows != 1) {
                 throw new RuntimeException("Invalid request to sql: " + sql);
             }
-            return player;
+            return getOneById(player.getId()).orElseThrow(()->new RuntimeException("Player must exist."));
         } else {
             /*save*/
             log.info("Save player: " + player);

@@ -5,6 +5,7 @@ export const GAME_LIST_PAGE_NAME = "GameListPage"
 export const RATING_PAGE_NAME = "RatingPage"
 export const PLAYERS_LIST_PAGE_NAME = "PlayersListPage"
 export const CHAT_PAGE_NAME = "ChatPage"
+export const TTT_GAME_PAGE_NAME = "TttGamePage"
 
 
 export const REGISTER_PAGE_PATH = "/register"
@@ -14,3 +15,4 @@ export const GAME_LIST_PAGE_PATH = "/game_list"
 export const RATING_PAGE_PATH = "/rating"
 export const PLAYERS_LIST_PAGE_PATH ="/player_list"
 export const CHAT_PAGE_PATH = "/chat"
+export const TTT_GAME_PAGE_PATH = "/game/ttt"

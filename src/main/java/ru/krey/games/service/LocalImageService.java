@@ -52,7 +52,10 @@ public class LocalImageService implements ImageService {
         log.debug(fileToSave.toString());
         img.transferTo(fileToSave);
         player.setPhoto(fileName);
-        playerDao.saveOrUpdate(player);
+        Player playerFromDb = playerDao.saveOrUpdate(player);
+        if(playerFromDb.getPhoto()==null){
+            throw new BadRequestException("Не удалось загрузить фото!");
+        }
     }
 
     @Override

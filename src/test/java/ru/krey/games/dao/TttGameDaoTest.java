@@ -133,7 +133,9 @@ public class TttGameDaoTest {
         TttGame tttGame = tttGameDao.getOneById(this.ids.get(0)).orElse(null);
 
         tttGame.setActualDuration(31);
-        tttGame.setBaseDuration(331);
+        tttGame.setPlayer1Time(331L);
+        tttGame.setPlayer2Time(332L);
+        tttGame.setBasePlayerTime(333L);
         tttGame.setSizeField(99);
         tttGame.setVictoryReasonCode((byte) 222);
         Player winner = creator.createPlayer("login_in_game_update_1","email_in_game_update_1");

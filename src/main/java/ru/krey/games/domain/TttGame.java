@@ -34,9 +34,17 @@ public class TttGame implements Game {
     private Integer sizeField;
 
     @NonNull
-    private Integer baseDuration;
+    private Long player1Time;
+
+    @NonNull
+    private Long player2Time;
+
+    @NonNull
+    private Long basePlayerTime;
 
     private Integer actualDuration;
+
+    private Integer complexity;
 
     @NonNull
     private Byte victoryReasonCode;
@@ -58,6 +66,6 @@ public class TttGame implements Game {
 
     @Override
     public int getDurationInMillis() {
-        return baseDuration;
+        return actualDuration;
     }
 }

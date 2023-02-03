@@ -22,27 +22,27 @@ export default {
     }
   },
   mounted() {
-    updateAuthUserInStorage(this.$store).then(() => {
-          if (this.$store.state.player) {
-            this.player = this.$store.state.player;
-          } else {
-            this.player = null;
-          }
-          console.log(this.player)
-        }
-    )
+    this.updateAuthUser();
   },
   created() {
-    updateAuthUserInStorage(this.$store).then(() => {
-          if (this.$store.state.player) {
-            this.player = this.$store.state.player;
-          } else {
-            this.player = null;
-          }
-          console.log(this.player)
-        }
-    );
-
+    this.updateAuthUser();
+  },
+  methods:{
+    updateAuthUser(){
+      if(!this.$store.state.player){
+        updateAuthUserInStorage(this.$store).then(() => {
+              if (this.$store.state.player) {
+                this.player = this.$store.state.player;
+              } else {
+                this.player = null;
+              }
+              // console.log(this.player)
+            }
+        )
+      }else{
+        this.player = this.$store.state.player;
+      }
+    }
   }
 }
 

@@ -2,6 +2,10 @@
 -- drop table authority;
 -- drop table game_chat;
 -- delete from player;
+-- ALTER TABLE player ADD COLUMN last_game_code INT2;
+
+-- drop table ttt_move;
+-- drop table ttt_game;
 
 CREATE TABLE IF NOT EXISTS player
 (
@@ -15,6 +19,7 @@ CREATE TABLE IF NOT EXISTS player
     photo VARCHAR(200),
     role VARCHAR(20),
     enabled BOOLEAN DEFAULT TRUE,
+    last_game_code INT2,
     UNIQUE (login)
 );
 
@@ -27,9 +32,12 @@ CREATE TABLE IF NOT EXISTS ttt_game
     end_time TIMESTAMP,
     winner_id INTEGER,
     size_field INT2 NOT NULL,
-    base_duration INTEGER NOT NULL,
+    player1_time INTEGER NOT NULL,
+    player2_time INTEGER NOT NULL,
+    base_player_time INTEGER NOT NULL,
     actual_duration INTEGER,
-    victory_reason_code INT2
+    victory_reason_code INT2,
+    complexity INT2
 );
 
 CREATE TABLE IF NOT EXISTS ttt_move
@@ -39,7 +47,7 @@ CREATE TABLE IF NOT EXISTS ttt_move
     game_time_millis INTEGER NOT NULL,
     x_coordinate INT2 NOT NULL ,
     y_coordinate INT2 NOT NULL,
-    player_id INTEGER REFERENCES player(id),
+    player_id INTEGER,
     game_id INTEGER NOT NULL REFERENCES ttt_game(id)
 );
 

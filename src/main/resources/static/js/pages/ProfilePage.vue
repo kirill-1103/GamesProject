@@ -104,7 +104,7 @@ export default {
           this.imgSrc = "data:image/;base64, " + result.data;
           let img = document.getElementById("player_photo");
           img['src'] = this.imgSrc;
-
+    
           // console.log(this.imgSrc)
         }).catch(err => {
           console.log("ERR:");

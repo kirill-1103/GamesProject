@@ -26,9 +26,12 @@ public class TttGameMapper implements RowMapper<TttGame> {
                 .endTime(rs.getTimestamp("end_time").toLocalDateTime())
                 .winner(getPlayerById(rs.getLong("winner_id")))
                 .sizeField(rs.getInt("size_field"))
-                .baseDuration(rs.getInt("base_duration"))
+                .player1Time(rs.getLong("player1_time"))
+                .player2Time(rs.getLong("player2_time"))
+                .basePlayerTime(rs.getLong("base_player_time"))
                 .actualDuration(rs.getInt("actual_duration"))
                 .victoryReasonCode(rs.getByte("victory_reason_code"))
+                .complexity(rs.getInt("complexity"))
                 .build();
 
     }

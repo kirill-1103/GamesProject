@@ -1,11 +1,10 @@
 import {createApp} from 'vue'
 import App from "./pages/App.vue"
 import router from "router/router"
-import { createStore } from 'vuex'
+import {createStore} from 'vuex'
 
 import "bootstrap/dist/css/bootstrap.min.css"
 import "bootstrap"
-
 
 
 import '../css/main.scss'
@@ -14,14 +13,18 @@ import '../css/w3.css'
 import '../css/table.scss'
 
 const store = createStore({
-    state(){
+    state() {
         return {
-            player: null
+            player: null,
+            playerPhoto: null
         }
     },
-    mutations:{
-        setPlayer(state,player){
-            state.player=player;
+    mutations: {
+        setPlayer(state, player) {
+            state.player = player;
+        },
+        setPlayerPhoto(state, photo) {
+            state.playerPhoto = photo;
         }
     }
 })

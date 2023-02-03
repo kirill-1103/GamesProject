@@ -36,9 +36,9 @@ public class PlayerJdbcTemplate implements PlayerDao {
             log.info("Update player: " + player);
 
             String sql = "UPDATE player SET login=?, email=?, sign_up_time=?, last_sign_in_time=?," +
-                    " rating=?, role=?, photo=?, enabled=?, password=? WHERE id = ?";
+                    " rating=?, role=?, photo=?, enabled=?, password=?, last_game_code=? WHERE id = ?";
             int rows = jdbcTemplate.update(sql, player.getLogin(), player.getEmail(), player.getSignUpTime(), player.getLastSignInTime(),
-                    player.getRating(), player.getRole(), player.getPhoto(), player.getEnabled(), player.getPassword(), player.getId());
+                    player.getRating(), player.getRole(), player.getPhoto(), player.getEnabled(), player.getPassword(),player.getLastGameCode(), player.getId());
             if (rows != 1) {
                 throw new RuntimeException("Invalid request to sql: " + sql);
             }
@@ -50,7 +50,7 @@ public class PlayerJdbcTemplate implements PlayerDao {
 
 
             String sql = "INSERT INTO player (login, password, email, sign_up_time, last_sign_in_time," +
-                    "rating, role, photo, enabled) VALUES (?,?,?,?,?,?,?,?,?) RETURNING id";
+                    "rating, role, photo, enabled,last_game_code) VALUES (?,?,?,?,?,?,?,?,?,?) RETURNING id";
 
             jdbcTemplate.update(connection -> {
                 int index = 1;
@@ -64,7 +64,12 @@ public class PlayerJdbcTemplate implements PlayerDao {
                 ps.setInt(index++, player.getRating());
                 ps.setString(index++, player.getRole());
                 ps.setString(index++, player.getPhoto());
-                ps.setBoolean(index, player.getEnabled());
+                ps.setBoolean(index++, player.getEnabled());
+                if(player.getLastGameCode()!=null){
+                    ps.setInt(index++,player.getLastGameCode());
+                }else{
+                    ps.setObject(index++, null);
+                }
                 return ps;
             }, keyHolder);
 

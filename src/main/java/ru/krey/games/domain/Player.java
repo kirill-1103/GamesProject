@@ -41,4 +41,6 @@ public class Player {
 
     @NonNull
     private String Role;
+
+    private Integer lastGameCode;
 }

@@ -47,7 +47,7 @@ public class TttGameJdbcTemplate implements TttGameDao {
         if (game == null) throw new IllegalArgumentException("TttGame object is null");
 
         final Long player2Id = game.getPlayer2() == null ? null : game.getPlayer2().getId();
-        final Long winnerId  = game.getWinner()  == null ? null : game.getWinner().getId();
+        final Long winnerId = game.getWinner() == null ? null : game.getWinner().getId();
 
         if (game.getId() != null && getOneById(game.getId()).isPresent()) {
             /*update*/
@@ -55,15 +55,16 @@ public class TttGameJdbcTemplate implements TttGameDao {
 
             String query = "UPDATE ttt_game SET " +
                     "player1_id=?, player2_id=?, start_time=?,end_time=?," +
-                    "winner_id=?, size_field=?, base_duration=?, actual_duration=?," +
-                    "victory_reason_code=? WHERE id=? ";
+                    "winner_id=?, size_field=?, player1_time=?,player2_time=?,base_player_time=?," +
+                    " actual_duration=?, victory_reason_code=?, complexity=? WHERE id=? ";
 
 
             int rows = jdbcTemplate.update(query, game.getPlayer1().getId(), player2Id,
                     game.getStartTime(), game.getEndTime(), winnerId, game.getSizeField(),
-                    game.getBaseDuration(), game.getActualDuration(), game.getVictoryReasonCode(), game.getId());
-            if (rows!=1){
-                throw new RuntimeException("Invalid request to sql: "+query);
+                    game.getPlayer1Time(), game.getPlayer2Time(), game.getBasePlayerTime(),
+                    game.getActualDuration(), game.getVictoryReasonCode(), game.getComplexity(), game.getId());
+            if (rows != 1) {
+                throw new RuntimeException("Invalid request to sql: " + query);
             }
             return game;
         } else {
@@ -73,9 +74,9 @@ public class TttGameJdbcTemplate implements TttGameDao {
             KeyHolder keyHolder = new GeneratedKeyHolder();
 
             String query = "INSERT INTO ttt_game (player1_id,player2_id,start_time," +
-                    "end_time,winner_id,size_field,base_duration,actual_duration," +
-                    "victory_reason_code)" +
-                    "VALUES(?,?,?,?,?,?,?,?,?) RETURNING id";
+                    "end_time,winner_id,size_field,player1_time,player2_time,base_player_time,actual_duration," +
+                    "victory_reason_code, complexity)" +
+                    "VALUES(?,?,?,?,?,?,?,?,?,?,?,?) RETURNING id";
 
             jdbcTemplate.update(connection -> {
                 PreparedStatement ps = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
@@ -87,19 +88,26 @@ public class TttGameJdbcTemplate implements TttGameDao {
                     ps.setLong(index++, player2Id);
                 }
                 ps.setTimestamp(index++, Timestamp.valueOf(game.getStartTime()));
-                ps.setTimestamp(index++,Timestamp.valueOf(game.getEndTime()));
+                ps.setTimestamp(index++, Timestamp.valueOf(game.getEndTime()));
                 if (winnerId == null) {
                     ps.setObject(index++, winnerId);
                 } else {
                     ps.setLong(index++, winnerId);
                 }
                 ps.setInt(index++, game.getSizeField());
-                ps.setInt(index++, game.getBaseDuration());
+                ps.setLong(index++, game.getPlayer1Time());
+                ps.setLong(index++, game.getPlayer2Time());
+                ps.setLong(index++, game.getBasePlayerTime());
                 ps.setInt(index++, game.getActualDuration());
-                ps.setInt(index, game.getVictoryReasonCode());
+                ps.setInt(index++, game.getVictoryReasonCode());
+                if (game.getComplexity() == null) {
+                    ps.setObject(index++, null);
+                } else {
+                    ps.setInt(index++, game.getComplexity());
+                }
                 return ps;
-            },keyHolder);
-            return getOneById(keyHolder.getKey().longValue()).orElseThrow(()->new RuntimeException("TttGame must exist in this context"));
+            }, keyHolder);
+            return getOneById(keyHolder.getKey().longValue()).orElseThrow(() -> new RuntimeException("TttGame must exist in this context"));
         }
     }
 

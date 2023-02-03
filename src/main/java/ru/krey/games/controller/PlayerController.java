@@ -3,27 +3,20 @@ package ru.krey.games.controller;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.MediaType;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.krey.games.dao.interfaces.PlayerDao;
+import ru.krey.games.dao.interfaces.TttGameDao;
 import ru.krey.games.domain.Player;
+import ru.krey.games.domain.interfaces.Game;
 import ru.krey.games.error.BadRequestException;
 import ru.krey.games.error.NotFoundException;
 import ru.krey.games.service.AuthService;
 import ru.krey.games.service.LocalImageService;
 import ru.krey.games.service.interfaces.ImageService;
 
-import java.io.File;
 import java.io.IOException;
-import java.util.Collection;
 import java.util.Objects;
 
 @RestController
@@ -31,6 +24,8 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class PlayerController {
     private final PlayerDao playerDao;
+
+    private final TttGameDao tttGameDao;
     private final AuthService authService;
 
     private final ImageService imageService;
@@ -38,6 +33,7 @@ public class PlayerController {
     private final LocalImageService localImageService;
 
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+
 
 
     private final static Logger log = LoggerFactory.getLogger(PlayerController.class);
@@ -119,6 +115,12 @@ public class PlayerController {
 
         player.setPassword(null);
         return player;
+    }
+
+    @PostMapping("/currentGame")
+    @ResponseBody Integer getCurrentGame(@RequestParam("id") Long playerId){
+        Player player = playerDao.getOneById(playerId).orElseThrow(() -> new NotFoundException("Игрока с таким id нет!"));
+        return player.getLastGameCode();
     }
 
 

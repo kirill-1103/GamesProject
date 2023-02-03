@@ -56,20 +56,20 @@
 <script>
 import axios from "axios";
 import {LOGIN_PAGE_NAME} from "../router/component_names.js";
-import updateAuthUserInLocalStorage from "../service/auth.js";
+import updateAuthUserInStorage from "../service/auth.js";
 
 export default {
   name:"Nav",
   props:['player'],
   methods:{
     exit(){
-      if(!localStorage.getItem("player")){
+      if(!this.$store.state.player){
         alert("Вы еще не авторизованы!");
         return;
       }
       console.log('exit')
       axios.post("/logout").then(()=>{
-        updateAuthUserInLocalStorage();
+        updateAuthUserInStorage(this.$store);
         this.$router.push({name:LOGIN_PAGE_NAME});
       });
     }

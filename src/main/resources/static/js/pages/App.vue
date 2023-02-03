@@ -10,21 +10,21 @@
 <script>
 import Nav from "components/Nav.vue"
 import axios from "axios";
-import updateAuthUserInLocalStorage from "../service/auth.js";
+import updateAuthUserInStorage from "../service/auth.js";
 
 export default {
   components: {
     Nav
   },
-  data:function (){
-    return{
-      player:null
+  data: function () {
+    return {
+      player: null
     }
   },
   mounted() {
-    updateAuthUserInLocalStorage().then(()=> {
-          if (localStorage.getItem('player')) {
-            this.player = localStorage.getItem('player');
+    updateAuthUserInStorage(this.$store).then(() => {
+          if (this.$store.state.player) {
+            this.player = this.$store.state.player;
           } else {
             this.player = null;
           }
@@ -33,15 +33,16 @@ export default {
     )
   },
   created() {
-    updateAuthUserInLocalStorage().then(()=> {
-          if (localStorage.getItem('player')) {
-            this.player = localStorage.getItem('player');
+    updateAuthUserInStorage(this.$store).then(() => {
+          if (this.$store.state.player) {
+            this.player = this.$store.state.player;
           } else {
             this.player = null;
           }
           console.log(this.player)
         }
-    )
+    );
+
   }
 }
 

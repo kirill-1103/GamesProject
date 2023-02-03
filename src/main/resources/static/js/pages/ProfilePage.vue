@@ -70,7 +70,7 @@
 
 <script>
 import axios from "axios";
-import updateAuthUserInLocalStorage from "../service/auth.js";
+import updateAuthUserInStorage from "../service/auth.js";
 import fromArrayToDate from "../service/datetime.js";
 import EditProfileModal from "../components/EditProfileModal.vue";
 
@@ -93,8 +93,8 @@ export default {
     }
   },
   created() {
-    updateAuthUserInLocalStorage().then(() => {//get player
-      this.player = JSON.parse(localStorage.getItem("player"));
+    updateAuthUserInStorage(this.$store).then(() => {//get player
+      this.player = this.$store.state.player;
       this.signUpTime = fromArrayToDate(this.player.signUpTime);
       console.log(this.player);
       if (this.player.photo && this.player.photo !== '') {

@@ -1,10 +1,10 @@
 <template>
-temp
+
 </template>
 
 <script>
 export default {
-  name: "TempPage"
+  name: "StartGameComponent"
 }
 </script>
 

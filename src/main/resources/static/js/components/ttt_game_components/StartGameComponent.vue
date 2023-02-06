@@ -1,7 +1,7 @@
 <template>
   <div style="text-align: center">
     <div style="text-align: center">
-      <img class="game-img" src="../../img/ttt-logo.jpg" alt="ttt-game-img" >
+      <img class="game-img" src="../../../img/ttt-logo.jpg" alt="ttt-game-img" >
     </div>
 
 

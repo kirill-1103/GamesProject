@@ -11,6 +11,9 @@ import '../css/main.scss'
 import '../css/form.scss'
 import '../css/w3.css'
 import '../css/table.scss'
+import {connect} from './service/ws.js'
+
+connect();
 
 const store = createStore({
     state() {

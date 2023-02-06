@@ -1,6 +1,6 @@
 <template>
   <div class="div_chat">
-f
+
   </div>
 </template>
 

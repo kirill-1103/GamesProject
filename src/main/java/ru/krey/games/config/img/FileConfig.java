@@ -1,16 +1,10 @@
 package ru.krey.games.config.img;
 
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.web.servlet.MultipartConfigFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.util.unit.DataSize;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
-import org.springframework.web.multipart.support.StandardServletMultipartResolver;
 import ru.krey.games.service.LocalImageService;
-
-import javax.servlet.MultipartConfigElement;
 
 @Configuration
 @ComponentScan

@@ -11,10 +11,8 @@ import java.time.LocalDateTime;
 @EqualsAndHashCode
 @NoArgsConstructor
 public class TttMove {
-
     private Long id;
 
-    @NonNull
     private LocalDateTime absoluteTime;
 
     @NonNull

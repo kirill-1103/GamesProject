@@ -9,9 +9,9 @@
         <ProfileInTttGame :surrender="true" :player="player"></ProfileInTttGame>
       </div>
 
-      <canvas v-if="!chat_b" class="ttt-canvas col" ref="canvas">
-        Ваш браузер не поддерживает canvas.
-      </canvas>
+      <TttCanvas v-if="!chat_b" class="col">
+
+      </TttCanvas>
 
       <div class="div-chat col" v-else>
         <GameChatComponent></GameChatComponent>
@@ -26,17 +26,20 @@
     <button @click="openChat">Чат</button>
     <button @click="openGame">Игра</button>
   </div>
+  <button @click="click">click</button>
 </template>
 
 <script>
-import StartGameComponent from "../../components/StartGameComponent.vue";
-import ProfileInTttGame from "../../components/ProfileInTttGame.vue";
+import StartGameComponent from "../../components/ttt_game_components/StartGameComponent.vue";
+import ProfileInTttGame from "../../components/ttt_game_components/ProfileInTttGame.vue";
 import updateAuthUserInStorage from "../../service/auth.js";
 import GameChatComponent from "../../components/GameChatComponent.vue";
+import TttCanvas from "../../components/ttt_game_components/TttCanvas.vue";
+import {sendMessage, addHandler} from "../../service/ws.js";
 
 export default{
   name:"TttGamePage",
-  components:{StartGameComponent,ProfileInTttGame,GameChatComponent},
+  components:{StartGameComponent,ProfileInTttGame,GameChatComponent,TttCanvas},
   data: function(){
     return{
       ctx:null,
@@ -45,7 +48,7 @@ export default{
       height:500,
       player:{},
       player_2:{},
-      chat_b:true
+      chat_b:false
     }
   },
   created() {
@@ -63,11 +66,12 @@ export default{
     //TODO: Сделать запрос на профиль противника
     this.player_2.login="Компьютер"
     this.player_2.rating =  "Без рейтинга"
+
+    addHandler(data=>{
+      console.log(data);
+    })
   },
   mounted(){
-    if(!this.chat_b){
-      this.setCanvasSettings();
-    }
     // let x = 0;
     // let y = 50;
     // this.ctx.fillStyle = 'red';
@@ -115,20 +119,11 @@ export default{
     },
     openGame(){
       this.chat_b=false;
-      if(!this.canvas){
-        this.setCanvasSettings();
-      }
     },
-    setCanvasSettings(){
-      this.canvas = this.$refs.canvas
-      this.ctx = this.canvas.getContext('2d');
-      this.canvas.height = 500;
-      this.canvas.width = 500;
-
-      this.ctx.fillStyle = 'white';
-      this.ctx.fillRect(0,0,this.canvas.width,this.canvas.height)
+    click(){
+      sendMessage({"x_coord":0,"y_coord":0,"player_id":this.player.id,"game_id":1})
     }
-  }
+  },
 }
 
 // function getRandomInt(max) {
@@ -141,11 +136,6 @@ export default{
 </script>
 
 <style>
-.ttt-canvas{
-  display: block;
-  margin: auto;
-}
-
 .div_chat{
   width: 500px;
   height: 500px;

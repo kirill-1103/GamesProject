@@ -7,7 +7,7 @@
           </div>
 
           <div v-if="!player.photo">
-            <img  src="../../img/default.png" alt="img" class="rounded-circle" width="100" >
+            <img src="../../../img/default.png" alt="img" class="rounded-circle" width="100" >
           </div>
           <div v-if="player.img_data">
               <img   :src="player.img_data" alt="img" class="rounded-circle" width="100" >

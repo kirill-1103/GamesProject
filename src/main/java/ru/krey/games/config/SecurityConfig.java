@@ -11,6 +11,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.header.writers.frameoptions.XFrameOptionsHeaderWriter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import ru.krey.games.handler.auth.AuthSuccessHandler;
 import ru.krey.games.service.RoleService;
@@ -24,11 +25,13 @@ public class SecurityConfig {
     private final AuthSuccessHandler authSuccessHandler;
 
     private static final String[] PUBLIC = new String[]{
-            "/error", "/login**","/auth", "/register", "/logout","/registration","/api/player/authenticated","/api/settings/**"
+            "/error", "/login**","/auth", "/register", "/logout","/registration","/api/player/authenticated","/api/settings/**," +
+            "/ws/**","/websocket/**","/socket/**","/topic/**"
     };
 
     private static final String[] FOR_AUTHORIZED = new String[]{
-            "/me**", "/rating**","/chat**","/game_list**","/player_list**","/api/**","/game/**","/game/ttt"
+            "/me**", "/rating**","/chat**","/game_list**","/player_list**","/api/**"
+            ,"/game/**","/game/ttt"
     };
 
 
@@ -37,6 +40,10 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
+                .headers()
+                    .addHeaderWriter(
+                            new XFrameOptionsHeaderWriter(XFrameOptionsHeaderWriter.XFrameOptionsMode.SAMEORIGIN))
+                .and()
                     .authorizeRequests()
                         .antMatchers(PUBLIC)
                             .permitAll()
@@ -80,7 +87,5 @@ public class SecurityConfig {
     public PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
     }
-
-
 
 }

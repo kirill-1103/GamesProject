@@ -7,6 +7,9 @@
 -- drop table ttt_move;
 -- drop table ttt_game;
 
+-- insert into ttt_game (id,player1_id,start_time,size_field,player1_time,player2_time,base_player_time)
+-- values (1,66,TIMESTAMP '2011-05-16 15:36:38', 3,3,3,3);
+
 CREATE TABLE IF NOT EXISTS player
 (
     id    SERIAL PRIMARY KEY,

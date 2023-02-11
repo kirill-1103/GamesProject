@@ -51,18 +51,18 @@ public class TttGameJdbcTemplate implements TttGameDao {
 
         if (game.getId() != null && getOneById(game.getId()).isPresent()) {
             /*update*/
-            log.info("Update TttGame: " + game);
+//            log.info("Update TttGame: " + game);
 
             String query = "UPDATE ttt_game SET " +
                     "player1_id=?, player2_id=?, start_time=?,end_time=?," +
                     "winner_id=?, size_field=?, player1_time=?,player2_time=?,base_player_time=?," +
-                    " actual_duration=?, victory_reason_code=?, complexity=? WHERE id=? ";
+                    " actual_duration=?, victory_reason_code=?, complexity=?, queue=? WHERE id=? ";
 
 
             int rows = jdbcTemplate.update(query, game.getPlayer1().getId(), player2Id,
                     game.getStartTime(), game.getEndTime(), winnerId, game.getSizeField(),
                     game.getPlayer1Time(), game.getPlayer2Time(), game.getBasePlayerTime(),
-                    game.getActualDuration(), game.getVictoryReasonCode(), game.getComplexity(), game.getId());
+                    game.getActualDuration(), game.getVictoryReasonCode(), game.getComplexity(),game.getQueue(), game.getId());
             if (rows != 1) {
                 throw new RuntimeException("Invalid request to sql: " + query);
             }
@@ -75,12 +75,13 @@ public class TttGameJdbcTemplate implements TttGameDao {
 
             String query = "INSERT INTO ttt_game (player1_id,player2_id,start_time," +
                     "end_time,winner_id,size_field,player1_time,player2_time,base_player_time,actual_duration," +
-                    "victory_reason_code, complexity)" +
-                    "VALUES(?,?,?,?,?,?,?,?,?,?,?,?) RETURNING id";
+                    "victory_reason_code, complexity, queue)" +
+                    "VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?) RETURNING id";
 
             jdbcTemplate.update(connection -> {
-                PreparedStatement ps = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
                 int index = 1;
+
+                PreparedStatement ps = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
                 ps.setLong(index++, game.getPlayer1().getId());
                 if (player2Id == null) {
                     ps.setObject(index++, player2Id);
@@ -88,7 +89,11 @@ public class TttGameJdbcTemplate implements TttGameDao {
                     ps.setLong(index++, player2Id);
                 }
                 ps.setTimestamp(index++, Timestamp.valueOf(game.getStartTime()));
-                ps.setTimestamp(index++, Timestamp.valueOf(game.getEndTime()));
+                if(game.getEndTime()==null){
+                    ps.setObject(index++, game.getEndTime());
+                }else{
+                    ps.setTimestamp(index++, Timestamp.valueOf(game.getEndTime()));
+                }
                 if (winnerId == null) {
                     ps.setObject(index++, winnerId);
                 } else {
@@ -99,12 +104,17 @@ public class TttGameJdbcTemplate implements TttGameDao {
                 ps.setLong(index++, game.getPlayer2Time());
                 ps.setLong(index++, game.getBasePlayerTime());
                 ps.setInt(index++, game.getActualDuration());
-                ps.setInt(index++, game.getVictoryReasonCode());
+                if(game.getVictoryReasonCode() == null){
+                    ps.setObject(index++, null);
+                }else{
+                    ps.setInt(index++, game.getVictoryReasonCode());
+                }
                 if (game.getComplexity() == null) {
                     ps.setObject(index++, null);
                 } else {
                     ps.setInt(index++, game.getComplexity());
                 }
+                ps.setByte(index++, game.getQueue());
                 return ps;
             }, keyHolder);
             return getOneById(keyHolder.getKey().longValue()).orElseThrow(() -> new RuntimeException("TttGame must exist in this context"));
@@ -115,5 +125,20 @@ public class TttGameJdbcTemplate implements TttGameDao {
     public Set<TttGame> getAllByPlayerId(Long playerId) {
         String query = "SELECT * FROM ttt_game WHERE player1_id = ? OR player2_id = ?";
         return new HashSet<>(jdbcTemplate.query(query, this.gameMapper, playerId, playerId));
+    }
+
+    @Override
+    public Optional<TttGame> getCurrentGameByPlayerId(Long id) {
+        String query = "SELECT * FROM ttt_game " +
+                "WHERE (player1_id = ? OR player2_id = ?) AND end_time IS NULL";
+
+        return jdbcTemplate.query(query, this.gameMapper, id, id)
+                .stream().findAny();
+    }
+
+    @Override
+    public Set<TttGame> getAllNoEnded(){
+        String query = "SELECT * FROM ttt_game WHERE end_time is NULL";
+        return new HashSet<>(jdbcTemplate.query(query,this.gameMapper));
     }
 }

@@ -32,14 +32,17 @@
 
       <button class="settings-input">Игра онлайн</button>
 
-      <button class="settings-input">Игра с компьютером</button>
+      <button class="settings-input" @click="computer">Игра с компьютером</button>
     </div>
   </div>
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   name: "StartGameComponent",
+  props:["startGame"],
   data: function(){
     return{
       time_string:"5 минут",
@@ -47,6 +50,13 @@ export default {
       settings:{
         time:5,
         field_size:3,
+        complexity:1
+      },
+      config : {
+        headers: {
+          'Content-Type': 'multipart/form-data;application/json',
+          "Access-Control-Allow-Origin": "*",
+        }
       }
     }
   },
@@ -60,6 +70,20 @@ export default {
       this.settings.field_size = size;
       this.field_size_text = size_str;
       document.getElementById("size_button").innerText = 'Размер поля: '+this.field_size_text;
+    },
+    computer(){
+      let data = {
+        player1_id:this.$store.state.player.id,
+        field_size:this.settings.field_size,
+        base_player_time: this.settings.time,
+        complexity: this.settings.complexity,
+      }
+      axios.post("/api/ttt_game/new",data,this.config).then((response)=>{
+        console.log(response.data);
+        this.$store.commit("setPlayerGameCode",1);
+        this.$store.commit("setPlayerGameId",response.data.id);
+        this.startGame();
+      })
     }
   }
 }

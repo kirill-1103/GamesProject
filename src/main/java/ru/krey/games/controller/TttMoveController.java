@@ -7,6 +7,7 @@ import org.springframework.core.convert.ConversionService;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import ru.krey.games.dao.interfaces.PlayerDao;
@@ -19,8 +20,9 @@ import java.time.LocalDateTime;
 
 @RestController
 @RequiredArgsConstructor
-
+@RequestMapping("api/ttt_move")
 public class TttMoveController {
+
 
     private final PlayerDao playerDao;
     private final TttGameDao gameDao;
@@ -31,8 +33,7 @@ public class TttMoveController {
 
     private final TttMoveDao moveDao;
 
-
-    @MessageMapping({"/api/ttt_move/temp"} )
+    @MessageMapping({"/temp"} )
     @SendTo("/topic/ttt_move")
     public @ResponseBody TttMoveDto temp(@RequestBody TttMoveDto moveDto){
         TttMove move = TttMove.builder()

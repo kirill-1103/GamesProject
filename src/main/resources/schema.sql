@@ -10,6 +10,10 @@
 -- insert into ttt_game (id,player1_id,start_time,size_field,player1_time,player2_time,base_player_time)
 -- values (1,66,TIMESTAMP '2011-05-16 15:36:38', 3,3,3,3);
 
+update player set last_game_code = null where login='kirill';
+update ttt_game set end_time = TIMESTAMP '2011-05-16 15:36:38';
+
+
 CREATE TABLE IF NOT EXISTS player
 (
     id    SERIAL PRIMARY KEY,
@@ -40,7 +44,8 @@ CREATE TABLE IF NOT EXISTS ttt_game
     base_player_time INTEGER NOT NULL,
     actual_duration INTEGER,
     victory_reason_code INT2,
-    complexity INT2
+    complexity INT2,
+    queue INT2
 );
 
 CREATE TABLE IF NOT EXISTS ttt_move

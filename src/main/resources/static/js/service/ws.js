@@ -4,47 +4,21 @@ import {Stomp} from '@stomp/stompjs'
 
 let stompClient = null
 
-const handlers = []
-
-const config_ = {
-    headers:{
-        'Content-Type':'multipart/form-data;application/json',
-            "Access-Control-Allow-Origin": "*",
-    }
-}
-
-export function connect(){
+export function connect(gameId,callback,store){
     const socket = new SockJS('/socket');
     stompClient = Stomp.over(socket);
     stompClient.connect({},frame=>{
         console.log("Connected: "+frame)
-        stompClient.subscribe("/topic/ttt_move",move=>{
-            console.log('move:',move)
-            handlers.forEach(handler => handler(JSON.parse(move.body)))
+        stompClient.subscribe("/topic/ttt_game/"+gameId,game=>{
+
+            // console.log(JSON.parse(game.body))
+            callback(JSON.parse(game.body))
+            // console.log('connected to game with id '+ game.id)
+            // handlers.forEach(handler => handler(JSON.parse(move.body)))
         },(error)=>console.log("error"+JSON.stringify(error)))
     })
-    // const socket2 = new SockJS('http://app/localhost:8080/socket/websocket');
-    // // const socket2 = new SockJS('/socket');
-    // stompClient = Stomp.over(socket2);
-    // stompClient.connect({},frame=>{
-    //     console.log("Connected: "+frame)
-    //     stompClient.subscribe("/topic/ttt_move",move=>{
-    //         handlers.forEach(handler => handler(JSON.parse(move.body)))
-    //     },(error)=>console.log("error"+JSON.stringify(error)))
-    // })
-    // const socket3 = new SockJS('http://localhost:8080/socket/websocket');
-    // stompClient = Stomp.over(socket3);
-    // stompClient.connect({},frame=>{
-    //     console.log("Connected: "+frame)
-    //     stompClient.subscribe("/topic/ttt_move",move=>{
-    //         handlers.forEach(handler => handler(JSON.parse(move.body)))
-    //     },(error)=>console.log("error"+JSON.stringify(error)))
-    // })
 }
 
-export function addHandler(handler){
-    handlers.push(handler);
-}
 
 export function disconnect(){
     if(stompClient != null){
@@ -53,11 +27,11 @@ export function disconnect(){
     console.log('Disconnected');
 }
 
-export function sendMessage(move){
-    if(stompClient){
-        stompClient.send("/websocket/api/ttt_move/temp",{}, JSON.stringify(move))
-        console.log('send move')
-    }else{
-        console.log('cannot send move')
-    }
+export function sendMessageToConnectWithTime(){
+    // if(stompClient){
+    //     stompClient.send("/websocket/api/ttt_game/connect/",{})
+    //     console.log('connect with time handler')
+    // }else{
+    //     console.log('cannot connect')
+    // }
 }

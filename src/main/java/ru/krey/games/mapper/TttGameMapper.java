@@ -35,6 +35,7 @@ public class TttGameMapper implements RowMapper<TttGame> {
                 .actualDuration(rs.getInt("actual_duration"))
                 .victoryReasonCode(rs.getByte("victory_reason_code"))
                 .complexity(rs.getInt("complexity"))
+                .queue(rs.getByte("queue"))
                 .build();
 
     }

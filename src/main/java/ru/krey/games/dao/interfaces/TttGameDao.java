@@ -14,4 +14,8 @@ public interface TttGameDao {
     TttGame saveOrUpdate(TttGame game);
 
     Set<TttGame> getAllByPlayerId(Long playerId);
+
+    Optional<TttGame> getCurrentGameByPlayerId(Long id);
+
+    Set<TttGame> getAllNoEnded();
 }

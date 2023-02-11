@@ -11,15 +11,14 @@ import '../css/main.scss'
 import '../css/form.scss'
 import '../css/w3.css'
 import '../css/table.scss'
-import {connect} from './service/ws.js'
-
-connect();
 
 const store = createStore({
     state() {
         return {
             player: null,
-            playerPhoto: null
+            playerPhoto: null,
+            playerGameCode: null,
+            playerGameId: null
         }
     },
     mutations: {
@@ -28,6 +27,12 @@ const store = createStore({
         },
         setPlayerPhoto(state, photo) {
             state.playerPhoto = photo;
+        },
+        setPlayerGameCode(state, code){
+            state.playerGameCode = code;
+        },
+        setPlayerGameId(state,id){
+            state.playerGameId = id;
         }
     }
 })

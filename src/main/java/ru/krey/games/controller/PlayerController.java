@@ -10,10 +10,12 @@ import org.springframework.web.multipart.MultipartFile;
 import ru.krey.games.dao.interfaces.PlayerDao;
 import ru.krey.games.dao.interfaces.TttGameDao;
 import ru.krey.games.domain.Player;
+import ru.krey.games.domain.TttGame;
 import ru.krey.games.domain.interfaces.Game;
 import ru.krey.games.error.BadRequestException;
 import ru.krey.games.error.NotFoundException;
 import ru.krey.games.service.AuthService;
+import ru.krey.games.service.GameService;
 import ru.krey.games.service.LocalImageService;
 import ru.krey.games.service.interfaces.ImageService;
 
@@ -118,10 +120,26 @@ public class PlayerController {
         return player;
     }
 
-    @PostMapping("/currentGame")
-    @ResponseBody Integer getCurrentGame(@RequestParam("id") Long playerId){
+    @PostMapping("/currentGameCode")
+    @ResponseBody Integer getCurrentGameCode(@RequestParam("id") Long playerId){
         Player player = playerDao.getOneById(playerId).orElseThrow(() -> new NotFoundException("Игрока с таким id нет!"));
         return player.getLastGameCode();
+    }
+
+    @PostMapping("/currentGameId")
+    @ResponseBody Long getCurrentGameId(@RequestParam("id") Long playerId){
+        Player player = playerDao.getOneById(playerId).orElseThrow(() -> new NotFoundException("Игрока с таким id нет!"));
+        if(player.getLastGameCode() == null){
+            return null;
+        }
+
+        if(player.getLastGameCode() == GameService.TttGameCode){
+            TttGame game =  tttGameDao.getCurrentGameByPlayerId(playerId)
+                    .orElse(null);
+            return game == null ? null : game.getId();
+        }
+
+        return null;
     }
 
 

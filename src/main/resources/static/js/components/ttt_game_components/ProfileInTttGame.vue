@@ -3,7 +3,8 @@
       <div class="card-body profile-card" >
         <div v-if="player.login">
           <div class="div_for_p">
-            <p>Время: 1:03</p>
+            <p v-if="!player_time">Время: 00:00</p>
+            <p v-else>Время: {{reformatTime(player_time)}}</p>
           </div>
 
           <div v-if="!player.photo">
@@ -36,9 +37,18 @@
 <script>
   export default {
     name:"ProfileInTttGame",
-    props:['player', 'surrender'],
+    props:['player', 'surrender', "player_time"],
     data:function(){
       return {
+      }
+    },
+    methods:{
+      reformatTime(time){
+        let minutes = Math.floor(time/60/10);
+        let seconds = Math.floor((time - minutes*60*10)/10)
+        let min_str = minutes > 9 ?  String(minutes) : "0"+String(minutes);
+        let sec_str = seconds > 9 ?  String(seconds) : "0"+String(seconds);
+        return min_str + ":" + sec_str;
       }
     }
   }

@@ -42,16 +42,18 @@ public class TttGame implements Game {
     @NonNull
     private Long basePlayerTime;
 
+    //фактическая длительность игры
     private Integer actualDuration;
 
     private Integer complexity;
 
-    @NonNull
     private Byte victoryReasonCode;
+
+    private Byte queue;
 
     @Override
     public Set<Player> getPlayers() {
-        return Set.of(player1,player2);
+        return Set.of(player1, player2);
     }
 
     @Override
@@ -67,5 +69,18 @@ public class TttGame implements Game {
     @Override
     public int getDurationInMillis() {
         return actualDuration;
+    }
+
+    private final int diffTime = 10;
+    public void changePlayer1Time(){
+        if(this.player1Time != null){
+            this.player1Time -= diffTime;
+        }
+    }
+
+    public void changePlayer2Time(){
+        if(this.player2Time != null){
+            this.player2Time -=diffTime;
+        }
     }
 }

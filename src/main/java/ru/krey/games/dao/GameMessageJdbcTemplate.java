@@ -9,7 +9,7 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
 import ru.krey.games.dao.interfaces.GameMessageDao;
 import ru.krey.games.domain.GameMessage;
-import ru.krey.games.mapper.GameMessageMapper;
+import ru.krey.games.service.mapper.GameMessageMapper;
 
 import java.sql.PreparedStatement;
 import java.sql.Statement;
@@ -17,7 +17,6 @@ import java.sql.Timestamp;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor

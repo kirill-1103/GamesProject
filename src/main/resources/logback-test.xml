@@ -3,14 +3,14 @@
 
     <appender name="Console" class="ch.qos.logback.core.ConsoleAppender">
         <layout class="ch.qos.logback.classic.PatternLayout">
-            <Pattern>TEST: %-30(%d %p) %-30.30([%t] %C): %msg%n%throwable</Pattern>
+            <Pattern>%-30(%d %p) %-30.30([%t] %C): %msg%n%throwable</Pattern>
         </layout>
     </appender>
 
     <appender name="File" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>logs/app-logback-test.log</file>
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
-            <Pattern>TEST: %d %p [%t] %C: %msg%n%throwable</Pattern>
+            <Pattern>%d %p [%t] %C: %msg%n%throwable</Pattern>
         </encoder>
 
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">

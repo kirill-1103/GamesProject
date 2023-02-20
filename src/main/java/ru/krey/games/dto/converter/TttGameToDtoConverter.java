@@ -8,7 +8,7 @@ import ru.krey.games.dto.TttGameDto;
 
 @RequiredArgsConstructor
 @Component
-public class TttGameToDto implements Converter<TttGame, TttGameDto> {
+public class TttGameToDtoConverter implements Converter<TttGame, TttGameDto> {
 
     @Override
     public TttGameDto convert(TttGame game) {
@@ -30,6 +30,7 @@ public class TttGameToDto implements Converter<TttGame, TttGameDto> {
                 .victoryReasonCode(game.getVictoryReasonCode())
                 .winnerId(winnerId)
                 .queue(game.getQueue())
+                .field(game.getField())
                 .build();
     }
 }

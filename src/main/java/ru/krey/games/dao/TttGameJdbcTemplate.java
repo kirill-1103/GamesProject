@@ -1,6 +1,5 @@
 package ru.krey.games.dao;
 
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,7 +9,7 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
 import ru.krey.games.dao.interfaces.TttGameDao;
 import ru.krey.games.domain.TttGame;
-import ru.krey.games.mapper.TttGameMapper;
+import ru.krey.games.service.mapper.TttGameMapper;
 
 import java.sql.PreparedStatement;
 import java.sql.Statement;

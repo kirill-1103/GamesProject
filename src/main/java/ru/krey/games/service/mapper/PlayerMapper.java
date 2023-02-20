@@ -1,4 +1,4 @@
-package ru.krey.games.mapper;
+package ru.krey.games.service.mapper;
 
 
 import org.springframework.jdbc.core.RowMapper;

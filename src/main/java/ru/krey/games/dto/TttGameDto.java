@@ -3,6 +3,7 @@ package ru.krey.games.dto;
 import com.fasterxml.jackson.annotation.JsonAlias;
 import lombok.Builder;
 import lombok.Data;
+import ru.krey.games.logic.ttt.TttField;
 
 import java.time.LocalDateTime;
 
@@ -47,4 +48,6 @@ public class TttGameDto {
     private Byte victoryReasonCode;
 
     private Byte queue;
+
+    private TttField field;
 }

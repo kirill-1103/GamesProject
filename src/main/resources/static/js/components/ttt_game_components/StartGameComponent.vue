@@ -30,9 +30,9 @@
         </ul>
       </div>
 
-      <button class="settings-input">Игра онлайн</button>
+      <button  :disabled="$store.state.playerGameId !== -1" class="settings-input">Игра онлайн</button>
 
-      <button class="settings-input" @click="computer">Игра с компьютером</button>
+      <button  :disabled="$store.state.playerGameId !== -1" class="settings-input" @click="computer">Игра с компьютером</button>
     </div>
   </div>
 </template>
@@ -52,12 +52,14 @@ export default {
         field_size:3,
         complexity:1
       },
+      alreadyStart:false,
       config : {
         headers: {
           'Content-Type': 'multipart/form-data;application/json',
           "Access-Control-Allow-Origin": "*",
         }
-      }
+      },
+      disabled:true
     }
   },
   methods:{
@@ -72,6 +74,10 @@ export default {
       document.getElementById("size_button").innerText = 'Размер поля: '+this.field_size_text;
     },
     computer(){
+      if(this.alreadyStart){
+        return;
+      }
+      this.alreadyStart = true;
       let data = {
         player1_id:this.$store.state.player.id,
         field_size:this.settings.field_size,
@@ -83,7 +89,14 @@ export default {
         this.$store.commit("setPlayerGameCode",1);
         this.$store.commit("setPlayerGameId",response.data.id);
         this.startGame();
+        this.alreadyStart = false;
       })
+    },
+    online(){
+      if(this.alreadyStart){
+        return;
+      }
+      this.alreadyStart = true;
     }
   }
 }

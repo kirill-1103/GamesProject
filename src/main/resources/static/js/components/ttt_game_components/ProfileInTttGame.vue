@@ -24,7 +24,7 @@
           <div class="div_for_p">
             <p>Рейтинг: {{player.rating}}</p>
           </div>
-          <button style="width:100%" v-if="surrender">Сдаться </button>
+          <button :disabled="field.length === 0" style="width:100%" v-if="surrender && !end" @click="surrender_f">Сдаться </button>
         </div>
 
         <div style="margin-top:50%;" v-else class="spinner-border text-primary" role="status">
@@ -35,20 +35,34 @@
 </template>
 
 <script>
+  import axios from "axios";
+
   export default {
     name:"ProfileInTttGame",
-    props:['player', 'surrender', "player_time"],
+    props:['player', 'surrender', "player_time", "end", "field","game"],
     data:function(){
       return {
+        config: {
+          headers: {
+            'Content-Type': 'multipart/form-data;application/json',
+            "Access-Control-Allow-Origin": "*",
+          }
+        },
       }
     },
     methods:{
       reformatTime(time){
+        if(time<0){
+          return "∞";
+        }
         let minutes = Math.floor(time/60/10);
         let seconds = Math.floor((time - minutes*60*10)/10)
         let min_str = minutes > 9 ?  String(minutes) : "0"+String(minutes);
         let sec_str = seconds > 9 ?  String(seconds) : "0"+String(seconds);
         return min_str + ":" + sec_str;
+      },
+      surrender_f(){
+        axios.post("/api/ttt_game/surrender",{game_id:this.game.id,player_id:this.player.id},this.config)
       }
     }
   }

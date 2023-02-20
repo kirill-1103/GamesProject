@@ -43,13 +43,15 @@ function getGameCodeAndId(store,callback){
             .then((result)=>{
                 if(result.data){
                     store.commit("setPlayerGameCode",result.data);
-                    console.log('game-code:'+result.data);
                 }
             }).then(()=>{
                 if(store.state.player ){
                     axios.post("/api/player/currentGameId",{id:store.state.player.id},config)
                         .then(result=>{
-                            console.log(result.data)
+                            console.log("id:"+result.data)
+                            if(!result.data){
+                                store.commit("setPlayerGameId",-1);
+                            }
                             if(result.data){
                                 store.commit("setPlayerGameId",result.data)
                                 if(callback){

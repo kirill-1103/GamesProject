@@ -4,17 +4,18 @@ import {Stomp} from '@stomp/stompjs'
 
 let stompClient = null
 
+
 export function connect(gameId,callback,store){
     const socket = new SockJS('/socket');
     stompClient = Stomp.over(socket);
+    stompClient.debug = function (){};//do nothing
     stompClient.connect({},frame=>{
         console.log("Connected: "+frame)
         stompClient.subscribe("/topic/ttt_game/"+gameId,game=>{
-
+            //
+            // console.log("GAME BODY")
             // console.log(JSON.parse(game.body))
             callback(JSON.parse(game.body))
-            // console.log('connected to game with id '+ game.id)
-            // handlers.forEach(handler => handler(JSON.parse(move.body)))
         },(error)=>console.log("error"+JSON.stringify(error)))
     })
 }

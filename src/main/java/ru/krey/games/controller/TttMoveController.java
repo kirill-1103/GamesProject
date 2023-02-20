@@ -33,19 +33,19 @@ public class TttMoveController {
 
     private final TttMoveDao moveDao;
 
-    @MessageMapping({"/temp"} )
-    @SendTo("/topic/ttt_move")
-    public @ResponseBody TttMoveDto temp(@RequestBody TttMoveDto moveDto){
-        TttMove move = TttMove.builder()
-                .absoluteTime(LocalDateTime.now())
-                .player(playerDao.getOneById(moveDto.getPlayerId()).get())
-                .game(gameDao.getOneById(moveDto.getGameId()).get())
-                .xCoordinate(moveDto.getXCoord())
-                .yCoordinate(moveDto.getYCoord())
-                .gameTimeMillis(3)
-                .build();
-        log.debug(move.toString());
-        TttMove moveFromDb =  moveDao.saveOrUpdate(move);
-        return conversionService.convert(moveFromDb,TttMoveDto.class);
-    }
+//    @MessageMapping({"/temp"} )
+//    @SendTo("/topic/ttt_move")
+//    public @ResponseBody TttMoveDto temp(@RequestBody TttMoveDto moveDto){
+//        TttMove move = TttMove.builder()
+//                .absoluteTime(LocalDateTime.now())
+//                .player(playerDao.getOneById(moveDto.getPlayerId()).get())
+//                .game(gameDao.getOneById(moveDto.getGameId()).get())
+//                .xCoordinate(moveDto.getXCoord())
+//                .yCoordinate(moveDto.getYCoord())
+//                .gameTimeMillis(3)
+//                .build();
+//        log.debug(move.toString());
+//        TttMove moveFromDb =  moveDao.saveOrUpdate(move);
+//        return conversionService.convert(moveFromDb,TttMoveDto.class);
+//    }
 }

@@ -27,6 +27,7 @@
           <li><button class="dropdown-item" @click="setSize(3, '3x3')">3x3</button></li>
           <li><button class="dropdown-item" @click="setSize(5,'5x5')">5x5</button></li>
           <li><button class="dropdown-item" @click="setSize(7,'7x7')">7x7</button></li>
+          <li><button class="dropdown-item" @click="setSize(13,'13x13')">13x13</button></li>
         </ul>
       </div>
 

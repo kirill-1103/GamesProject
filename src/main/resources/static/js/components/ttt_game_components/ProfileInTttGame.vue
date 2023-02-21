@@ -48,6 +48,7 @@
             "Access-Control-Allow-Origin": "*",
           }
         },
+        alreadySurrendered:false
       }
     },
     methods:{
@@ -62,7 +63,12 @@
         return min_str + ":" + sec_str;
       },
       surrender_f(){
-        axios.post("/api/ttt_game/surrender",{game_id:this.game.id,player_id:this.player.id},this.config)
+        if(!this.alreadySurrendered && !this.game.endTime ){
+          this.alreadySurrendered = true;
+          axios.post("/api/ttt_game/surrender",{game_id:this.game.id,player_id:this.player.id},this.config)
+        }else{
+          alert("Игра уже завершена")
+        }
       }
     }
   }

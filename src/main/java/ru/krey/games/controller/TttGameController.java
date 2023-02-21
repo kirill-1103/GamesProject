@@ -26,6 +26,8 @@ import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 @RestController
 @RequestMapping("api/ttt_game")
@@ -76,7 +78,7 @@ public class TttGameController {
                 .sizeField(fieldSize)
                 .queue((byte) 1)
                 .build();
-        if(minutes == -1){
+        if (minutes == -1) {
             newGame.setBasePlayerTime(minutes);
         }
         TttGame savedGame = gameDao.saveOrUpdate(newGame);
@@ -107,8 +109,8 @@ public class TttGameController {
             savedGames = new HashSet<>(gamesNoEnded);
         }
         savedGames.forEach((game) -> {
-            if(Objects.isNull(game.getVictoryReasonCode())){
-               return;
+            if (Objects.isNull(game.getVictoryReasonCode())) {
+                return;
             }
             game.changeGameTime();
             if (game.getField() == null) {
@@ -126,6 +128,9 @@ public class TttGameController {
     public void surrender(@RequestParam("game_id") Long gameId,
                           @RequestParam("player_id") Long playerId) {
         TttGame game = getGameFromSaved(gameId);
+
+        savedGames.removeIf((g) -> game.getId().equals(g.getId()));
+
         if (game.getPlayer1().getId().equals(playerId)) {
             game.setVictoryReasonCode((byte) GameService.VICTORY_REASON_PLAYER1_LOSE);
             game.setWinner(game.getPlayer2());
@@ -249,14 +254,15 @@ public class TttGameController {
     }
 
     private void saveGameInDb(TttGame game) {
-        new Thread(()->{
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        executor.execute(() -> {
             game.setEndTime(LocalDateTime.now());
 //            game.setActualDuration((int) (game.getBasePlayerTime()*2-game.getPlayer1Time()-game.getPlayer2Time()));
             gameDao.saveOrUpdate(game);
             savedGames.removeIf((g) -> g.getId().equals(game.getId()));
             messagingTemplate.convertAndSend("/topic/ttt_game/" + game.getId()
                     , conversionService.convert(game, TttGameDto.class));
-            log.info("Game "+game.getId()+" saved");
-        }).start();
+            log.info("Game " + game.getId() + " saved");
+        });
     }
 }

@@ -4,7 +4,6 @@
             <div style="margin:0;margin-left:-12px;width: 503px;height:503px" class="card card-bordered">
               <div class="card-header">
                 <h4 class="card-title"><strong>Chat</strong></h4>
-                <a class="btn btn-xs btn-secondary" href="#" data-abc="true">Let's Chat App</a>
               </div>
 
               <div class="ps-container ps-theme-default ps-active-y" ref="chat_content" id="chat-content" style="overflow-y: scroll !important; height:400px !important;">
@@ -48,7 +47,7 @@ import {fromArrayToHoursMinutesSeconds, fromStringToHoursMinutesSeconds} from ".
 
 export default{
   name:'GameChatComponent',
-  props:['game','player'],
+  props:['game','player','messages','messagesLoaded','addMessage'],
   data:function() {
     return {
       config: {
@@ -57,14 +56,9 @@ export default{
           'Accept': 'application/json'
         }
       },
-      messages:[],
-      messagesLoaded :false
     }
   },
-  created() {
-    console.log('created')
-    this.getMessages();
-  },
+
   mounted() {
     this.$refs.form_send_message.addEventListener("submit",this.send);
   },
@@ -86,28 +80,6 @@ export default{
     },
     isMe(message){
       return message.senderId === this.player.id;
-    },
-    getMessages(){
-      let interval = setInterval(()=>{
-        if(this.game && this.game.id && this.game.gameCode){
-          axios.get("/api/game_message/"+this.game.id+"/"+this.game.gameCode)
-              .then(messages=>{
-                this.messages = messages.data;
-                for (let mess of this.messages){
-                  mess.time = fromArrayToHoursMinutesSeconds(mess.time)
-                }
-                this.messages = this.messages.reverse();
-                connectToGameMessages(this.game.id, this.game.gameCode, this.addMessage);
-                this.messagesLoaded = true;
-
-              })
-          clearInterval(interval)
-        }
-      },100)
-    },
-    addMessage(message){
-      message.time = fromStringToHoursMinutesSeconds(message.time);
-      this.messages.unshift(message)
     }
   }
 }

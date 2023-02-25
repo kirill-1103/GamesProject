@@ -7,7 +7,7 @@
   <div class="container" v-else>
     <div class="row">
       <div class="col">
-        <ProfileInTttGame :field="field" :game="game" :end="end" :player_time="playerTime" :surrender="true" :player="player"></ProfileInTttGame>
+        <ProfileInTttGame :field="field" :game="game" :player_time="otherPlayerTime" :surrender="false" :player="player_2"></ProfileInTttGame>
       </div>
 
       <div class="col"  style="text-align: center" v-if="!chat_b && field.length !== 0">
@@ -18,7 +18,12 @@
 
 
       <div class="div-chat col" v-else-if="chat_b && field.length !== 0">
-        <GameChatComponent :game="game" :player="player"></GameChatComponent>
+        <GameChatComponent :messagesLoaded="messagesLoaded"
+                           :messages="messages"
+                           :game="game"
+                           :player="player"
+                           :addMessage="addMessageInChat"
+        ></GameChatComponent>
       </div>
 
       <div class="col" v-else>
@@ -28,7 +33,7 @@
       </div>
 
       <div class="col">
-        <ProfileInTttGame :field="field" :game="game" :player_time="otherPlayerTime" :surrender="false" :player="player_2"></ProfileInTttGame>
+        <ProfileInTttGame :field="field" :game="game" :end="end" :player_time="playerTime" :surrender="true" :player="player"></ProfileInTttGame>
       </div>
     </div>
 
@@ -45,7 +50,7 @@ import ProfileInTttGame from "../../components/ttt_game_components/ProfileInTttG
 import updateAuthUserInStorage from "../../service/auth.js";
 import GameChatComponent from "../../components/GameChatComponent.vue";
 import TttCanvas from "../../components/ttt_game_components/TttCanvas.vue";
-import {sendMessageToConnectWithTime, connectToTttGame} from "../../service/ws.js";
+import {sendMessageToConnectWithTime, connectToTttGame, connectToGameMessages} from "../../service/ws.js";
 import axios from "axios";
 import {
   VICTORY_REASON_DRAW, VICTORY_REASON_PLAYER1_LOSE,
@@ -53,6 +58,7 @@ import {
   VICTORY_REASON_PLAYER1_WIN, VICTORY_REASON_PLAYER2_LOSE,
   VICTORY_REASON_PLAYER2_WIN, VICTORY_REASON_PLAYER2_TIME_WIN
 } from "../../service/TttGameHelper";
+import {fromArrayToHoursMinutesSeconds, fromStringToHoursMinutesSeconds} from "../../service/datetime";
 
 export default {
   name: "TttGamePage",
@@ -81,7 +87,9 @@ export default {
       playerTime: 0,
       otherPlayerTime: 0,
       end: false,
-      finished:false
+      finished:false,
+      messages:[],
+      messagesLoaded:false
     }
   },
   created() {
@@ -114,6 +122,7 @@ export default {
       this.getGameAndConnect();
       this.setEnemyIfExists(game);
       this.startChat();
+      this.getMessages();
     },
     getGameAndConnect() {
       if (this.$store.state.playerGameId) {
@@ -242,6 +251,28 @@ export default {
 
         }
       }
+    },
+    getMessages(){
+      let interval = setInterval(()=>{
+        if(this.game && this.game.id && this.game.gameCode){
+          axios.get("/api/game_message/"+this.game.id+"/"+this.game.gameCode)
+              .then(messages=>{
+                this.messages = messages.data;
+                for (let mess of this.messages){
+                  mess.time = fromArrayToHoursMinutesSeconds(mess.time)
+                }
+                this.messages = this.messages.reverse();
+                connectToGameMessages(this.game.id, this.game.gameCode, this.addMessageInChat);
+                this.messagesLoaded = true;
+
+              })
+          clearInterval(interval)
+        }
+      },100)
+    },
+    addMessageInChat(message){
+      message.time = fromStringToHoursMinutesSeconds(message.time);
+      this.messages.unshift(message)
     },
     startChat(){
 

@@ -28,12 +28,14 @@ export default function updateAuthUserInStorage(store,callback=null){
 
 function getPhoto(store){
     if(store.state.player){
-        axios.post("/api/player/image", {img_name: store.state.player.photo}, config).then((result) => {
-            store.commit("setPlayerPhoto","data:image/;base64, " + result.data)
-        }).catch(err => {
-            console.log("ERR:");
-            console.log(err)
-        })
+        if(store.state.player.photo){
+            axios.post("/api/player/image", {img_name: store.state.player.photo}, config).then((result) => {
+                store.commit("setPlayerPhoto","data:image/;base64, " + result.data)
+            }).catch(err => {
+                console.log("ERR:");
+                console.log(err)
+            })
+        }
     }
 }
 
@@ -48,7 +50,6 @@ function getGameCodeAndId(store,callback){
                 if(store.state.player ){
                     axios.post("/api/player/currentGameId",{id:store.state.player.id},config)
                         .then(result=>{
-                            console.log("id:"+result.data)
                             if(!result.data){
                                 store.commit("setPlayerGameId",-1);
                             }
@@ -57,7 +58,6 @@ function getGameCodeAndId(store,callback){
                                 if(callback){
                                     callback();
                                 }
-                                console.log("game-id:"+result.data)
                             }
                         })
                 }

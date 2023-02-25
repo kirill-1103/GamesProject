@@ -42,7 +42,7 @@ public class PlayerController {
     private final static Logger log = LoggerFactory.getLogger(PlayerController.class);
 
     @GetMapping("/{id}")
-    public @ResponseBody Player getOneById(long id) {
+    public @ResponseBody Player getOneById(@PathVariable Long id) {
         Player player = playerDao.getOneById(id)
                 .orElseThrow(() -> new NotFoundException("Игрока с таким id не существует!"));
         player.setPassword(null);

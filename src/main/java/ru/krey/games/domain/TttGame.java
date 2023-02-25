@@ -74,7 +74,7 @@ public class TttGame implements Game {
         return actualDuration;
     }
 
-    private final int diffTime = 10;//1sec
+    private final int diffTime = 1;//0.1sec
 
     private void changePlayer1Time() {
         if (this.player1Time != null && this.basePlayerTime>0) {
@@ -90,11 +90,16 @@ public class TttGame implements Game {
 
     public void changeGameTime() {
         this.actualDuration += diffTime;
-        if (queue == 1) {
+        if (queue == 0) {
             changePlayer1Time();
         } else {
             changePlayer2Time();
         }
+    }
+
+    public static long getGameTimeFromMinutes(int minutes){
+        final int x = 60 * 10;
+        return (long) x * (long) minutes;
     }
 
     @Override

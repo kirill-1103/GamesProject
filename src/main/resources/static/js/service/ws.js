@@ -2,22 +2,30 @@ import SockJS from 'sockjs-client'
 
 import {Stomp} from '@stomp/stompjs'
 
-let stompClient = null
 
-
-export function connect(gameId,callback,store){
-    const socket = new SockJS('/socket');
-    stompClient = Stomp.over(socket);
-    stompClient.debug = function (){};//do nothing
+export function connectToTttGame(gameId, callback, store){
+    let stompClient = getStompClient("/socket/ttt_new_game");
     stompClient.connect({},frame=>{
-        console.log("Connected: "+frame)
         stompClient.subscribe("/topic/ttt_game/"+gameId,game=>{
-            //
-            // console.log("GAME BODY")
-            // console.log(JSON.parse(game.body))
             callback(JSON.parse(game.body))
         },(error)=>console.log("error"+JSON.stringify(error)))
     })
+}
+
+export function connectToSearchResult(playerId, callback){
+    const stompClient = getStompClient("/socket/ttt_search");
+    stompClient.connect({}, frame=>{
+        stompClient.subscribe("/topic/ttt_player_search_ready/"+playerId,game=>{
+            callback(JSON.parse(game.body));
+        }, error=>console.log("error"+JSON.stringify(error)))
+    })
+}
+
+function getStompClient(socket_name){
+    const socket = new SockJS(socket_name);
+    const stompClient = Stomp.over(socket);
+    stompClient.debug = function(){};
+    return stompClient;
 }
 
 

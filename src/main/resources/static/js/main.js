@@ -18,7 +18,8 @@ const store = createStore({
             player: null,
             playerPhoto: null,
             playerGameCode: null,
-            playerGameId: null
+            playerGameId: null,
+            inSearch: false
         }
     },
     mutations: {
@@ -33,6 +34,9 @@ const store = createStore({
         },
         setPlayerGameId(state,id){
             state.playerGameId = id;
+        },
+        setInSearch(state, inSearch){
+            state.inSearch = inSearch;
         }
     }
 })

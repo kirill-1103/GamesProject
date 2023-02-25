@@ -160,11 +160,15 @@ export default {
     },
     addClickListener() {
       this.canvas.addEventListener("mouseup", e => {
+        console.log(this.player.id)
+        console.log(this.game.player1Id)
+        console.log(this.game.player2Id)
+        console.log(this.game.queue)
         let canvas_x = e.pageX - e.target.offsetLeft,
             canvas_y = e.pageY - e.target.offsetTop;
         let field_coords = this.getFieldCoordsByCanvasCoords(canvas_x, canvas_y);
-        if (this.player.id === this.game.player1Id && this.game.queue === 1
-            || this.player.id === this.game.player2Id && this.game.queue === 2) {
+        if (this.player.id === this.game.player1Id && this.game.queue === 0
+            || this.player.id === this.game.player2Id && this.game.queue === 1) {
           if(this.field[field_coords.field_y][field_coords.field_x] !== 0){
             alert("Данное поле занято!");
             return;

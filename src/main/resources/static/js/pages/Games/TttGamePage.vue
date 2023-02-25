@@ -10,9 +10,12 @@
         <ProfileInTttGame :field="field" :game="game" :end="end" :player_time="playerTime" :surrender="true" :player="player"></ProfileInTttGame>
       </div>
 
-      <TttCanvas v-if="!chat_b && field.length !== 0" :game=game :field="field" :player="player" :makeMove="makeMove" class="col">
+      <div class="col"  style="text-align: center" v-if="!chat_b && field.length !== 0">
+        <TttCanvas  :game=game :field="field" :player="player" :makeMove="makeMove">
+        </TttCanvas>
+        <span ref="whoMoveText" style="font-size: 20px; color:brown; "></span>
+      </div>
 
-      </TttCanvas>
 
       <div class="div-chat col" v-else-if="chat_b && field.length !== 0">
         <GameChatComponent></GameChatComponent>
@@ -42,7 +45,7 @@ import ProfileInTttGame from "../../components/ttt_game_components/ProfileInTttG
 import updateAuthUserInStorage from "../../service/auth.js";
 import GameChatComponent from "../../components/GameChatComponent.vue";
 import TttCanvas from "../../components/ttt_game_components/TttCanvas.vue";
-import {sendMessageToConnectWithTime, connect} from "../../service/ws.js";
+import {sendMessageToConnectWithTime, connectToTttGame} from "../../service/ws.js";
 import axios from "axios";
 import {
   VICTORY_REASON_DRAW, VICTORY_REASON_PLAYER1_LOSE,
@@ -97,6 +100,7 @@ export default {
     //TODO: Сделать запрос на профиль противника
     this.player_2.login = "Компьютер"
     this.player_2.rating = "Без рейтинга"
+
   },
 
   methods: {
@@ -106,8 +110,9 @@ export default {
     openGame() {
       this.chat_b = false;
     },
-    startGame() {
+    startGame(game = null) {
       this.getGameAndConnect();
+      this.setEnemyIfExists(game);
     },
     getGameAndConnect() {
       if (this.$store.state.playerGameId) {
@@ -119,7 +124,7 @@ export default {
     updateGameFromDb() {
       axios.get("/api/ttt_game/" + this.$store.state.playerGameId).then((response) => {
         this.game = response.data;
-        connect(this.game.id, this.updateState, this.$store);
+        connectToTttGame(this.game.id, this.updateState, this.$store);
       }).catch((error) => {
         console.log(error)
       })
@@ -127,7 +132,7 @@ export default {
     updateState(game) {
       this.game = game;
       this.field = this.game.field.field;
-      console.log(this.field[0][0])
+      this.setWhoMove();
       this.checkEndGame()
     },
     makeMove(x, y) {
@@ -143,9 +148,49 @@ export default {
         alert("Игра закончена");
       }
     },
+    setEnemy(game){
+      if(game && game.player2Id){
+        let id;
+        if(this.$store.state.player.id === game.player2Id){
+          id = game.player1Id
+        }else{
+          id = game.player2Id
+        }
+        axios.get("/api/player/"+id).then(result=>{
+          this.player_2 = result.data
+          if(this.player_2.photo){
+            axios.post("/api/player/image", {img_name: this.player_2.photo}, this.config).then((result) => {
+              this.player_2.img_data = "data:image/;base64, " + result.data;
+            }).catch(err => {
+              console.log("ERR:");
+              console.log(err)
+            })
+          }
+        })
+      }
+    },
+    setEnemyIfExists(game){
+      let interval = setInterval(()=>{
+        if(!this.player_2.id){
+          if(game && game.player2Id || this.game && this.game.player2Id){
+            if(game){
+              this.setEnemy(game);
+            }else{
+              this.setEnemy(this.game)
+            }
+            clearInterval(interval);
+          }
+        }else{
+          if(this.game.player1Id && !this.game.player2Id){
+            clearInterval(interval);
+          }
+        }
+      },100);
+    },
     checkEndGame() {
       if (this.game.endTime && !this.finished) {
         this.finished=true;
+        this.$refs.whoMoveText.innerText = '';
         if (this.game.victoryReasonCode === VICTORY_REASON_DRAW) {
           alert("Ничья!");
           return;
@@ -179,6 +224,21 @@ export default {
           } else if (this.game.victoryReasonCode === VICTORY_REASON_PLAYER2_WIN) {
             alert("Вы выиграли!")
           }
+        }
+      }
+    },
+    setWhoMove(){
+      if(this.$refs.whoMoveText){
+        if(!this.finished){
+          if(this.player.id === this.game.player1Id && this.game.queue === 0
+              || this.player.id === this.game.player2Id && this.game.queue === 1){
+            this.$refs.whoMoveText.innerText = "Ваш ход"
+          }else{
+            this.$refs.whoMoveText.innerText = "Ход противника"
+          }
+        }else{
+          this.$refs.whoMoveText.innerText = ""
+
         }
       }
     }

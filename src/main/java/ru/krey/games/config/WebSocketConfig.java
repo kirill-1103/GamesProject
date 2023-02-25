@@ -25,12 +25,11 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/socket/ttt_new_game")
+        registry.addEndpoint("/socket/ttt_new_game","/socket/ttt_search","/socket/game_messages")
 //                .addInterceptors(new HttpSessionHandshakeInterceptor())
                         .withSockJS();
 //        registry.addEndpoint("/socket");
 ////                .addInterceptors(new HttpSessionHandshakeInterceptor())
-        registry.addEndpoint("/socket/ttt_search").withSockJS();
     }
 
     @Override

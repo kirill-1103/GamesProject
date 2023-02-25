@@ -11,9 +11,7 @@ import org.springframework.format.FormatterRegistry;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import ru.krey.games.dto.converter.TttGameToDtoConverter;
-import ru.krey.games.dto.converter.TttMoveDtoToTttMoveConverter;
-import ru.krey.games.dto.converter.TttMoveToTttMoveDtoConverter;
+import ru.krey.games.dto.converter.*;
 
 @Configuration
 @EnableWebMvc
@@ -27,6 +25,10 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
     private final TttGameToDtoConverter tttGameToDto;
 
+    private final GameMessageToDtoConverter gameMessageToDtoConverter;
+
+    private final GameMessageDtoToGameMessageConverter gameMessageDtoToGameMessageConverter;
+
     @Bean
     public WebServerFactoryCustomizer<ConfigurableServletWebServerFactory> webServerCustomizer(){
         return factory -> factory.addErrorPages(new ErrorPage(HttpStatus.NOT_FOUND,"/"));
@@ -37,5 +39,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
         registry.addConverter(tttMoveDtoToTttMoveConverter);
         registry.addConverter(tttMoveToTttMoveDtoConverter);
         registry.addConverter(tttGameToDto);
+        registry.addConverter(gameMessageToDtoConverter);
+        registry.addConverter(gameMessageDtoToGameMessageConverter);
     }
 }

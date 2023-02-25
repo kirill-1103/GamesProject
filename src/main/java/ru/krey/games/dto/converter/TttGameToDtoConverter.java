@@ -31,6 +31,7 @@ public class TttGameToDtoConverter implements Converter<TttGame, TttGameDto> {
                 .winnerId(winnerId)
                 .queue(game.getQueue())
                 .field(game.getField())
+                .gameCode(game.getGameCode())
                 .build();
     }
 }

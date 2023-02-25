@@ -14,9 +14,7 @@ import ru.krey.games.service.mapper.GameMessageMapper;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.sql.Timestamp;
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @Component
 @RequiredArgsConstructor
@@ -45,8 +43,8 @@ public class GameMessageJdbcTemplate implements GameMessageDao {
             String query = "UPDATE game_message SET game_id=?,game_code=?,sender_id=?,time=?,message=? WHERE id=?";
             int rows = jdbcTemplate.update(query, message.getGameId(), message.getGameCode(),
                     senderId, message.getTime(), message.getMessage(), message.getId());
-            if (rows!=1){
-                throw new RuntimeException("Invalid request in sql: "+query);
+            if (rows != 1) {
+                throw new RuntimeException("Invalid request in sql: " + query);
             }
             return message;
         } else {
@@ -85,5 +83,11 @@ public class GameMessageJdbcTemplate implements GameMessageDao {
     public Set<GameMessage> getAllBySenderId(Long senderId) {
         String query = "SELECT * FROM game_message WHERE sender_id=?";
         return new HashSet<>(jdbcTemplate.query(query, gameMessageMapper, senderId));
+    }
+
+    @Override
+    public List<GameMessage> getAllByGameIdAndGameCode(Long gameId, Integer gameCode) {
+        String query = "SELECT * FROM game_message WHERE game_id = ? AND game_code = ? ORDER BY time ";
+        return new ArrayList<>(jdbcTemplate.query(query, gameMessageMapper, gameId, gameCode));
     }
 }

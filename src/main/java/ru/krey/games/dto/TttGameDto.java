@@ -50,4 +50,7 @@ public class TttGameDto {
     private Byte queue;
 
     private TttField field;
+
+    @JsonAlias("game_code")
+    private int gameCode;
 }

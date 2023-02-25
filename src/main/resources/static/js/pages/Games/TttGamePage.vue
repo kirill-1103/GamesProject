@@ -18,7 +18,7 @@
 
 
       <div class="div-chat col" v-else-if="chat_b && field.length !== 0">
-        <GameChatComponent></GameChatComponent>
+        <GameChatComponent :game="game" :player="player"></GameChatComponent>
       </div>
 
       <div class="col" v-else>
@@ -65,7 +65,7 @@ export default {
       height: 500,
       player: {},
       player_2: {},
-      chat_b: false,
+      chat_b: true,//change to false in future
       settings: {
         field_size: 0,
         time: 0
@@ -113,6 +113,7 @@ export default {
     startGame(game = null) {
       this.getGameAndConnect();
       this.setEnemyIfExists(game);
+      this.startChat();
     },
     getGameAndConnect() {
       if (this.$store.state.playerGameId) {
@@ -241,6 +242,9 @@ export default {
 
         }
       }
+    },
+    startChat(){
+
     }
   },
   watch: {

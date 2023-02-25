@@ -21,6 +21,15 @@ export function connectToSearchResult(playerId, callback){
     })
 }
 
+export function connectToGameMessages(gameId,gameCode,callback){
+    const stompClient = getStompClient("/socket/game_messages");
+    stompClient.connect({},frame=>{
+        stompClient.subscribe("/topic/game_message/"+gameId+"/"+gameCode,message => {
+            callback(JSON.parse(message.body));
+        },error=>console.log("error:"+JSON.stringify(error)));
+    })
+}
+
 function getStompClient(socket_name){
     const socket = new SockJS(socket_name);
     const stompClient = Stomp.over(socket);

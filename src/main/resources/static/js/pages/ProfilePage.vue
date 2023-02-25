@@ -70,7 +70,7 @@
 <script>
 import axios from "axios";
 import updateAuthUserInStorage from "../service/auth.js";
-import fromArrayToDate from "../service/datetime.js";
+import {fromArrayToDate} from "../service/datetime";
 import EditProfileModal from "../components/EditProfileModal.vue";
 
 export default {

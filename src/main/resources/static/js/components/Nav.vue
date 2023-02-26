@@ -57,7 +57,7 @@
 import axios from "axios";
 import {LOGIN_PAGE_NAME, TTT_GAME_PAGE_NAME} from "../router/component_names.js";
 import updateAuthUserInStorage from "../service/auth.js";
-import {GAME_CODE} from "../service/TttGameHelper";
+import {TTT_GAME_CODE} from "../service/TttGameHelper";
 
 export default {
   name:"Nav",
@@ -84,7 +84,7 @@ export default {
       });
     },
     goToCurrentGame(){
-      if(this.$store.state.playerGameCode === GAME_CODE
+      if(this.$store.state.playerGameCode === TTT_GAME_CODE
           && this.$store.state.playerGameId !== -1 && this.$store.state.playerGameId){
         this.$router.push({name:TTT_GAME_PAGE_NAME});
       }

@@ -20,4 +20,4 @@ export const NONE = 0;
 
 export const DRAW = 2;
 
-export const GAME_CODE = 1;
+export const TTT_GAME_CODE = 1;

@@ -58,9 +58,7 @@
 
     </div>
   </div>
-
   <TttSearchModal  :gameStarting="gameStarting" :player="$store.state.player" :stopSearch="stopSearch"/>
-
 </template>
 
 <script>
@@ -95,7 +93,7 @@ export default {
         }
       },
       disabled: true,
-      gameStarting:false
+      gameStarting:false,
     }
   },
   created() {
@@ -139,7 +137,6 @@ export default {
       if (this.alreadyStart || this.$store.state.inSearch) {
         return;
       }
-      this.$store.commit("setInSearch", true);
       this.alreadyStart = true;
       let data = {
         player_id: this.$store.state.player.id,
@@ -147,6 +144,7 @@ export default {
         base_player_time: this.settings.time,
       }
       axios.post("/api/ttt_game/search", data, this.config2)
+          .then(()=>{      this.$store.commit("setInSearch", true);})
       connectToSearchResult(data.player_id, this.setSettingsAndStartGame)
     },
     setSettingsAndStartGame(game) {

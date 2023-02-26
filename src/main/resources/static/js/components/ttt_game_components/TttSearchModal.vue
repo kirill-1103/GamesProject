@@ -1,7 +1,7 @@
 <template>
-  <div style="width:100%;height: 100%;" ref="modal" class="modal" id="tttSearchModal" role="dialog"  tabindex="-1" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+  <div ref="modal" class="modal" id="tttSearchModal" role="dialog"  tabindex="-1" aria-labelledby="mySmallModalLabel" aria-hidden="true">
     <div class="modal-dialog">
-      <div class="modal-content" >
+      <div id="modal-content" class="modal-content" >
           <div style="margin:auto;margin-top:10px"  class="spinner-border text-primary" role="status">
             <span class="visually-hidden">Loading..</span>
           </div>
@@ -42,7 +42,7 @@ export default {
     //   backdrop:false
     // })
     document.addEventListener("click",(ev)=>{
-      if(ev.target.id === 'tttSearchModal'){
+      if(ev.target.id !== 'modal-content' && this.$store.state.inSearch){
         this.stopSearch();
       }
     })

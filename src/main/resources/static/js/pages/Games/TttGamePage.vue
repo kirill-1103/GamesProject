@@ -71,7 +71,7 @@ export default {
       height: 500,
       player: {},
       player_2: {},
-      chat_b: true,//change to false in future
+      chat_b: false,
       settings: {
         field_size: 0,
         time: 0

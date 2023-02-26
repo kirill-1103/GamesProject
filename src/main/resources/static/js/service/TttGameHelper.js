@@ -19,3 +19,5 @@ export const O = -1;
 export const NONE = 0;
 
 export const DRAW = 2;
+
+export const GAME_CODE = 1;

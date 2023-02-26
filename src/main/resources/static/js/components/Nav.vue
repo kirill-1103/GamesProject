@@ -35,7 +35,7 @@
             </li>
 
             <li class="nav-item">
-              <a class="nav-link disabled" href="#">Текущая игра</a>
+              <a ref="currentGame" class="nav-link " @click="goToCurrentGame" href="#">Текущая игра</a>
             </li>
           </ul>
 
@@ -55,12 +55,22 @@
 
 <script>
 import axios from "axios";
-import {LOGIN_PAGE_NAME} from "../router/component_names.js";
+import {LOGIN_PAGE_NAME, TTT_GAME_PAGE_NAME} from "../router/component_names.js";
 import updateAuthUserInStorage from "../service/auth.js";
+import {GAME_CODE} from "../service/TttGameHelper";
 
 export default {
   name:"Nav",
   props:['player'],
+  mounted() {
+    setInterval(()=>{
+      if(this.$store.state.playerGameId && this.$store.state.playerGameId!==-1){
+        this.$refs.currentGame.style.color = 'white'
+      }else{
+        this.$refs.currentGame.style.color = 'gray'
+      }
+    },100)
+  },
   methods:{
     exit(){
       if(!this.$store.state.player){
@@ -72,6 +82,12 @@ export default {
         updateAuthUserInStorage(this.$store);
         this.$router.push({name:LOGIN_PAGE_NAME});
       });
+    },
+    goToCurrentGame(){
+      if(this.$store.state.playerGameCode === GAME_CODE
+          && this.$store.state.playerGameId !== -1 && this.$store.state.playerGameId){
+        this.$router.push({name:TTT_GAME_PAGE_NAME});
+      }
     }
   }
 }

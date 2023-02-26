@@ -1,4 +1,4 @@
-package ru.krey.games.service.mapper;
+package ru.krey.games.utils.mapper;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.RowMapper;

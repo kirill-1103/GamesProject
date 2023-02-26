@@ -4,8 +4,6 @@ import lombok.*;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -17,7 +15,7 @@ import ru.krey.games.dao.interfaces.PlayerDao;
 import ru.krey.games.dao.service.TimeComparator;
 import ru.krey.games.domain.Player;
 import ru.krey.games.dao.service.Creator;
-import ru.krey.games.service.RoleService;
+import ru.krey.games.utils.RoleUtils;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -115,7 +113,7 @@ public class PlayerDaoTest {
     public void testUpdate(){
         Player playerForUpdate = playerDao.getOneById(ids.get(0)).get();
         playerForUpdate.setRating(3);
-        playerForUpdate.setRole(RoleService.ROLE_ADMIN);
+        playerForUpdate.setRole(RoleUtils.ROLE_ADMIN);
         playerForUpdate.setEnabled(false);
         playerForUpdate.setEmail("new_email@mail.com");
         playerForUpdate.setPhoto("photo");

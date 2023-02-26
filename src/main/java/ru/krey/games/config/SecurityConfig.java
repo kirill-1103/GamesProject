@@ -14,7 +14,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.header.writers.frameoptions.XFrameOptionsHeaderWriter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import ru.krey.games.handler.auth.AuthSuccessHandler;
-import ru.krey.games.service.RoleService;
+import ru.krey.games.utils.RoleUtils;
 
 
 @Configuration
@@ -48,10 +48,10 @@ public class SecurityConfig {
                         .antMatchers(PUBLIC)
                             .permitAll()
                         .antMatchers(FOR_AUTHORIZED)
-                            .hasAnyAuthority(RoleService.getRoleForConfig(RoleService.ROLE_USER),
-                            RoleService.getRoleForConfig(RoleService.ROLE_ADMIN))
+                            .hasAnyAuthority(RoleUtils.getRoleForConfig(RoleUtils.ROLE_USER),
+                            RoleUtils.getRoleForConfig(RoleUtils.ROLE_ADMIN))
                         .anyRequest()
-                            .hasAuthority(RoleService.ROLE_ADMIN)
+                            .hasAuthority(RoleUtils.ROLE_ADMIN)
                 .and()
                     .formLogin()
                     .loginPage("/auth")

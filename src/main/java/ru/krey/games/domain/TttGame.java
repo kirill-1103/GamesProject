@@ -2,8 +2,9 @@ package ru.krey.games.domain;
 
 import lombok.*;
 import ru.krey.games.domain.interfaces.Game;
+import ru.krey.games.error.BadRequestException;
 import ru.krey.games.logic.ttt.TttField;
-import ru.krey.games.service.GameService;
+import ru.krey.games.utils.GameUtils;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -61,12 +62,12 @@ public class TttGame implements Game {
 
     @Override
     public String getGameName() {
-        return GameService.TttGameName;
+        return GameUtils.TttGameName;
     }
 
     @Override
     public int getGameCode() {
-        return GameService.TttGameCode;
+        return GameUtils.TttGameCode;
     }
 
     @Override
@@ -77,13 +78,13 @@ public class TttGame implements Game {
     private final int diffTime = 1;//0.1sec
 
     private void changePlayer1Time() {
-        if (this.player1Time != null && this.basePlayerTime>0) {
+        if (this.player1Time != null && this.basePlayerTime > 0) {
             this.player1Time -= diffTime;
         }
     }
 
     private void changePlayer2Time() {
-        if (this.player2Time != null && this.basePlayerTime>0) {
+        if (this.player2Time != null && this.basePlayerTime > 0) {
             this.player2Time -= diffTime;
         }
     }
@@ -97,7 +98,34 @@ public class TttGame implements Game {
         }
     }
 
-    public static long getGameTimeFromMinutes(int minutes){
+    //return true if rating has been changed
+    public boolean changeRating() {
+        if (this.getPlayer2() != null) {
+            this.getWinner().plusRating();
+            if (this.getWinner().getId().equals(this.getPlayer2().getId())) {
+                this.getPlayer1().minusRating();
+            } else {
+                this.getPlayer2().minusRating();
+            }
+            return true;
+        }
+        return false;
+    }
+
+    public Player addMoveInFieldReturningMover(Long playerId, Integer x, Integer y) {
+        if (this.getPlayer1().getId().equals(playerId)) {
+            this.getField().setMove(x, y, TttField.X);
+            return this.getPlayer1();
+        } else if (this.getPlayer2().getId().equals(playerId)) {
+            this.getField().setMove(x, y, TttField.O);
+            return this.getPlayer2();
+        } else {
+            throw new IllegalArgumentException("Wrong player's id");
+        }
+    }
+
+
+    public static long getGameTimeFromMinutes(int minutes) {
         final int x = 60 * 10;
         return (long) x * (long) minutes;
     }

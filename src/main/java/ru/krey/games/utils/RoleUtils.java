@@ -1,6 +1,6 @@
-package ru.krey.games.service;
+package ru.krey.games.utils;
 
-public  class RoleService {
+public  class RoleUtils {
     public static final String ROLE_USER = "USER";
     public static final String ROLE_ADMIN = "ADMIN";
 

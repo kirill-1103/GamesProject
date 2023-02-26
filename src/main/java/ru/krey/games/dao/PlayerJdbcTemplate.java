@@ -9,7 +9,7 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
 import ru.krey.games.domain.Player;
 import ru.krey.games.dao.interfaces.PlayerDao;
-import ru.krey.games.service.mapper.PlayerMapper;
+import ru.krey.games.utils.mapper.PlayerMapper;
 
 import java.sql.PreparedStatement;
 import java.sql.Statement;

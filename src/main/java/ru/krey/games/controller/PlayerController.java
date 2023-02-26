@@ -3,7 +3,6 @@ package ru.krey.games.controller;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -11,11 +10,10 @@ import ru.krey.games.dao.interfaces.PlayerDao;
 import ru.krey.games.dao.interfaces.TttGameDao;
 import ru.krey.games.domain.Player;
 import ru.krey.games.domain.TttGame;
-import ru.krey.games.domain.interfaces.Game;
 import ru.krey.games.error.BadRequestException;
 import ru.krey.games.error.NotFoundException;
-import ru.krey.games.service.AuthService;
-import ru.krey.games.service.GameService;
+import ru.krey.games.utils.AuthUtils;
+import ru.krey.games.utils.GameUtils;
 import ru.krey.games.service.LocalImageService;
 import ru.krey.games.service.interfaces.ImageService;
 
@@ -29,7 +27,7 @@ public class PlayerController {
     private final PlayerDao playerDao;
 
     private final TttGameDao tttGameDao;
-    private final AuthService authService;
+    private final AuthUtils authUtils;
 
     private final ImageService imageService;
 
@@ -51,7 +49,7 @@ public class PlayerController {
 
     @GetMapping("/authenticated")
     public @ResponseBody Player getAuthenticatedUser() {
-        Player player = playerDao.getOneByLogin(authService.getCurrentUsername())
+        Player player = playerDao.getOneByLogin(authUtils.getCurrentUsername())
                 .orElseThrow(() -> new BadRequestException("Авторизованного игрока нет!"));
         player.setPassword(null);
         return player;
@@ -114,7 +112,7 @@ public class PlayerController {
 
 
 
-        authService.changeSessionUser(player);//change username and password in session
+        authUtils.changeSessionUser(player);//change username and password in session
 
         player.setPassword(null);
         return player;
@@ -133,7 +131,7 @@ public class PlayerController {
             return null;
         }
 
-        if(player.getLastGameCode() == GameService.TttGameCode){
+        if(player.getLastGameCode() == GameUtils.TttGameCode){
             TttGame game =  tttGameDao.getCurrentGameByPlayerId(playerId)
                     .orElse(null);
             return game == null ? null : game.getId();

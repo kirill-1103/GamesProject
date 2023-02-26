@@ -7,7 +7,7 @@ import org.springframework.web.multipart.MultipartFile;
 import ru.krey.games.domain.Player;
 import ru.krey.games.error.BadRequestException;
 import ru.krey.games.dao.interfaces.PlayerDao;
-import ru.krey.games.service.RoleService;
+import ru.krey.games.utils.RoleUtils;
 import ru.krey.games.service.interfaces.ImageService;
 
 import java.io.IOException;
@@ -44,7 +44,7 @@ public class AuthController {
                         .signUpTime(LocalDateTime.now())
                         .enabled(true)
                         .rating(0)
-                        .Role(RoleService.ROLE_USER)
+                        .Role(RoleUtils.ROLE_USER)
                         .build();
 
 

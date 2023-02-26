@@ -2,7 +2,6 @@ package ru.krey.games.service;
 
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
@@ -15,7 +14,6 @@ import ru.krey.games.error.NotFoundException;
 import ru.krey.games.service.interfaces.ImageService;
 
 import java.io.*;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.Base64;

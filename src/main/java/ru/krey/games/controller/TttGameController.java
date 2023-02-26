@@ -18,8 +18,10 @@ import ru.krey.games.dto.TttSearchDto;
 import ru.krey.games.error.BadRequestException;
 import ru.krey.games.error.NotFoundException;
 import ru.krey.games.logic.ttt.TttField;
-import ru.krey.games.service.AuthService;
-import ru.krey.games.service.GameService;
+import ru.krey.games.service.TttGameService;
+import ru.krey.games.service.TttMoveService;
+import ru.krey.games.utils.AuthUtils;
+import ru.krey.games.utils.GameUtils;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -31,26 +33,22 @@ import java.util.concurrent.Executors;
 @RequestMapping("api/ttt_game")
 @RequiredArgsConstructor
 public class TttGameController {
+    private final TttGameService gameService;
 
-    private final TttGameDao gameDao;
-
-    private final TttMoveDao moveDao;
+    private final TttMoveService moveService;
 
     private final static Logger log = LoggerFactory.getLogger(TttGameController.class);
-
-    private final PlayerDao playerDao;
 
     private final ConversionService conversionService;
 
     private final SimpMessagingTemplate messagingTemplate;
 
-    private final AuthService authService;
-
     private final ExecutorService executorForSave = Executors.newSingleThreadExecutor();
 
-    private Set<TttGame> savedGames = new ConcurrentSkipListSet<>(Comparator.comparingLong(TttGame::getId));
+    private final Set<TttGame> savedGames = new ConcurrentSkipListSet<>(Comparator.comparingLong(TttGame::getId));
 
-    private Deque<TttSearchDto> searches = new ArrayDeque<>();
+    private final Deque<TttSearchDto> searches = new ArrayDeque<>();
+
 
     @PostMapping("/new")
     public @ResponseBody TttGameDto newGame(
@@ -58,7 +56,8 @@ public class TttGameController {
             @RequestParam("field_size") Integer fieldSize, @RequestParam("base_player_time") Long minutes,
             @RequestParam(value = "complexity", required = false) Integer complexity
     ) {
-        TttGame savedGame = createGame(player1Id, player2Id, fieldSize, minutes, complexity);
+
+        TttGame savedGame = gameService.newGame(player1Id, player2Id, fieldSize, minutes, complexity);
         savedGames.add(savedGame);
         return conversionService.convert(savedGame, TttGameDto.class);
     }
@@ -67,18 +66,13 @@ public class TttGameController {
     public TttGameDto getOneById(@PathVariable("id") Long id) {
         return conversionService.convert(savedGames.stream().filter(savedGame -> savedGame.getId().equals(id))
                 .findAny()
-                .orElse(gameDao.getOneById(id)
+                .orElse(gameService.getOneById(id)
                         .orElseThrow(() -> new NotFoundException("Игра не найдена"))), TttGameDto.class);
     }
 
     //    @MessageMapping("/connect")
     @Scheduled(fixedRate = 100)
     private void gameProcessing() {
-//        if (savedGames.isEmpty()) {
-//            Set<TttGame> gamesNoEnded = gameDao.getAllNoEnded();
-//            savedGames = new ConcurrentSkipListSet<>(Comparator.comparingLong(TttGame::getId));
-//            savedGames.addAll(gamesNoEnded);
-//        }
         savedGames.forEach((game) -> {
             if(Objects.isNull(game.getEndTime())){
                 if (Objects.isNull(game.getVictoryReasonCode())) {
@@ -106,10 +100,10 @@ public class TttGameController {
         savedGames.removeIf((g) -> game.getId().equals(g.getId()));
 
         if (game.getPlayer1().getId().equals(playerId)) {
-            game.setVictoryReasonCode((byte) GameService.VICTORY_REASON_PLAYER1_LOSE);
+            game.setVictoryReasonCode((byte) GameUtils.VICTORY_REASON_PLAYER1_LOSE);
             game.setWinner(game.getPlayer2());
         } else if (game.getPlayer2().getId().equals(playerId)) {
-            game.setVictoryReasonCode((byte) GameService.VICTORY_REASON_PLAYER2_LOSE);
+            game.setVictoryReasonCode((byte) GameUtils.VICTORY_REASON_PLAYER2_LOSE);
             game.setWinner(game.getPlayer1());
         } else {
             throw new BadRequestException();
@@ -124,7 +118,12 @@ public class TttGameController {
                          @RequestParam("y") Integer y) {
         TttGame game = getGameFromSaved(gameId);
 
-        Player mover = addMoveInFieldReturningMover(game, playerId, x, y);
+        Player mover;
+        try{
+            mover = game.addMoveInFieldReturningMover(playerId, x, y);
+        }catch(IllegalArgumentException e){
+            throw new BadRequestException(e);
+        }
 
         game.setQueue((byte) (1 - game.getQueue()));
 
@@ -142,10 +141,10 @@ public class TttGameController {
         messagingTemplate.convertAndSend("/topic/ttt_game/" + gameId
                 , conversionService.convert(game, TttGameDto.class));
 
-        saveMove(game, mover, x, y);
+        moveService.saveMove(game,mover,x,y);
 
         if (!Objects.isNull(coords)) {
-            saveMove(game, null, coords[0], coords[1]);
+            moveService.saveMove(game, null, coords[0], coords[1]);
         }
     }
 
@@ -160,12 +159,12 @@ public class TttGameController {
                         }
                 );
 
-        TttSearchDto otherSearch = searchIsReady(search);
+        TttSearchDto otherSearch = getReadySearch(search);
 
         if (otherSearch == null) {
             searches.add(search);
         } else {
-            TttGame savedGame = createGame(search.getPlayerId(), otherSearch.getPlayerId(),
+            TttGame savedGame = gameService.newGame(search.getPlayerId(), otherSearch.getPlayerId(),
                     otherSearch.getSizeField(), otherSearch.getBasePlayerTime(), null);
             savedGames.add(savedGame);
             messagingTemplate.convertAndSend("/topic/ttt_player_search_ready/" + savedGame.getPlayer1().getId()
@@ -185,7 +184,7 @@ public class TttGameController {
     }
 
 
-    private TttSearchDto searchIsReady(TttSearchDto search) {
+    private TttSearchDto getReadySearch(TttSearchDto search) {
         Iterator<TttSearchDto> iterator = searches.iterator();
         while (iterator.hasNext()) {
             TttSearchDto s = iterator.next();
@@ -224,19 +223,6 @@ public class TttGameController {
         return coords;
     }
 
-    private void saveMove(TttGame game, Player mover, Integer x, Integer y) {
-        TttMove move = TttMove.builder()
-                .absoluteTime(LocalDateTime.now())
-                .game(game)
-                .gameTimeMillis((int) ((game.getBasePlayerTime() * 2 - (game.getPlayer1Time() + game.getPlayer2Time())) * 100))
-                .xCoordinate(x)
-                .yCoordinate(y)
-                .player(mover)
-                .build();
-
-        moveDao.saveOrUpdate(move);
-    }
-
     private void endGameByWinner(TttGame game, int winner) {
         setWinner(game, winner);
         saveGameInDb(game);
@@ -245,10 +231,10 @@ public class TttGameController {
     private void endGameByTime(TttGame game) {
         if (game.getPlayer1Time() == 0) {
             game.setWinner(game.getPlayer2());
-            game.setVictoryReasonCode((byte) GameService.VICTORY_REASON_PLAYER2_TIME_WIN);
+            game.setVictoryReasonCode((byte) GameUtils.VICTORY_REASON_PLAYER2_TIME_WIN);
         } else {
             game.setWinner(game.getPlayer1());
-            game.setVictoryReasonCode((byte) GameService.VICTORY_REASON_PLAYER1_TIME_WIN);
+            game.setVictoryReasonCode((byte) GameUtils.VICTORY_REASON_PLAYER1_TIME_WIN);
         }
         saveGameInDb(game);
     }
@@ -256,14 +242,14 @@ public class TttGameController {
     private void setWinner(TttGame game, int winner) {
         if (winner == TttField.X) {
             game.setWinner(game.getPlayer1());
-            game.setVictoryReasonCode((byte) GameService.VICTORY_REASON_PLAYER1_WIN);
+            game.setVictoryReasonCode((byte) GameUtils.VICTORY_REASON_PLAYER1_WIN);
         } else if (winner == TttField.O) {
             if (game.getPlayer2() != null) {
                 game.setWinner(game.getPlayer2());
             }
-            game.setVictoryReasonCode((byte) GameService.VICTORY_REASON_PLAYER2_WIN);
+            game.setVictoryReasonCode((byte) GameUtils.VICTORY_REASON_PLAYER2_WIN);
         } else if (winner == TttField.DRAW) {
-            game.setVictoryReasonCode((byte) GameService.VICTORY_REASON_DRAW);
+            game.setVictoryReasonCode((byte) GameUtils.VICTORY_REASON_DRAW);
         } else {
             throw new RuntimeException();
         }
@@ -277,25 +263,9 @@ public class TttGameController {
                 .orElseThrow(BadRequestException::new);
     }
 
-    private Player addMoveInFieldReturningMover(TttGame game, Long playerId,
-                                                Integer x, Integer y) {
-        if (game.getPlayer1().getId().equals(playerId)) {
-            game.getField().setMove(x, y, TttField.X);
-            return game.getPlayer1();
-        } else if (game.getPlayer2().getId().equals(playerId)) {
-            game.getField().setMove(x, y, TttField.O);
-            return game.getPlayer2();
-        } else {
-            throw new BadRequestException();
-        }
-    }
-
     private void saveGameInDb(TttGame game) {
         executorForSave.execute(() -> {
-            game.setEndTime(LocalDateTime.now());
-//            game.setActualDuration((int) (game.getBasePlayerTime()*2-game.getPlayer1Time()-game.getPlayer2Time()));
-            gameDao.saveOrUpdate(game);
-            changeRating(game);
+            gameService.setEndedGameInDb(game);
             savedGames.removeIf((g) -> g.getId().equals(game.getId()));
             messagingTemplate.convertAndSend("/topic/ttt_game/" + game.getId()
                     , conversionService.convert(game, TttGameDto.class));
@@ -303,63 +273,4 @@ public class TttGameController {
         });
     }
 
-    private void changeRating(TttGame game) {
-        if (game.getPlayer2() != null) {
-            game.getWinner().plusRating();
-            if (game.getWinner().getId().equals(game.getPlayer2().getId())) {
-                game.getPlayer1().minusRating();
-            } else {
-                game.getPlayer2().minusRating();
-            }
-            playerDao.saveOrUpdate(game.getPlayer1());
-            playerDao.saveOrUpdate(game.getPlayer2());
-        }
-    }
-
-    private TttGame createGame(Long player1Id, Long player2Id,
-                               Integer fieldSize, Long minutes,
-                               Integer complexity) {
-        if (player1Id == null || fieldSize == null || minutes == null) {
-            throw new BadRequestException("Не удалось создать игру - неверные входные данные");
-        }
-
-        if (player2Id != null) {
-            Random random = new Random();
-            long randomInt = random.nextInt(2);
-            if (randomInt == 1) {
-                long temp = player1Id;
-                player1Id = player2Id;
-                player2Id = temp;
-            }
-        }
-
-        Player player1 = playerDao.getOneById(player1Id).orElseThrow(NotFoundException::new);
-        Player player2 = player2Id == null ? null : playerDao.getOneById(player2Id).orElseThrow(NotFoundException::new);
-
-        Long time = TttGame.getGameTimeFromMinutes(minutes.intValue());
-
-        TttGame newGame = TttGame.builder()
-                .actualDuration(0)
-                .basePlayerTime(time)
-                .player1Time(time + 30)
-                .player2Time(time)
-                .player1(player1)
-                .player2(player2)
-                .startTime(LocalDateTime.now())
-                .complexity(complexity)
-                .sizeField(fieldSize)
-                .queue((byte) 0)
-                .build();
-        if (minutes == -1) {
-            newGame.setBasePlayerTime(minutes);
-        }
-        TttGame savedGame = gameDao.saveOrUpdate(newGame);
-        player1.setLastGameCode(GameService.TttGameCode);
-        playerDao.saveOrUpdate(player1);
-        if (player2 != null) {
-            player2.setLastGameCode(GameService.TttGameCode);
-        }
-        savedGame.setField(new TttField(fieldSize));
-        return savedGame;
-    }
 }

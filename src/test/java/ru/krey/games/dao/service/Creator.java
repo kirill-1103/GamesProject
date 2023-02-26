@@ -3,7 +3,6 @@ package ru.krey.games.dao.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import ru.krey.games.dao.TttMoveDaoTest;
 import ru.krey.games.dao.interfaces.GameMessageDao;
 import ru.krey.games.dao.interfaces.PlayerDao;
 import ru.krey.games.dao.interfaces.TttGameDao;
@@ -12,7 +11,7 @@ import ru.krey.games.domain.GameMessage;
 import ru.krey.games.domain.Player;
 import ru.krey.games.domain.TttGame;
 import ru.krey.games.domain.TttMove;
-import ru.krey.games.service.RoleService;
+import ru.krey.games.utils.RoleUtils;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -39,7 +38,7 @@ public class Creator {
                  .signUpTime(LocalDateTime.now())
                  .password(new BCryptPasswordEncoder().encode("123"))
                  .photo(null)
-                 .Role(RoleService.ROLE_USER)
+                 .Role(RoleUtils.ROLE_USER)
                  .rating(0)
                  .enabled(true)
                  .build());

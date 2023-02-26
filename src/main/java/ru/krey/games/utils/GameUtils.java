@@ -1,6 +1,6 @@
-package ru.krey.games.service;
+package ru.krey.games.utils;
 
-public class GameService {
+public class GameUtils {
     public final static String TttGameName = "TttGame";
     public final static int TttGameCode = 1;
 
@@ -17,5 +17,4 @@ public class GameService {
     public final static int VICTORY_REASON_PLAYER2_LOSE = 15;
 
     public final static int VICTORY_REASON_DRAW = 16;
-
 }

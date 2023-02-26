@@ -1,16 +1,16 @@
-package ru.krey.games.service;
+package ru.krey.games.utils;
 
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 import ru.krey.games.domain.Player;
 
 import java.util.Collection;
 
-@Service
-public class AuthService {
+@Component
+public class AuthUtils {
     public String getCurrentUsername(){
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         return auth.getName();

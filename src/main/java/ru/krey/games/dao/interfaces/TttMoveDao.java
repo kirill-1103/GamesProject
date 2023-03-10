@@ -1,7 +1,9 @@
 package ru.krey.games.dao.interfaces;
 
 import ru.krey.games.domain.TttMove;
+import ru.krey.games.dto.TttMoveDto;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -17,5 +19,5 @@ public interface TttMoveDao {
 
     TttMove saveOrUpdate(TttMove move);
 
-
+    List<TttMoveDto> getAllByGameIdOrderedByTime(Long gameId);
 }

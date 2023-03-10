@@ -36,6 +36,7 @@
 
 <script>
   import axios from "axios";
+  import {reformatTime} from "../../service/datetime";
 
   export default {
     name:"ProfileInTttGame",
@@ -48,20 +49,11 @@
             "Access-Control-Allow-Origin": "*",
           }
         },
-        alreadySurrendered:false
+        alreadySurrendered:false,
+        reformatTime:reformatTime
       }
     },
     methods:{
-      reformatTime(time){
-        if(time<0){
-          return "∞";
-        }
-        let minutes = Math.floor(time/60/10);
-        let seconds = Math.floor((time - minutes*60*10)/10)
-        let min_str = minutes > 9 ?  String(minutes) : "0"+String(minutes);
-        let sec_str = seconds > 9 ?  String(seconds) : "0"+String(seconds);
-        return min_str + ":" + sec_str;
-      },
       surrender_f(){
         if(!this.alreadySurrendered && !this.game.endTime ){
           this.alreadySurrendered = true;

@@ -11,7 +11,7 @@ import {O, X} from "../../service/TttGameHelper";
 
 export default {
   name: "TttCanvas",
-  props: ["game", "field", "player", "makeMove"],
+  props: ["game", "field", "player", "makeMove", "isShowing"],
   data: function () {
     return {
       canvas: null,
@@ -151,9 +151,10 @@ export default {
     addListeners() {
       let canvasTimeout = setTimeout(() => {
         if (this.canvas) {
-          this.addClickListener();
-          this.addMoveListener();
-
+          if(!this.isShowing){
+            this.addClickListener();
+            this.addMoveListener();
+          }
           clearTimeout(canvasTimeout);
         }
       }, 100)

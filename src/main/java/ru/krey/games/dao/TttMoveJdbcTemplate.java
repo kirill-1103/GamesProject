@@ -9,14 +9,14 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
 import ru.krey.games.dao.interfaces.TttMoveDao;
 import ru.krey.games.domain.TttMove;
+import ru.krey.games.dto.TttMoveDto;
+import ru.krey.games.utils.mapper.TttMoveDtoMapper;
 import ru.krey.games.utils.mapper.TttMoveMapper;
 
 import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.sql.Timestamp;
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @Component
 @RequiredArgsConstructor
@@ -24,6 +24,8 @@ public class TttMoveJdbcTemplate implements TttMoveDao {
 
     private final JdbcTemplate jdbcTemplate;
     private final TttMoveMapper moveMapper;
+
+    private final TttMoveDtoMapper moveDtoMapper;
 
     private final static Logger log = LoggerFactory.getLogger(TttMoveJdbcTemplate.class);
 
@@ -50,6 +52,12 @@ public class TttMoveJdbcTemplate implements TttMoveDao {
     public Set<TttMove> getAllByGameId(Long gameId) {
         String query = "SELECT * FROM ttt_move WHERE game_id=?";
         return new HashSet<>(jdbcTemplate.query(query, moveMapper, gameId));
+    }
+
+    @Override
+    public List<TttMoveDto> getAllByGameIdOrderedByTime(Long gameId) {
+        String query = "SELECT * FROM ttt_move WHERE game_id=? ORDER BY game_time_millis ";
+        return new ArrayList<>(jdbcTemplate.query(query, moveDtoMapper, gameId));
     }
 
     @Override

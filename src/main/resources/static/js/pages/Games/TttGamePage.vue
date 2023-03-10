@@ -11,7 +11,7 @@
       </div>
 
       <div class="col"  style="text-align: center" v-if="!chat_b && field.length !== 0">
-        <TttCanvas  :game=game :field="field" :player="player" :makeMove="makeMove">
+        <TttCanvas  :game=game :field="field" :player="player" :makeMove="makeMove" :isShowing="false">
         </TttCanvas>
         <span v-text="whoMoveText" style="font-size: 20px; color:brown; "></span>
       </div>

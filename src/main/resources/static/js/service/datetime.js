@@ -19,3 +19,14 @@ export function fromStringToHoursMinutesSeconds(string){
 export function fromArrayToDateWithTime(array){
     return fromArrayToDate(array) +" / "+fromArrayToHoursMinutesSeconds(array)
 }
+
+export function reformatTime(time){
+    if(time<0){
+        return "∞";
+    }
+    let minutes = Math.floor(time/60/10);
+    let seconds = Math.floor((time - minutes*60*10)/10)
+    let min_str = minutes > 9 ?  String(minutes) : "0"+String(minutes);
+    let sec_str = seconds > 9 ?  String(seconds) : "0"+String(seconds);
+    return min_str + ":" + sec_str;
+}

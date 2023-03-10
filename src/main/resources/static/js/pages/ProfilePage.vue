@@ -43,9 +43,10 @@
             </thead>
           </table>
           <div ref="scroll_table" class="table-scroll-body">
-            <table ref="table" v-if="games">
+            <table class="main-table" ref="table" v-if="games">
               <tbody>
-              <tr v-for="game of games">
+              <tr v-for="game of games" v-on:click="showGame(game.id)" data-bs-toggle="modal"
+                  data-bs-target="#showGame">
                 <th class="col1" scope="row">{{ game.id }}</th>
                 <td class="col2">{{ game.name }}</td>
                 <td class="col3">{{ game.entityName }}</td>
@@ -57,7 +58,9 @@
             <div style="margin-top:20%;" v-else class="spinner-border text-primary" role="status">
               <span class="visually-hidden">Loading..</span>
             </div>
-            <div v-if="waitingTable && games"  class="spinner-border text-primary" role="status">
+
+            <div  v-if="waitingTable && games"
+                 class="spinner-border text-primary" role="status">
               <span class="visually-hidden">Loading..</span>
             </div>
           </div>
@@ -66,6 +69,8 @@
     </div>
 
     <EditProfileModal :player="player"/>
+
+    <ShowGameModal :gameSettings="gameSettingsForModal" />
 
   </div>
 
@@ -77,11 +82,13 @@ import axios from "axios";
 import updateAuthUserInStorage from "../service/auth.js";
 import {fromArrayToDate, fromArrayToDateWithTime} from "../service/datetime";
 import EditProfileModal from "../components/EditProfileModal.vue";
+import ShowGameModal from "../components/ShowGameModal.vue";
 import {TTT_GAME_CODE} from "../service/TttGameHelper"
 
 export default {
   name: "ProfilePage",
   components: {
+    ShowGameModal,
     EditProfileModal
   },
   data: function () {
@@ -100,14 +107,17 @@ export default {
       from: 0,
       to: 15,
       waitingTable: false,
-      stopTable: false
+      stopTable: false,
+      gameSettingsForModal:{
+        id:null,
+        code:null
+      }
     }
   },
   created() {
     updateAuthUserInStorage(this.$store).then(() => {//get player
       this.player = this.$store.state.player;
       this.signUpTime = fromArrayToDate(this.player.signUpTime);
-      console.log(this.player);
       if (this.player.photo && this.player.photo !== '') {
         axios.post("/api/player/image", {img_name: this.player.photo}, this.config).then((result) => {
           this.imgSrc = "data:image/;base64, " + result.data;
@@ -127,7 +137,6 @@ export default {
   methods: {
     getGamesTable() {
       let interval = setInterval(() => {
-        console.log('here')
         if (this.player.login !== null) {
           this.waitingTable = true;
           axios.post("/api/games/byplayer", {
@@ -168,7 +177,16 @@ export default {
           this.getGamesTable();
         }
       })
-    }
+    },
+
+    showGame(id) {
+      let gameCodeForModal = this.games.filter((game) => game.id === id)[0].code;
+      let gameIdForModal = id;
+      this.gameSettingsForModal = {
+        id:gameIdForModal,
+        code:gameCodeForModal
+      }
+    },
   }
 }
 </script>
@@ -185,7 +203,6 @@ export default {
   display: flex;
   flex-direction: column;
   width: 45%;
-  /*margin:10px auto;*/
   margin-top: 10px;
   word-wrap: break-word;
   background-clip: border-box;
@@ -231,20 +248,9 @@ th, td {
   padding-left: 8px;
 }
 
-.mb-3, .my-3 {
-  margin-bottom: 1rem !important;
-}
-
-.bg-gray-300 {
-  background-color: #e2e8f0;
-}
-
-.h-100 {
-  height: 100% !important;
-}
-
-.shadow-none {
-  box-shadow: none !important;
+.main-table tr:hover {
+  background: aliceblue !important;
+  cursor: pointer;
 }
 
 </style>

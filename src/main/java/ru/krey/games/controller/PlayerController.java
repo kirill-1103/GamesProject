@@ -101,6 +101,8 @@ public class PlayerController {
         }
 
         Player player = playerDao.saveOrUpdate(playerFromDb);
+        playerFromDb.setPassword(null);
+        player.setPassword(null);
 
         if(img!=null && !img.isEmpty()){
             try{
@@ -110,11 +112,8 @@ public class PlayerController {
             }
         }
 
-
-
         authUtils.changeSessionUser(player);//change username and password in session
 
-        player.setPassword(null);
         return player;
     }
 

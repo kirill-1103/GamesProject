@@ -13,7 +13,7 @@
       <div class="col"  style="text-align: center" v-if="!chat_b && field.length !== 0">
         <TttCanvas  :game=game :field="field" :player="player" :makeMove="makeMove">
         </TttCanvas>
-        <span ref="whoMoveText" style="font-size: 20px; color:brown; "></span>
+        <span v-text="whoMoveText" style="font-size: 20px; color:brown; "></span>
       </div>
 
 
@@ -89,7 +89,8 @@ export default {
       end: false,
       finished:false,
       messages:[],
-      messagesLoaded:false
+      messagesLoaded:false,
+      whoMoveText :''
     }
   },
   created() {
@@ -200,7 +201,7 @@ export default {
     checkEndGame() {
       if (this.game.endTime && !this.finished) {
         this.finished=true;
-        this.$refs.whoMoveText.innerText = '';
+        this.whoMoveText = '';
         if (this.game.victoryReasonCode === VICTORY_REASON_DRAW) {
           alert("Ничья!");
           return;
@@ -238,16 +239,16 @@ export default {
       }
     },
     setWhoMove(){
-      if(this.$refs.whoMoveText){
+      if(this.whoMoveText !== null && this.whoMoveText!==undefined){
         if(!this.finished){
           if(this.player.id === this.game.player1Id && this.game.queue === 0
               || this.player.id === this.game.player2Id && this.game.queue === 1){
-            this.$refs.whoMoveText.innerText = "Ваш ход"
+            this.whoMoveText = "Ваш ход"
           }else{
-            this.$refs.whoMoveText.innerText = "Ход противника"
+            this.whoMoveText = "Ход противника"
           }
         }else{
-          this.$refs.whoMoveText.innerText = ""
+          this.whoMoveText = ""
 
         }
       }

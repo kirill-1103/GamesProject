@@ -18,4 +18,6 @@ public interface TttGameDao {
     Optional<TttGame> getCurrentGameByPlayerId(Long id);
 
     Set<TttGame> getAllNoEnded();
+
+    Set<TttGame> getAllGamesWithPlayersByPlayerId(Long playerId);
 }

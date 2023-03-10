@@ -18,6 +18,8 @@ import java.util.Set;
 @ToString
 public class TttGame implements Game {
 
+
+    public final static String RUSSIAN_NAME = "Крестики нолики";
     private Long id;
 
     @NonNull
@@ -129,6 +131,12 @@ public class TttGame implements Game {
         final int x = 60 * 10;
         return (long) x * (long) minutes;
     }
+
+    @Override
+    public String getRussianName(){
+        return RUSSIAN_NAME;
+    }
+
 
     @Override
     public boolean equals(Object o) {

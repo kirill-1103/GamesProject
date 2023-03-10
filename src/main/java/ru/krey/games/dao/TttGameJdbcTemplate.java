@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 import ru.krey.games.dao.interfaces.TttGameDao;
 import ru.krey.games.domain.TttGame;
 import ru.krey.games.utils.mapper.TttGameMapper;
+import ru.krey.games.utils.mapper.TttGameWithPlayerMapper;
 
 import java.sql.PreparedStatement;
 import java.sql.Statement;
@@ -25,7 +26,9 @@ public class TttGameJdbcTemplate implements TttGameDao {
     private final TttGameMapper gameMapper;
     private final JdbcTemplate jdbcTemplate;
 
+    private final TttGameWithPlayerMapper tttGameWithPlayerMapper;
     private static final Logger log = LoggerFactory.getLogger(TttGameJdbcTemplate.class);
+
 
     @Override
     public Optional<TttGame> getOneById(Long id) {
@@ -139,5 +142,23 @@ public class TttGameJdbcTemplate implements TttGameDao {
     public Set<TttGame> getAllNoEnded(){
         String query = "SELECT * FROM ttt_game WHERE end_time is NULL";
         return new HashSet<>(jdbcTemplate.query(query,this.gameMapper));
+    }
+
+    @Override
+    public Set<TttGame> getAllGamesWithPlayersByPlayerId(Long playerId){
+        String query = "SELECT  g.*," +
+                "p1.id AS p1_id, p1.last_game_code AS p1_last_game_code, p1.login AS p1_login, " +
+                "p1.password AS p1_password, p1.email as p1_email, p1.enabled as p1_enabled, " +
+                "p1.last_sign_in_time as p1_last_sign_in_time, p1.photo AS p1_photo, p1.rating AS p1_rating, " +
+                "p1.role AS p1_role, p1.sign_up_time AS p1_sign_up_time, " +
+                "p2.id AS p2_id, p2.last_game_code AS p2_last_game_code, p2.login AS p2_login, " +
+                "p2.password AS p2_password, p2.email as p2_email, p2.enabled as p2_enabled, " +
+                "p2.last_sign_in_time as p2_last_sign_in_time, p2.photo as p2_photo, p2.rating as p2_rating," +
+                "p2.role as p2_role, p2.sign_up_time as p2_sign_up_time " +
+                        "FROM ttt_game AS g " +
+                        "INNER JOIN player AS p1 ON g.player1_id = p1.id " +
+                        "LEFT OUTER JOIN player AS p2 ON g.player2_id = p2.id " +
+                        "WHERE g.player1_id = ? OR g.player2_id = ?";
+        return new HashSet<>(jdbcTemplate.query(query,this.tttGameWithPlayerMapper,playerId,playerId));
     }
 }

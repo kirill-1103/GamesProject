@@ -34,27 +34,32 @@
           <table class="table " style="overflow-y:scroll; scroll-behavior:smooth">
             <thead style="height: 20px">
             <tr>
-              <th class = "col1" scope="col">№</th>
-              <th class = "col2" scope="col">Игра</th>
-              <th class = "col3" scope="col">Противник</th>
-              <th class = "col4" scope="col">Итог</th>
-              <th class = "col5" scope="col">Время игры</th>
+              <th class="col1" scope="col">№</th>
+              <th class="col2" scope="col">Игра</th>
+              <th class="col3" scope="col">Противник</th>
+              <th class="col4" scope="col">Итог</th>
+              <th class="col5" scope="col">Время игры</th>
             </tr>
             </thead>
           </table>
-          <div class="table-scroll-body">
-            <table>
+          <div ref="scroll_table" class="table-scroll-body">
+            <table ref="table" v-if="games">
               <tbody>
-              <tr >
-                <th class = "col1"  scope="row">3</th>
-                <td class = "col2">Крестики-Нолики</td>
-                <td class = "col3">KIRILL_KIRILL</td>
-                <td class = "col4">Поражение</td>
-                <td class = "col5">11.03.2001 03:00:55</td>
+              <tr v-for="game of games">
+                <th class="col1" scope="row">{{ game.id }}</th>
+                <td class="col2">{{ game.name }}</td>
+                <td class="col3">{{ game.entityName }}</td>
+                <td class="col4">{{ game.result }}</td>
+                <td class="col5">{{ game.time }}</td>
               </tr>
-
               </tbody>
             </table>
+            <div style="margin-top:20%;" v-else class="spinner-border text-primary" role="status">
+              <span class="visually-hidden">Loading..</span>
+            </div>
+            <div v-if="waitingTable && games"  class="spinner-border text-primary" role="status">
+              <span class="visually-hidden">Loading..</span>
+            </div>
           </div>
         </div>
       </div>
@@ -70,8 +75,9 @@
 <script>
 import axios from "axios";
 import updateAuthUserInStorage from "../service/auth.js";
-import {fromArrayToDate} from "../service/datetime";
+import {fromArrayToDate, fromArrayToDateWithTime} from "../service/datetime";
 import EditProfileModal from "../components/EditProfileModal.vue";
+import {TTT_GAME_CODE} from "../service/TttGameHelper"
 
 export default {
   name: "ProfilePage",
@@ -80,7 +86,7 @@ export default {
   },
   data: function () {
     return {
-      player: {login:null},
+      player: {login: null},
       signUpTime: '',
       config: {
         headers: {
@@ -88,7 +94,13 @@ export default {
           "Access-Control-Allow-Origin": "*",
         }
       },
-      imgSrc: ''
+      imgSrc: '',
+      games: null,
+      tttGameCode: TTT_GAME_CODE,
+      from: 0,
+      to: 15,
+      waitingTable: false,
+      stopTable: false
     }
   },
   created() {
@@ -98,19 +110,65 @@ export default {
       console.log(this.player);
       if (this.player.photo && this.player.photo !== '') {
         axios.post("/api/player/image", {img_name: this.player.photo}, this.config).then((result) => {
-          // console.log(result);
-          // console.log(typeof (result.data))
           this.imgSrc = "data:image/;base64, " + result.data;
           let img = document.getElementById("player_photo");
           img['src'] = this.imgSrc;
-    
-          // console.log(this.imgSrc)
         }).catch(err => {
           console.log("ERR:");
           console.log(err)
         })
       }
     })
+  },
+  mounted() {
+    this.getGamesTable();
+    this.addScrollListener();
+  },
+  methods: {
+    getGamesTable() {
+      let interval = setInterval(() => {
+        console.log('here')
+        if (this.player.login !== null) {
+          this.waitingTable = true;
+          axios.post("/api/games/byplayer", {
+            id: this.player.id,
+            from: this.from,
+            to: this.to
+          }, this.config).then(result => {
+            if (result.data.length === 0) {
+              this.stopTable = true;
+              this.waitingTable = false;
+              console.log('here1')
+              return;
+            }
+            for (let game of result.data) {
+              game.time = fromArrayToDateWithTime(game.time);
+            }
+            if (this.games === null) {
+              this.games = result.data
+            } else {
+              this.games = this.games.concat(result.data)
+            }
+            this.from = this.to;
+            this.to += 10;
+            this.waitingTable = false;
+          }).catch(error => {
+            console.log("ERROR:" + error);
+            console.log(error)
+          });
+          clearInterval(interval);
+        }
+      }, 100)
+    },
+
+    addScrollListener() {
+      this.$refs.scroll_table.addEventListener("scroll", (event) => {
+        let table = this.$refs.scroll_table;
+        if (table.scrollHeight - table.scrollTop === table.clientHeight && !this.waitingTable && !this.stopTable) {
+          this.getGamesTable();
+        }
+      })
+    }
   }
 }
 </script>
@@ -136,19 +194,20 @@ export default {
   float: left;
 }
 
-.col1{
-  width:4%;
+.col1 {
+  width: 4%;
 }
 
-.col2{
-  width:20%;
+.col2 {
+  width: 20%;
 }
 
-.col3{
-  width:30%;
+.col3 {
+  width: 30%;
 }
-.col4{
-  width:18%;
+
+.col4 {
+  width: 18%;
 }
 
 .card-body {
@@ -157,8 +216,9 @@ export default {
   min-height: 1px;
   padding: 1rem;
 }
- th,td{
-  font-size:12px !important;;
+
+th, td {
+  font-size: 12px !important;;
 }
 
 .gutters-sm {

@@ -15,3 +15,7 @@ export function fromStringToHoursMinutesSeconds(string){
     console.log(string)
     return string.substring(string.indexOf('T')+1,string.indexOf('.'));
 }
+
+export function fromArrayToDateWithTime(array){
+    return fromArrayToDate(array) +" / "+fromArrayToHoursMinutesSeconds(array)
+}

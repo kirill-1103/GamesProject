@@ -4,6 +4,7 @@ public class GameUtils {
     public final static String TttGameName = "TttGame";
     public final static int TttGameCode = 1;
 
+
     public final static int VICTORY_REASON_PLAYER1_WIN = 10;
 
     public final static int VICTORY_REASON_PLAYER2_WIN = 11;

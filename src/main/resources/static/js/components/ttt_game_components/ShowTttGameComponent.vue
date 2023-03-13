@@ -1,17 +1,21 @@
 <template>
   <div  style="width:100%;text-align: center; font-size:16pt;" >
-    <span v-if="game.moves[moveNumber-1]">    {{reformatTime(game.moves[moveNumber-1].gameTimeMillis)}}</span>
-    <span v-else>00:00</span>
+    <span v-if="game.moves[moveNumber-1] && gameOrChatText === 'Чат'">    {{reformatTime(game.moves[moveNumber-1].gameTimeMillis)}}</span>
+    <span v-else-if="gameOrChatText === 'Чат'">00:00</span>
   </div>
   <div v-if="field && field.length !== 0 && !waitingGame">
-    <TttCanvas  :field="field" :player=null :game="game.game" :isShowing=true :makeMove="()=>{}"></TttCanvas>
+    <TttCanvas v-if="gameOrChatText === 'Чат' " :field="field" :player=null :game="game.game" :isShowing=true :makeMove="()=>{}"></TttCanvas>
+    <ReplayChatComponent v-else :messages="messages" :player="player"></ReplayChatComponent>
     <div style="width:500px;margin: 20px auto auto;">
       <div style="width:100%;text-align: center">
         <span v-text="whoWin"></span>
       </div>
       <br>
-      <button style="width:49%;margin-right: 2%" @click="back">Назад</button>
-      <button style="width:49%" @click="forward">Вперед</button>
+      <p v-if="entity">Враг: <a href="#">{{entity.login}}</a></p>
+      <br>
+      <button :disabled="gameOrChatText === 'Игра'" style="width:32%;margin-right: 1%" @click="back">←</button>
+      <button :disabled="gameOrChatText === 'Игра'" style="width:32%;margin-right: 1%" @click="forward">→</button>
+      <button style="width:32%" @click="gameOrChat">{{gameOrChatText}}</button>
     </div>
   </div>
   <div style="width:100%" v-else>
@@ -31,24 +35,31 @@ import {
   VICTORY_REASON_PLAYER1_TIME_WIN,
   VICTORY_REASON_PLAYER2_LOSE,
   VICTORY_REASON_PLAYER1_LOSE,
-  VICTORY_REASON_PLAYER2_TIME_WIN, VICTORY_REASON_PLAYER2_WIN
+  VICTORY_REASON_PLAYER2_TIME_WIN,
+  VICTORY_REASON_PLAYER2_WIN
 } from "../../service/TttGameHelper";
 import TttCanvas from "./TttCanvas.vue";
-import {reformatTime} from "../../service/datetime";
+import {fromArrayToHoursMinutesSeconds, reformatTime} from "../../service/datetime";
+import ReplayChatComponent from "../ReplayChatComponent.vue";
+import axios from "axios";
 
 export default {
   name: "ShowTttGameComponent",
-  components: {TttCanvas},
-  props: ["game","waitingGame"],
+  components: {ReplayChatComponent, TttCanvas},
+  props: ["game","waitingGame","entity"],
   data: function () {
     return {
       field: null,
       moveNumber:null,
       reformatTime:reformatTime,
-      whoWin:''
+      whoWin:'',
+      gameOrChatText:'Чат',
+      messages:[],
+      player:null
     }
   },
   mounted() {
+    this.getMessages();
     if (this.game) {
       this.init();
     }
@@ -56,15 +67,31 @@ export default {
   watch: {
     game(newV, oldV) {
       this.init();
+      this.getMessages();
     }
   },
   methods: {
     init() {
       this.moveNumber = this.game.moves.length;
       this.fillField();
+      this.player = this.$store.state.player.id;
       this.setWhoWin();
     },
-
+    getMessages(){
+      let interval = setInterval(()=>{
+        if(this.game && this.game.game && this.game.game.id && this.game.game.gameCode){
+          axios.get("/api/game_message/"+this.game.game.id+"/"+this.game.game.gameCode)
+              .then(messages=>{
+                this.messages = messages.data;
+                for (let mess of this.messages){
+                  mess.time = fromArrayToHoursMinutesSeconds(mess.time)
+                }
+                this.messages = this.messages.reverse();
+              })
+          clearInterval(interval)
+        }
+      },100)
+    },
     getFieldFromMoves(moves,sizeField) {
       let field = this.getEmptyFieldBySize(sizeField);
       let firstId = null
@@ -106,7 +133,7 @@ export default {
       }
     },
     setWhoWin(){
-      let playerId = this.$store.state.player.id
+      let playerId = this.player.id
       let reasonCode = this.game.game.victoryReasonCode;
       if (reasonCode === VICTORY_REASON_DRAW) {
         this.setWhoWinText("Ничья!");
@@ -128,6 +155,7 @@ export default {
         }
       }
       if (this.game.game.player2Id === playerId) {
+
         if (reasonCode === VICTORY_REASON_PLAYER1_WIN) {
           this.setWhoWinText("Вы проиграли!")
         } else if (reasonCode === VICTORY_REASON_PLAYER1_TIME_WIN) {
@@ -145,6 +173,13 @@ export default {
     },
     setWhoWinText(text){
       this.whoWin = text;
+    },
+    gameOrChat(){
+      if(this.gameOrChatText === 'Чат'){
+        this.gameOrChatText = 'Игра'
+      }else{
+        this.gameOrChatText = 'Чат'
+      }
     }
   }
 

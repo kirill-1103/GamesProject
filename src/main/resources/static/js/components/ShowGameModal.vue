@@ -1,5 +1,5 @@
 <template>
-  <div  class="modal fade" id="showGame" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal fade" id="showGame" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div style="width:800px;height: 100%" class="modal-dialog">
       <div style="width:800px;height: 103%" class="modal-content">
         <div style="width:800px;" class="modal-header">
@@ -7,16 +7,14 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div style="width:800px;" class="modal-body">
-          <ShowTttGameComponent  v-if="gameSettings && isTtt" :game="game" :waitingGame = "waitingGame"></ShowTttGameComponent>
+          <ShowTttGameComponent v-if="gameSettings && isTtt" :game="game"
+                                :waitingGame="waitingGame" :entity="entity"></ShowTttGameComponent>
 
           <div style="width:100%" v-else>
-            <div  style="width:80px;height:80px;margin:25% 45%" class="spinner-border text-primary" role="status">
+            <div style="width:80px;height:80px;margin:25% 45%" class="spinner-border text-primary" role="status">
               <span style="margin:auto" class="visually-hidden">Loading..</span>
             </div>
           </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="button-close" data-bs-dismiss="modal">Закрыть</button>
         </div>
       </div>
     </div>
@@ -43,13 +41,14 @@ export default {
       },
       game: null,
       isTtt: false,
-      waitingGame:false
+      waitingGame: false,
+      entity: null
     }
   },
   mounted() {
   },
-  watch:{
-    gameSettings(newV,oldV){
+  watch: {
+    gameSettings(newV, oldV) {
       if (newV) {
         if (newV.code === TTT_GAME_CODE) {//show ttt game
           this.waitingGame = true;
@@ -57,6 +56,28 @@ export default {
             this.game = result.data;
             this.isTtt = true;
             this.waitingGame = false
+
+            let entityId;
+            if (this.game.game.player1Id === this.$store.state.player.id) {
+              if (this.game.game.player2Id) {
+                entityId = this.game.game.player2Id
+              } else {
+                entityId = -1;
+              }
+            } else {
+              entityId = this.game.game.player1Id;
+            }
+
+            console.log('id:',entityId)
+            console.log(this.game.game)
+
+            if (entityId !== -1) {
+              axios.get("/api/player/" + entityId).then((result) => {
+                this.entity = result.data;
+              })
+            }else{
+              this.entity = null;
+            }
           })
         }
       }

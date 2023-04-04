@@ -7,6 +7,7 @@ import RatingPage from "../pages/RatingPage.vue";
 import PlayersListPage from "../pages/PlayersListPage.vue";
 import ChatPage from "../pages/ChatPage.vue";
 import TttGamePage from "../pages/Games/TttGamePage.vue";
+import PlayerProfilePage from "../pages/PlayerProfilePage.vue";
 
 
 import {
@@ -17,7 +18,8 @@ import {
     RATING_PAGE_NAME, RATING_PAGE_PATH,
     PLAYERS_LIST_PAGE_NAME, PLAYERS_LIST_PAGE_PATH,
     CHAT_PAGE_NAME, CHAT_PAGE_PATH,
-    TTT_GAME_PAGE_NAME,TTT_GAME_PAGE_PATH
+    TTT_GAME_PAGE_NAME,TTT_GAME_PAGE_PATH,
+    PLAYER_PROFILE_PAGE_NAME,PLAYER_PROFILE_PAGE_PATH
 } from "./component_names";
 
 const routes = [
@@ -29,6 +31,7 @@ const routes = [
     {path: RATING_PAGE_PATH, name: RATING_PAGE_NAME, component: RatingPage},
     {path: CHAT_PAGE_PATH, name: CHAT_PAGE_NAME, component: ChatPage},
     {path: TTT_GAME_PAGE_PATH, name: TTT_GAME_PAGE_NAME, component: TttGamePage},
+    {path: PLAYER_PROFILE_PAGE_PATH, name:PLAYER_PROFILE_PAGE_NAME, component: PlayerProfilePage}
 ]
 
 const router = createRouter({

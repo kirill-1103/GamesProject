@@ -31,7 +31,7 @@ public class SecurityConfig {
 
     private static final String[] FOR_AUTHORIZED = new String[]{
             "/me**", "/rating**","/chat**","/game_list**","/player_list**","/api/**"
-            ,"/game/**","/game/ttt"
+            ,"/game/**","/game/ttt","/player/**"
     };
 
 

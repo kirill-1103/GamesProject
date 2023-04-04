@@ -18,7 +18,7 @@ public class MainController {
     private static final Logger log = LoggerFactory.getLogger(MainController.class);
     @GetMapping(value = {"/main","/css/*","/me**", "/rating**","/chat**","/game_list**","/player_list**",
             "/error", "/login**","/auth", "/register", "/logout","/registration","/game/**",
-            "/ws**","/websocket**","/ws/**","/websocket/**","/topic/**"})
+            "/ws**","/websocket**","/ws/**","/websocket/**","/topic/**","/player/**"})
     public String main(HttpServletRequest request){
         String header = request.getHeader("referer");
             return "index";

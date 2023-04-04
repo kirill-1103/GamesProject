@@ -26,6 +26,11 @@ public class GameController {
         List<GameStatisticDto> games = new ArrayList<>();
 
         List<GameStatisticDto> tttGames = getTttGames(id);
+
+        if(tttGames.size() == 0){
+            return tttGames;
+        }
+
         games.addAll(tttGames);
         /* ... */
 

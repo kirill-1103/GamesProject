@@ -59,7 +59,7 @@
               <span class="visually-hidden">Loading..</span>
             </div>
 
-            <div  v-if="waitingTable && games"
+            <div v-if="waitingTable && games"
                  class="spinner-border text-primary" role="status">
               <span class="visually-hidden">Loading..</span>
             </div>
@@ -70,7 +70,7 @@
 
     <EditProfileModal :player="player"/>
 
-    <ShowGameModal :gameSettings="gameSettingsForModal" />
+    <ShowGameModal :gameSettings="gameSettingsForModal"/>
 
   </div>
 
@@ -108,9 +108,9 @@ export default {
       to: 15,
       waitingTable: false,
       stopTable: false,
-      gameSettingsForModal:{
-        id:null,
-        code:null
+      gameSettingsForModal: {
+        id: null,
+        code: null
       }
     }
   },
@@ -152,6 +152,8 @@ export default {
             }
             for (let game of result.data) {
               game.time = fromArrayToDateWithTime(game.time);
+              console.log(game.time)
+              console.log(game.time)
             }
             if (this.games === null) {
               this.games = result.data
@@ -183,8 +185,8 @@ export default {
       let gameCodeForModal = this.games.filter((game) => game.id === id)[0].code;
       let gameIdForModal = id;
       this.gameSettingsForModal = {
-        id:gameIdForModal,
-        code:gameCodeForModal
+        id: gameIdForModal,
+        code: gameCodeForModal
       }
     },
   }

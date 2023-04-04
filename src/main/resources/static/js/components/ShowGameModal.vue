@@ -8,7 +8,7 @@
         </div>
         <div style="width:800px;" class="modal-body">
           <ShowTttGameComponent v-if="gameSettings && isTtt" :game="game"
-                                :waitingGame="waitingGame" :entity="entity"></ShowTttGameComponent>
+                                :waitingGame="waitingGame" :entity="entity" :withoutChat="gameSettings.withoutChat"></ShowTttGameComponent>
 
           <div style="width:100%" v-else>
             <div style="width:80px;height:80px;margin:25% 45%" class="spinner-border text-primary" role="status">
@@ -58,14 +58,26 @@ export default {
             this.waitingGame = false
 
             let entityId;
-            if (this.game.game.player1Id === this.$store.state.player.id) {
-              if (this.game.game.player2Id) {
-                entityId = this.game.game.player2Id
-              } else {
+            if (this.$route.params.id){
+              if(this.game.game.player2Id){
+                if (this.game.game.player1Id == this.$route.params.id){
+                  entityId = this.game.game.player2Id
+                }else{
+                  entityId = this.game.game.player1Id;
+                }
+              }else{
                 entityId = -1;
               }
-            } else {
-              entityId = this.game.game.player1Id;
+            }else{
+              if (this.game.game.player1Id === this.$store.state.player.id) {
+                if (this.game.game.player2Id) {
+                  entityId = this.game.game.player2Id
+                } else {
+                  entityId = -1;
+                }
+              } else {
+                entityId = this.game.game.player1Id;
+              }
             }
 
             console.log('id:',entityId)

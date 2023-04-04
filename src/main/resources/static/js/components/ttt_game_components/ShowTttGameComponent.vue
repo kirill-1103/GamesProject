@@ -11,11 +11,13 @@
         <span v-text="whoWin"></span>
       </div>
       <br>
-      <p v-if="entity">Враг: <a href="#">{{entity.login}}</a></p>
+      <p v-if="entity">Враг: <a v-bind:href="'/player/'+entity.id">{{entity.login}}</a></p>
       <br>
       <button :disabled="gameOrChatText === 'Игра'" style="width:32%;margin-right: 1%" @click="back">←</button>
       <button :disabled="gameOrChatText === 'Игра'" style="width:32%;margin-right: 1%" @click="forward">→</button>
-      <button style="width:32%" @click="gameOrChat">{{gameOrChatText}}</button>
+      <button v-if="!withoutChat || (entity && entity.id === player)" style="width:32%" @click="gameOrChat">{{gameOrChatText}}</button>
+      <button v-else disabled style="width:32%;background:grey" @click="gameOrChat">{{gameOrChatText}}</button>
+
     </div>
   </div>
   <div style="width:100%" v-else>
@@ -46,7 +48,7 @@ import axios from "axios";
 export default {
   name: "ShowTttGameComponent",
   components: {ReplayChatComponent, TttCanvas},
-  props: ["game","waitingGame","entity"],
+  props: ["game","waitingGame","entity",'withoutChat'],
   data: function () {
     return {
       field: null,
@@ -55,11 +57,13 @@ export default {
       whoWin:'',
       gameOrChatText:'Чат',
       messages:[],
-      player:null
+      player:null,
     }
   },
   mounted() {
-    this.getMessages();
+    if(!this.withoutChat){
+      this.getMessages();
+    }
     if (this.game) {
       this.init();
     }
@@ -76,6 +80,7 @@ export default {
       this.fillField();
       this.player = this.$store.state.player.id;
       this.setWhoWin();
+      this.gameOrChatText = 'Чат'
     },
     getMessages(){
       let interval = setInterval(()=>{

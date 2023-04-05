@@ -14,4 +14,6 @@ public interface PlayerDao {
     Optional<Player> getOneByEmail(String email);
 
     List<Player> getAllOrderByRating();
+
+    Long getPlayerTopById(Long id);
 }

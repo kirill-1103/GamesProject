@@ -10,7 +10,7 @@
             <p class="text-secondary mb-1">Логин: {{ player.login }}</p>
             <p class="text-secondary mb-1">Почта: {{ player.email }}</p>
             <p class="text-secondary mb-1">Рейтинг: {{ player.rating }}</p>
-            <p class="text-secondary mb-1">Место в топе: 1</p>
+            <p class="text-secondary mb-1">Место в топе: {{ playerTop }}</p>
             <p class="text-secondary mb-1">Дата регистрации: {{ signUpTime }}</p>
             <button data-bs-toggle="modal" data-bs-target="#editProfileModal" style="width:100%">Редактировать</button>
           </div>
@@ -94,6 +94,7 @@ export default {
   data: function () {
     return {
       player: {login: null},
+      playerTop: 0,
       signUpTime: '',
       config: {
         headers: {
@@ -133,6 +134,7 @@ export default {
   mounted() {
     this.getGamesTable();
     this.addScrollListener();
+    this.getPlayerTop();
   },
   methods: {
     getGamesTable() {
@@ -187,6 +189,17 @@ export default {
         code: gameCodeForModal
       }
     },
+
+    getPlayerTop() {
+      let interval = setInterval(() => {
+        if (this.player.login !== null) {
+          axios.get("/api/player/top/"+this.player.id).then(res=>{
+            this.playerTop = res.data;
+          })
+          clearInterval(interval);
+        }
+      }, 100)
+    }
   }
 }
 </script>

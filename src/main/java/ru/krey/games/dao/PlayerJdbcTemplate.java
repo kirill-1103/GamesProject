@@ -113,4 +113,15 @@ public class PlayerJdbcTemplate implements PlayerDao {
         String query = "SELECT * FROM PLAYER ORDER BY rating DESC";
         return jdbcTemplate.query(query, this.playerMapper);
     }
+
+    @Override
+    public Long getPlayerTopById(Long id){
+        String query =  "SELECT row_number " +
+                "FROM (" +
+                "    SELECT ROW_NUMBER() OVER (ORDER BY rating DESC) AS row_number, * " +
+                "    FROM player" +
+                ") AS player_with_row_numbers " +
+                "WHERE player_with_row_numbers.id = ?";
+        return jdbcTemplate.queryForObject(query,Long.class,id);
+    }
 }

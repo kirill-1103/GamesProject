@@ -174,5 +174,10 @@ public class PlayerController {
         return players.subList(Math.min(players.size()-1,from.intValue()),Math.min(players.size(),to.intValue()));
     }
 
+    @GetMapping("/top/{id}")
+    public Long getPlayerTop(@PathVariable Long id){
+        return playerDao.getPlayerTopById(id);
+    }
+
 
 }

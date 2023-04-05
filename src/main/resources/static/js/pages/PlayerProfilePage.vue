@@ -13,7 +13,7 @@
               <p class="text-secondary mb-1">Логин: {{ player.login }}</p>
               <p class="text-secondary mb-1">Почта: {{ player.email }}</p>
               <p class="text-secondary mb-1">Рейтинг: {{ player.rating }}</p>
-              <p class="text-secondary mb-1">Место в топе: 1</p>
+              <p class="text-secondary mb-1">Место в топе: {{ playerTop }}</p>
               <p class="text-secondary mb-1">Дата регистрации: {{ signUpTime }}</p>
             </div>
           </div>
@@ -97,6 +97,7 @@ export default {
       to: 15,
       waitingTable: false,
       stopTable: false,
+      playerTop: 0,
       gameSettingsForModal: {
         id: null,
         code: null
@@ -111,15 +112,16 @@ export default {
     }
   },
   created() {
-    updateAuthUserInStorage(this.$store).then(()=>{
-      if(this.$store.state.player.id == this.$route.params.id){
+    updateAuthUserInStorage(this.$store).then(() => {
+      if (this.$store.state.player.id == this.$route.params.id) {
         this.$router.replace("/me")
-      }else{
+      } else {
         this.getGamesTable();
         this.addScrollListener();
         this.getUser(this.$route.params.id);
       }
     })
+    this.getPlayerTop();
   },
   mounted() {
 
@@ -146,7 +148,6 @@ export default {
         this.notFound = true;
       })
     },
-
     getGamesTable() {
       let interval = setInterval(() => {
         if (this.player.login !== null) {
@@ -176,7 +177,7 @@ export default {
             console.log("ERROR:" + error);
             console.log(error)
           });
-          if(!this.games){
+          if (!this.games) {
             this.games = []
           }
           clearInterval(interval);
@@ -197,8 +198,22 @@ export default {
       this.gameSettingsForModal = {
         id: id,
         code: gameCodeForModal,
-        withoutChat:true
+        withoutChat: true
       }
+    },
+    getPlayerTop() {
+      let interval = setInterval(() => {
+        if (this.$route.params.id !== null) {
+          if(this.$route.params.id == undefined){
+            clearInterval(interval)
+            return;
+          }
+          axios.get("/api/player/top/" + this.$route.params.id).then(res => {
+            this.playerTop = res.data;
+          })
+          clearInterval(interval);
+        }
+      }, 100)
     }
   }
 }

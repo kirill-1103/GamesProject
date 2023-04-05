@@ -15,6 +15,7 @@ import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -105,5 +106,11 @@ public class PlayerJdbcTemplate implements PlayerDao {
         return jdbcTemplate.query(query, this.playerMapper, email)
                 .stream()
                 .findAny();
+    }
+
+    @Override
+    public List<Player> getAllOrderByRating(){
+        String query = "SELECT * FROM PLAYER ORDER BY rating DESC";
+        return jdbcTemplate.query(query, this.playerMapper);
     }
 }

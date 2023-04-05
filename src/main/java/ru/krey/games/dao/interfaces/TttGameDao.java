@@ -20,4 +20,6 @@ public interface TttGameDao {
     Set<TttGame> getAllNoEnded();
 
     Set<TttGame> getAllGamesWithPlayersByPlayerId(Long playerId);
+
+    Set<TttGame> getAllGamesWithPlayers();
 }

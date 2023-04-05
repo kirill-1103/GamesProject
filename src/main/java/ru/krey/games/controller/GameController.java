@@ -70,9 +70,4 @@ public class GameController {
         }
         return resultList;
     }
-
-
-
-
-
 }

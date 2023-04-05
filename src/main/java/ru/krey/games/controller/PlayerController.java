@@ -16,8 +16,12 @@ import ru.krey.games.utils.AuthUtils;
 import ru.krey.games.utils.GameUtils;
 import ru.krey.games.service.LocalImageService;
 import ru.krey.games.service.interfaces.ImageService;
+import ru.krey.games.utils.RoleUtils;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @RestController
@@ -40,7 +44,7 @@ public class PlayerController {
     private final static Logger log = LoggerFactory.getLogger(PlayerController.class);
 
     @GetMapping("/{id}")
-    public @ResponseBody Player getOneById(@PathVariable Long id) {
+    public  Player getOneById(@PathVariable Long id) {
         Player player = playerDao.getOneById(id)
                 .orElseThrow(() -> new NotFoundException("Игрока с таким id не существует!"));
         player.setPassword(null);
@@ -48,7 +52,7 @@ public class PlayerController {
     }
 
     @GetMapping("/authenticated")
-    public @ResponseBody Player getAuthenticatedUser() {
+    public  Player getAuthenticatedUser() {
         Player player = playerDao.getOneByLogin(authUtils.getCurrentUsername())
                 .orElseThrow(() -> new BadRequestException("Авторизованного игрока нет!"));
         player.setPassword(null);
@@ -56,7 +60,7 @@ public class PlayerController {
     }
 
     @PostMapping(value = "/image")
-    public @ResponseBody String getImageBase64(@RequestParam("img_name") String imgName) {
+    public  String getImageBase64(@RequestParam("img_name") String imgName) {
         if (imgName == null || imgName.isBlank()) {
             throw new BadRequestException("Имя файла пустое");
         }
@@ -68,8 +72,29 @@ public class PlayerController {
         }
     }
 
+    @PostMapping("/images")
+    public List<String> getImagesBase64ByImagesNames(@RequestBody List<String> names){
+        List<String> images = new ArrayList<>();
+        if(names == null || names.size() == 0){
+            throw new BadRequestException("Список имет пуст");
+        }
+        names.forEach((name)->{
+            if(name == null || name.isBlank()){
+                images.add(null);
+                return;
+            }
+            try {
+                images.add(localImageService.getImageBase64(name));
+            } catch (IOException e) {
+                log.error(e.getMessage());
+                throw new BadRequestException("Такой файл не найден.", e);
+            }
+        });
+        return images;
+    }
+
     @PostMapping("/update")
-    public @ResponseBody Player updatePlayer(
+    public  Player updatePlayer(
             @RequestParam("login") String login,
             @RequestParam("email") String email,
             @RequestParam(value = "password", required = false) String password,
@@ -118,13 +143,13 @@ public class PlayerController {
     }
 
     @PostMapping("/currentGameCode")
-    @ResponseBody Integer getCurrentGameCode(@RequestParam("id") Long playerId){
+    public Integer getCurrentGameCode(@RequestParam("id") Long playerId){
         Player player = playerDao.getOneById(playerId).orElseThrow(() -> new NotFoundException("Игрока с таким id нет!"));
         return player.getLastGameCode();
     }
 
     @PostMapping("/currentGameId")
-    @ResponseBody Long getCurrentGameId(@RequestParam("id") Long playerId){
+     public Long getCurrentGameId(@RequestParam("id") Long playerId){
         Player player = playerDao.getOneById(playerId).orElseThrow(() -> new NotFoundException("Игрока с таким id нет!"));
         if(player.getLastGameCode() == null){
             return null;
@@ -137,6 +162,16 @@ public class PlayerController {
         }
 
         return null;
+    }
+
+    @PostMapping("/rating")
+    public List<Player> getAllOrderedByRatingStepByStep(@RequestParam Long from, @RequestParam Long to){
+
+        List<Player> players = playerDao.getAllOrderByRating();
+        if(from>=players.size()){
+            return new ArrayList<>();
+        }
+        return players.subList(Math.min(players.size()-1,from.intValue()),Math.min(players.size(),to.intValue()));
     }
 
 

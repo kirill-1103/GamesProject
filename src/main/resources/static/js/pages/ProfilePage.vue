@@ -152,8 +152,6 @@ export default {
             }
             for (let game of result.data) {
               game.time = fromArrayToDateWithTime(game.time);
-              console.log(game.time)
-              console.log(game.time)
             }
             if (this.games === null) {
               this.games = result.data

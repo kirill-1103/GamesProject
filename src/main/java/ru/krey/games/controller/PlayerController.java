@@ -20,9 +20,8 @@ import ru.krey.games.utils.RoleUtils;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
+import java.util.function.Consumer;
 
 @RestController
 @RequestMapping("api/player")
@@ -40,11 +39,10 @@ public class PlayerController {
     private final PasswordEncoder bCryptPasswordEncoder;
 
 
-
     private final static Logger log = LoggerFactory.getLogger(PlayerController.class);
 
     @GetMapping("/{id}")
-    public  Player getOneById(@PathVariable Long id) {
+    public Player getOneById(@PathVariable Long id) {
         Player player = playerDao.getOneById(id)
                 .orElseThrow(() -> new NotFoundException("Игрока с таким id не существует!"));
         player.setPassword(null);
@@ -52,7 +50,7 @@ public class PlayerController {
     }
 
     @GetMapping("/authenticated")
-    public  Player getAuthenticatedUser() {
+    public Player getAuthenticatedUser() {
         Player player = playerDao.getOneByLogin(authUtils.getCurrentUsername())
                 .orElseThrow(() -> new BadRequestException("Авторизованного игрока нет!"));
         player.setPassword(null);
@@ -60,7 +58,7 @@ public class PlayerController {
     }
 
     @PostMapping(value = "/image")
-    public  String getImageBase64(@RequestParam("img_name") String imgName) {
+    public String getImageBase64(@RequestParam("img_name") String imgName) {
         if (imgName == null || imgName.isBlank()) {
             throw new BadRequestException("Имя файла пустое");
         }
@@ -73,13 +71,13 @@ public class PlayerController {
     }
 
     @PostMapping("/images")
-    public List<String> getImagesBase64ByImagesNames(@RequestBody List<String> names){
+    public List<String> getImagesBase64ByImagesNames(@RequestBody List<String> names) {
         List<String> images = new ArrayList<>();
-        if(names == null || names.size() == 0){
+        if (names == null || names.size() == 0) {
             throw new BadRequestException("Список имет пуст");
         }
-        names.forEach((name)->{
-            if(name == null || name.isBlank()){
+        names.forEach((name) -> {
+            if (name == null || name.isBlank()) {
                 images.add(null);
                 return;
             }
@@ -94,7 +92,7 @@ public class PlayerController {
     }
 
     @PostMapping("/update")
-    public  Player updatePlayer(
+    public Player updatePlayer(
             @RequestParam("login") String login,
             @RequestParam("email") String email,
             @RequestParam(value = "password", required = false) String password,
@@ -109,19 +107,19 @@ public class PlayerController {
                 .orElseThrow(() -> new BadRequestException("Нет пользователя с таким id."));
 
         Player playerWithSameLogin = playerDao.getOneByLogin(login).orElse(null);
-        if(playerWithSameLogin != null && !Objects.equals(playerWithSameLogin.getId(), id)){
+        if (playerWithSameLogin != null && !Objects.equals(playerWithSameLogin.getId(), id)) {
             throw new BadRequestException("Пользователь с таким логином уже существует!");
         }
 
         Player playerWithSameEmail = playerDao.getOneByEmail(email).orElse(null);
-        if(playerWithSameEmail!=null && !Objects.equals(playerWithSameEmail.getId(),id)){
+        if (playerWithSameEmail != null && !Objects.equals(playerWithSameEmail.getId(), id)) {
             throw new BadRequestException("Пользователь с таким email уже существует!");
         }
 
         playerFromDb.setLogin(login);
         playerFromDb.setEmail(email);
 
-        if(password!=null && !password.isBlank()){
+        if (password != null && !password.isBlank()) {
             playerFromDb.setPassword(bCryptPasswordEncoder.encode(password));
         }
 
@@ -129,11 +127,11 @@ public class PlayerController {
         playerFromDb.setPassword(null);
         player.setPassword(null);
 
-        if(img!=null && !img.isEmpty()){
-            try{
-                imageService.savePlayerImage(img,playerFromDb.getId());
-            }catch (IOException e){
-                throw new RuntimeException("Не удалось загрузить фото. Попробуйте снова в профиле.",e);
+        if (img != null && !img.isEmpty()) {
+            try {
+                imageService.savePlayerImage(img, playerFromDb.getId());
+            } catch (IOException e) {
+                throw new RuntimeException("Не удалось загрузить фото. Попробуйте снова в профиле.", e);
             }
         }
 
@@ -143,20 +141,20 @@ public class PlayerController {
     }
 
     @PostMapping("/currentGameCode")
-    public Integer getCurrentGameCode(@RequestParam("id") Long playerId){
+    public Integer getCurrentGameCode(@RequestParam("id") Long playerId) {
         Player player = playerDao.getOneById(playerId).orElseThrow(() -> new NotFoundException("Игрока с таким id нет!"));
         return player.getLastGameCode();
     }
 
     @PostMapping("/currentGameId")
-     public Long getCurrentGameId(@RequestParam("id") Long playerId){
+    public Long getCurrentGameId(@RequestParam("id") Long playerId) {
         Player player = playerDao.getOneById(playerId).orElseThrow(() -> new NotFoundException("Игрока с таким id нет!"));
-        if(player.getLastGameCode() == null){
+        if (player.getLastGameCode() == null) {
             return null;
         }
 
-        if(player.getLastGameCode() == GameUtils.TttGameCode){
-            TttGame game =  tttGameDao.getCurrentGameByPlayerId(playerId)
+        if (player.getLastGameCode() == GameUtils.TttGameCode) {
+            TttGame game = tttGameDao.getCurrentGameByPlayerId(playerId)
                     .orElse(null);
             return game == null ? null : game.getId();
         }
@@ -165,19 +163,44 @@ public class PlayerController {
     }
 
     @PostMapping("/rating")
-    public List<Player> getAllOrderedByRatingStepByStep(@RequestParam Long from, @RequestParam Long to){
+    public List<Player> getAllOrderedByRatingStepByStep(@RequestParam Long from, @RequestParam Long to) {
 
         List<Player> players = playerDao.getAllOrderByRating();
-        if(from>=players.size()){
+        if (from >= players.size()) {
             return new ArrayList<>();
         }
-        return players.subList(Math.min(players.size()-1,from.intValue()),Math.min(players.size(),to.intValue()));
+        return players.subList(Math.min(players.size() - 1, from.intValue()), Math.min(players.size(), to.intValue()));
     }
 
     @GetMapping("/top/{id}")
-    public Long getPlayerTop(@PathVariable Long id){
+    public Long getPlayerTop(@PathVariable Long id) {
         return playerDao.getPlayerTopById(id);
     }
 
+    @GetMapping("")
+    public List<Player> getSearchResult(@RequestParam("search") String search) {
+        log.info("Search:" + search);
+        if (search.isBlank()) {
+            return new ArrayList<>();
+        }
+        search = search.trim();
+
+        List<Player> result = new ArrayList<>();
+
+        Consumer<Player> addIfNotContains = (player)->{
+            if(!result.contains(player)){
+                result.add(player);
+            }
+        };
+
+        playerDao.getOneByLogin(search).ifPresent(addIfNotContains);
+        playerDao.getOneByEmail(search).ifPresent(addIfNotContains);
+
+        playerDao.getPlayersWithNameStarts(search.toLowerCase()).forEach(addIfNotContains);
+        playerDao.getPlayersByPartOfName(search.toLowerCase()).forEach(addIfNotContains);
+        playerDao.getPlayersByPartOfEmail(search.toLowerCase()).forEach(addIfNotContains);
+
+        return result;
+    }
 
 }

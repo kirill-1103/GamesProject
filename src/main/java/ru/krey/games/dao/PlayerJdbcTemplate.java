@@ -14,10 +14,7 @@ import ru.krey.games.utils.mapper.PlayerMapper;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.sql.Timestamp;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @Component
 @RequiredArgsConstructor
@@ -38,11 +35,11 @@ public class PlayerJdbcTemplate implements PlayerDao {
             String sql = "UPDATE player SET login=?, email=?, sign_up_time=?, last_sign_in_time=?," +
                     " rating=?, role=?, photo=?, enabled=?, password=?, last_game_code=? WHERE id = ?";
             int rows = jdbcTemplate.update(sql, player.getLogin(), player.getEmail(), player.getSignUpTime(), player.getLastSignInTime(),
-                    player.getRating(), player.getRole(), player.getPhoto(), player.getEnabled(), player.getPassword(),player.getLastGameCode(), player.getId());
+                    player.getRating(), player.getRole(), player.getPhoto(), player.getEnabled(), player.getPassword(), player.getLastGameCode(), player.getId());
             if (rows != 1) {
                 throw new RuntimeException("Invalid request to sql: " + sql);
             }
-            return getOneById(player.getId()).orElseThrow(()->new RuntimeException("Player must exist."));
+            return getOneById(player.getId()).orElseThrow(() -> new RuntimeException("Player must exist."));
         } else {
             /*save*/
             log.info("Save player: " + player);
@@ -65,9 +62,9 @@ public class PlayerJdbcTemplate implements PlayerDao {
                 ps.setString(index++, player.getRole());
                 ps.setString(index++, player.getPhoto());
                 ps.setBoolean(index++, player.getEnabled());
-                if(player.getLastGameCode()!=null){
-                    ps.setInt(index++,player.getLastGameCode());
-                }else{
+                if (player.getLastGameCode() != null) {
+                    ps.setInt(index++, player.getLastGameCode());
+                } else {
                     ps.setObject(index++, null);
                 }
                 return ps;
@@ -109,19 +106,38 @@ public class PlayerJdbcTemplate implements PlayerDao {
     }
 
     @Override
-    public List<Player> getAllOrderByRating(){
+    public List<Player> getAllOrderByRating() {
         String query = "SELECT * FROM PLAYER ORDER BY rating DESC";
         return jdbcTemplate.query(query, this.playerMapper);
     }
 
     @Override
-    public Long getPlayerTopById(Long id){
-        String query =  "SELECT row_number " +
+    public Long getPlayerTopById(Long id) {
+        String query = "SELECT row_number " +
                 "FROM (" +
                 "    SELECT ROW_NUMBER() OVER (ORDER BY rating DESC) AS row_number, * " +
                 "    FROM player" +
                 ") AS player_with_row_numbers " +
                 "WHERE player_with_row_numbers.id = ?";
-        return jdbcTemplate.queryForObject(query,Long.class,id);
+        return jdbcTemplate.queryForObject(query, Long.class, id);
     }
+
+    @Override
+    public List<Player> getPlayersByPartOfName(String part) {
+        String query = "SELECT * FROM player WHERE LOWER(player.login) LIKE CONCAT('%', ?,'%')";
+        return new ArrayList<>(jdbcTemplate.query(query, this.playerMapper, part));
+    }
+
+    @Override
+    public List<Player> getPlayersByPartOfEmail(String part) {
+        String query = "SELECT * FROM player WHERE LOWER(player.email) LIKE CONCAT('%', ?,'%')";
+        return new ArrayList<>(jdbcTemplate.query(query, this.playerMapper, part));
+    }
+
+    @Override
+    public List<Player> getPlayersWithNameStarts(String part) {
+        String query = "SELECT * FROM player WHERE LOWER(player.login) LIKE CONCAT('%', ?)";
+        return new ArrayList<>(jdbcTemplate.query(query, this.playerMapper, part));
+    }
+
 }

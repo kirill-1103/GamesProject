@@ -8,12 +8,22 @@ import java.util.Set;
 
 public interface PlayerDao {
     Player saveOrUpdate(Player player);
+
     Optional<Player> getOneById(Long id);
+
     Set<Player> getAll();
+
     Optional<Player> getOneByLogin(String login);
+
     Optional<Player> getOneByEmail(String email);
 
     List<Player> getAllOrderByRating();
 
     Long getPlayerTopById(Long id);
+
+    List<Player> getPlayersByPartOfName(String part);
+
+    List<Player> getPlayersByPartOfEmail(String part);
+
+    List<Player> getPlayersWithNameStarts(String part);
 }

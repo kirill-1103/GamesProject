@@ -79,6 +79,7 @@ export default {
   },
   methods:{
     startSearch(){
+      this.searchProcessing = true;
       axios.get("/api/player",{
         params:{
           search:this.stringSearch
@@ -87,6 +88,7 @@ export default {
         console.log(res)
         this.players = res.data
         this.waitingTable = false;
+        this.searchProcessing=false
       }).then(()=>{
         let names = [];
         for (let player of this.players){

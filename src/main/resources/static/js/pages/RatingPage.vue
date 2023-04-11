@@ -121,7 +121,8 @@ export default {
     addScrollListener() {
       this.$refs.scroll_table.addEventListener("scroll", (event) => {
         let table = this.$refs.scroll_table;
-        if (table.scrollHeight - table.scrollTop === table.clientHeight && !this.waitingTable && !this.stopTable) {
+        if (Math.abs((table.scrollHeight - table.scrollTop)-table.clientHeight) < 1 && !this.waitingTable && !this.stopTable) {
+          console.log('here')
           this.getPlayers();
         }
       })

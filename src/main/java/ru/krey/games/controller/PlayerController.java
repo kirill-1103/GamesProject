@@ -16,10 +16,8 @@ import ru.krey.games.utils.AuthUtils;
 import ru.krey.games.utils.GameUtils;
 import ru.krey.games.service.LocalImageService;
 import ru.krey.games.service.interfaces.ImageService;
-import ru.krey.games.utils.RoleUtils;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
 import java.util.*;
 import java.util.function.Consumer;
 
@@ -177,8 +175,11 @@ public class PlayerController {
         return playerDao.getPlayerTopById(id);
     }
 
-    @GetMapping("")
-    public List<Player> getSearchResult(@RequestParam("search") String search) {
+    @PostMapping("/search")
+    public List<Player> getSearchResult(@RequestParam("search") String search, @RequestParam("from") int from, @RequestParam("to") int to) {
+        if (from > to) {
+            throw new BadRequestException("from>to");
+        }
         log.info("Search:" + search);
         if (search.isBlank()) {
             return new ArrayList<>();
@@ -187,8 +188,8 @@ public class PlayerController {
 
         List<Player> result = new ArrayList<>();
 
-        Consumer<Player> addIfNotContains = (player)->{
-            if(!result.contains(player)){
+        Consumer<Player> addIfNotContains = (player) -> {
+            if (!result.contains(player)) {
                 result.add(player);
             }
         };
@@ -200,7 +201,10 @@ public class PlayerController {
         playerDao.getPlayersByPartOfName(search.toLowerCase()).forEach(addIfNotContains);
         playerDao.getPlayersByPartOfEmail(search.toLowerCase()).forEach(addIfNotContains);
 
-        return result;
+        if (result.isEmpty()){
+            return result;
+        }
+        return result.subList(Math.min(result.size() - 1, from), Math.min(result.size(), to));
     }
 
 }

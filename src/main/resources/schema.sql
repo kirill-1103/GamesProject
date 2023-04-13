@@ -10,8 +10,8 @@
 -- insert into ttt_game (id,player1_id,start_time,size_field,player1_time,player2_time,base_player_time)
 -- values (1,66,TIMESTAMP '2011-05-16 15:36:38', 3,3,3,3);
 
-update player set last_game_code = null where login='kirill';
-update ttt_game set end_time = TIMESTAMP '2011-05-16 15:36:38';
+-- update player set last_game_code = null where login='kirill';
+-- update ttt_game set end_time = TIMESTAMP '2011-05-16 15:36:38';
 
 
 CREATE TABLE IF NOT EXISTS player
@@ -67,4 +67,16 @@ CREATE TABLE IF NOT EXISTS game_message
     sender_id INTEGER NOT NULL REFERENCES player(id),
     time TIMESTAMP NOT NULL,
     message TEXT NOT NULL
+);
+
+drop table message;
+
+CREATE TABLE IF NOT EXISTS message
+(
+    id SERIAL PRIMARY KEY,
+    sender_id INTEGER NOT NULL REFERENCES player(id),
+    recipient_id INTEGER NOT NULL REFERENCES player(id),
+    sending_time TIMESTAMP NOT NULL,
+    reading_time TIMESTAMP,
+    message_text TEXT NOT NULL
 )

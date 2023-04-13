@@ -44,6 +44,13 @@ export default {
   },
 
   created() {
+    let interval = setInterval(()=>{
+      console.log('a')
+      if(this.$store.state.player){
+        this.$router.push("/me")
+        clearInterval(interval)
+      }
+    },100)
     axios.get("/api/settings/img_size").then(result=>{
       console.log('max file size:', result.data);
       this.max_file_size = result.data;

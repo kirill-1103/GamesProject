@@ -7,10 +7,7 @@ import ru.krey.games.dao.interfaces.GameMessageDao;
 import ru.krey.games.dao.interfaces.PlayerDao;
 import ru.krey.games.dao.interfaces.TttGameDao;
 import ru.krey.games.dao.interfaces.TttMoveDao;
-import ru.krey.games.domain.GameMessage;
-import ru.krey.games.domain.Player;
-import ru.krey.games.domain.TttGame;
-import ru.krey.games.domain.TttMove;
+import ru.krey.games.domain.*;
 import ru.krey.games.utils.RoleUtils;
 
 import java.time.LocalDateTime;
@@ -44,7 +41,7 @@ public class Creator {
                  .build());
      }
 
-    public GameMessage createMessage(String message){
+    public GameMessage createGameMessage(String message){
         return gameMessageDao.saveOrUpdate(GameMessage.builder()
                 .message(message)
                 .gameId(2L)
@@ -101,5 +98,14 @@ public class Creator {
      private Player getPlayerByLogin(String login,String email){
          return playerDao.getOneByLogin(login).
                  orElse(createPlayerSave(login,email));
+    }
+
+    public Message createMessage(String text, Player sender, Player recipient){
+        return Message.builder()
+                .messageText(text)
+                .sender(sender)
+                .recipient(recipient)
+                .sendingTime(LocalDateTime.now())
+                .build();
     }
 }

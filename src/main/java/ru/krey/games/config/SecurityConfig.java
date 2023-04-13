@@ -72,7 +72,7 @@ public class SecurityConfig {
                 .and()
                 .and()
                     .exceptionHandling()
-                    .accessDeniedPage("/access-denied")
+                    .accessDeniedPage("/me")
                 .and()
                 .csrf().disable()
                 .build();

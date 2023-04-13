@@ -129,7 +129,11 @@ public class TttGameJdbcTemplate implements TttGameDao {
                 } else {
                     ps.setInt(index++, game.getComplexity());
                 }
-                ps.setByte(index++, game.getQueue());
+                if(game.getQueue() == null){
+                    ps.setObject(index++,game.getQueue());
+                }else{
+                    ps.setByte(index++, game.getQueue());
+                }
                 return ps;
             }, keyHolder);
             return getOneById(keyHolder.getKey().longValue()).orElseThrow(() -> new RuntimeException("TttGame must exist in this context"));

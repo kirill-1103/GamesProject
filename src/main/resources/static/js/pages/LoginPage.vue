@@ -26,6 +26,12 @@ export default {
     Form
   },
   created() {
+    let interval = setInterval(()=>{
+      console.log('a')
+      if(this.$store.state.player){
+        clearInterval(interval)
+      }
+    },100)
     if(localStorage.getItem("login") != null && localStorage.getItem("login")!=="undefined"){
       this.form.login = localStorage.getItem("login")
     }

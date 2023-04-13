@@ -5,8 +5,6 @@ import org.assertj.core.api.Assertions;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -24,7 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-@SpringBootTest
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @RunWith(SpringRunner.class)
 @NoArgsConstructor
 @TestPropertySource("/application-test.properties")
@@ -54,7 +52,7 @@ public class GameMessageDaoTest {
             messages.add("Message"+i);
         }
         messages.forEach(message->{
-            ids.add(creator.createMessage(message).getId());
+            ids.add(creator.createGameMessage(message).getId());
         });
     }
 
@@ -82,7 +80,7 @@ public class GameMessageDaoTest {
 
     @Test
     public void testSuccessSave(){
-        GameMessage gameMessage = creator.createMessage("Some message");
+        GameMessage gameMessage = creator.createGameMessage("Some message");
 
         Assertions.assertThat(gameMessage).isNotNull();
         Assertions.assertThat(gameMessage.getId()).isNotNull();

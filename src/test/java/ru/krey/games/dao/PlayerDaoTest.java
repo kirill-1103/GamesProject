@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.Set;
 
 
-@SpringBootTest
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @RunWith(SpringRunner.class)
 @NoArgsConstructor
 @TestPropertySource("/application-test.properties")

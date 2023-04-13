@@ -31,7 +31,8 @@ const routes = [
     {path: RATING_PAGE_PATH, name: RATING_PAGE_NAME, component: RatingPage},
     {path: CHAT_PAGE_PATH, name: CHAT_PAGE_NAME, component: ChatPage},
     {path: TTT_GAME_PAGE_PATH, name: TTT_GAME_PAGE_NAME, component: TttGamePage},
-    {path: PLAYER_PROFILE_PAGE_PATH, name:PLAYER_PROFILE_PAGE_NAME, component: PlayerProfilePage}
+    {path: PLAYER_PROFILE_PAGE_PATH, name:PLAYER_PROFILE_PAGE_NAME, component: PlayerProfilePage},
+    // {path: "*",name:PROFILE_PAGE_NAME,component: ProfilePage}
 ]
 
 const router = createRouter({

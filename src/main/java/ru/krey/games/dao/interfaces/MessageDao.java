@@ -9,6 +9,8 @@ public interface MessageDao {
 
     List<Message> getLastMessagesByPlayerId(Long id);
 
+    List<Message> getAllMessagesBetweenPlayers(Long player1Id, Long player2Id);
+
 
     List<Message> getAll();
 

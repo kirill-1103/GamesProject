@@ -25,11 +25,8 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/socket/ttt_new_game","/socket/ttt_search","/socket/game_messages")
-//                .addInterceptors(new HttpSessionHandshakeInterceptor())
-                        .withSockJS();
-//        registry.addEndpoint("/socket");
-////                .addInterceptors(new HttpSessionHandshakeInterceptor())
+        registry.addEndpoint("/socket/ttt_new_game", "/socket/ttt_search", "/socket/game_messages", "/socket/chat")
+                .withSockJS();
     }
 
     @Override
@@ -37,38 +34,5 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
         config.enableSimpleBroker("/topic");
         config.setApplicationDestinationPrefixes("/websocket");
     }
-
-//    @Override
-//    public boolean configureMessageConverters(List<MessageConverter> messageConverters) {
-//        DefaultContentTypeResolver resolver = new DefaultContentTypeResolver();
-//        resolver.setDefaultMimeType(MimeTypeUtils.APPLICATION_JSON);
-//        MappingJackson2MessageConverter converter = new MappingJackson2MessageConverter();
-//        converter.setObjectMapper(new ObjectMapper());
-//        converter.setContentTypeResolver(resolver);
-//        messageConverters.add(converter);
-//        messageConverters.add(new StringMessageConverter());
-//        messageConverters.add(new SimpleMessageConverter());
-//        return false;
-//    }
-
-
-
 }
 
-//class HttpHandshakeInterceptor implements HandshakeInterceptor {
-//
-//    @Override
-//    public boolean beforeHandshake(ServerHttpRequest request, ServerHttpResponse response, WebSocketHandler wsHandler,
-//                                   Map attributes) throws Exception {
-//        if (request instanceof ServletServerHttpRequest) {
-//            ServletServerHttpRequest servletRequest = (ServletServerHttpRequest) request;
-//            HttpSession session = servletRequest.getServletRequest().getSession();
-//            attributes.put("sessionId", session.getId());
-//        }
-//        return true;
-//    }
-//
-//    public void afterHandshake(ServerHttpRequest request, ServerHttpResponse response, WebSocketHandler wsHandler,
-//                               Exception ex) {
-//    }
-//}

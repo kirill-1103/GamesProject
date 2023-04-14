@@ -59,6 +59,13 @@ public class MessageJdbcTemplate implements MessageDao {
     }
 
     @Override
+    public List<Message> getAllMessagesBetweenPlayers(Long player1Id, Long player2Id) {
+        String condition = "WHERE m.sender_id = ? AND m.recipient_id = ? OR m.sender_id = ? AND m.recipient_id = ?";
+        String query = getAllMessagesWithPlayersInfo + condition;
+        return new ArrayList<>(jdbcTemplate.query(query, mapper, player1Id, player2Id, player1Id, player2Id));
+    }
+
+    @Override
     public List<Message> getAll() {
         String query = getAllMessagesWithPlayersInfo;
         return new ArrayList<>(jdbcTemplate.query(query, mapper));

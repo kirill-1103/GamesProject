@@ -29,6 +29,8 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
     private final GameMessageDtoToGameMessageConverter gameMessageDtoToGameMessageConverter;
 
+    private final MessageDtoToMessageConverter messageDtoToMessageConverter;
+
     @Bean
     public WebServerFactoryCustomizer<ConfigurableServletWebServerFactory> webServerCustomizer(){
         return factory -> factory.addErrorPages(new ErrorPage(HttpStatus.NOT_FOUND,"/"));
@@ -41,5 +43,6 @@ public class WebMvcConfig implements WebMvcConfigurer {
         registry.addConverter(tttGameToDto);
         registry.addConverter(gameMessageToDtoConverter);
         registry.addConverter(gameMessageDtoToGameMessageConverter);
+        registry.addConverter(messageDtoToMessageConverter);
     }
 }

@@ -10,22 +10,23 @@ import java.time.LocalDateTime;
 
 @Data
 @Builder
-@AllArgsConstructor
 @NoArgsConstructor
-public class GameMessageDto {
+@AllArgsConstructor
+public class MessageDto {
     private Long id;
 
-    @JsonAlias("game_id")
-    private Long gameId;
-
-    @JsonAlias("game_code")
-    private Integer gameCode;
+    @JsonAlias("recipient_id")
+    private Long recipientId;
 
     @JsonAlias("sender_id")
     private Long senderId;
 
-    private LocalDateTime time;
+    @JsonAlias("reading_time")
+    private LocalDateTime readingTime;
 
-    private String message;
+    @JsonAlias("sending_time")
+    private LocalDateTime sendingTime;
 
+    @JsonAlias("message_text")
+    private String messageText;
 }

@@ -26,7 +26,7 @@ public class SecurityConfig {
 
     private static final String[] PUBLIC = new String[]{
             "/error", "/login**","/auth", "/register", "/logout","/registration","/api/player/authenticated","/api/settings/**," +
-            "/ws/**","/websocket/**","/socket/**","/topic/**"
+            "/ws/**","/websocket/**","/socket/**","/topic/**", "/api/chat/**"
     };
 
     private static final String[] FOR_AUTHORIZED = new String[]{

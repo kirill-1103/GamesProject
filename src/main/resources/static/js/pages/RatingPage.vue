@@ -1,6 +1,6 @@
 <template>
-  <div style="width:90%;" class="card">
-    <div class="card-body">
+  <div style="width:90%;" class="card card2">
+    <div class="card-body card-body2">
       <div class="d-flex flex-column align-items-center text-center">
         <h2>Рейтинг</h2>
         <div class="table-scroll table-div">

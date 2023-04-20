@@ -11,6 +11,7 @@
 import Nav from "components/Nav.vue"
 import axios from "axios";
 import updateAuthUserInStorage from "../service/auth.js";
+import {connectToChats} from "../service/ws";
 
 export default {
   components: {
@@ -23,9 +24,9 @@ export default {
   },
   mounted() {
     this.updateAuthUser();
+    //TODO: get count unread messages and set it
   },
   created() {
-    this.updateAuthUser();
   },
   methods:{
     updateAuthUser(){
@@ -36,12 +37,15 @@ export default {
               } else {
                 this.player = null;
               }
-              // console.log(this.player)
             }
-        )
+        ).then(()=>{connectToChats(this.player.id,this.addNewMessageInState)})
       }else{
         this.player = this.$store.state.player;
+        connectToChats(this.player.id,this.addNewMessageInState)
       }
+    },
+    addNewMessageInState(message){
+      this.$store.commit("addNewMessage",message);
     }
   }
 }

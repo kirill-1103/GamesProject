@@ -26,4 +26,6 @@ public interface PlayerDao {
     List<Player> getPlayersByPartOfEmail(String part);
 
     List<Player> getPlayersWithNameStarts(String part);
+
+    List<Player> getPlayersByLogins(List<String> names);
 }

@@ -30,6 +30,15 @@ export function connectToGameMessages(gameId,gameCode,callback){
     })
 }
 
+export function connectToChats(playerId, callback){
+    const stopmClient = getStompClient("/socket/chat");
+    stopmClient.connect({},frame=>{
+        stopmClient.subscribe("/topic/chat/"+playerId, message => {
+            callback(JSON.parse(message.body));
+        }, error=>console.log("error in socket:" + JSON.stringify(error)));
+    })
+}
+
 function getStompClient(socket_name){
     const socket = new SockJS(socket_name);
     const stompClient = Stomp.over(socket);

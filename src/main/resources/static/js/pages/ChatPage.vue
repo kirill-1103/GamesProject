@@ -2,7 +2,6 @@
   <div class="content">
     <div class="container p-0">
 
-      <h1 class="h3 mb-3">Messages</h1>
 
       <div class="card">
         <div class="row g-0">
@@ -11,252 +10,125 @@
             <div class="px-4 d-none d-md-block">
               <div class="d-flex align-items-center">
                 <div class="flex-grow-1">
-                  <input type="text" class="form-control my-3" placeholder="Search...">
+                  <p type="text" class="">
+                    <br>
+                    <br>
+                  </p>
                 </div>
               </div>
             </div>
+            <div v-if="dialogsIsLoaded" class="players">
+              <div v-for="dialog of dialogs" class="companion">
+                <a @click="openDialog(dialog)" href="#"
+                   class="list-group-item list-group-item-action border-0 companion-item">
+                  <div v-show="dialog.hasUnread" class="badge bg-success float-right">!</div>
+                  <div class="d-flex align-items-start">
+                    <img v-if="dialog.companion.photo && dialog.companion.imageUrl" :src="dialog.companion.imageUrl"
+                         class="rounded-circle mr-1"
+                         alt="img" width="65" height="65">
+                    <div v-else-if="dialog.companion.photo && !dialog.companion.imageUrl" style="margin-top:50%;"
+                         class="spinner-border text-primary" role="status">
+                      <span class="visually-hidden">Loading..</span>
+                    </div>
+                    <img v-else-if="!dialog.companion.photo" src="../../img/default.png" class="rounded-circle mr-1"
+                         alt="img" width="65" height="65">
+                    <div class="flex-grow-1 ml-3" style="margin-left: 10px;">
+                      {{ dialog.companion.login }}
+                      <div v-if="isOnline(dialog.companion.id)" class="small"><span class="fas fa-circle chat-online"></span> Online</div>
+                      <div v-else class="small"><span class="fas fa-circle chat-offline"></span> Offline</div>
+                    </div>
+                  </div>
+                </a>
+                <br/>
+              </div>
+            </div>
 
-            <a href="#" class="list-group-item list-group-item-action border-0">
-              <div class="badge bg-success float-right">5</div>
-              <div class="d-flex align-items-start">
-                <img src="https://bootdey.com/img/Content/avatar/avatar5.png" class="rounded-circle mr-1" alt="Vanessa Tucker" width="40" height="40">
-                <div class="flex-grow-1 ml-3">
-                  Vanessa Tucker
-                  <div class="small"><span class="fas fa-circle chat-online"></span> Online</div>
-                </div>
-              </div>
-            </a>
-            <a href="#" class="list-group-item list-group-item-action border-0">
-              <div class="badge bg-success float-right">2</div>
-              <div class="d-flex align-items-start">
-                <img src="https://bootdey.com/img/Content/avatar/avatar2.png" class="rounded-circle mr-1" alt="William Harris" width="40" height="40">
-                <div class="flex-grow-1 ml-3">
-                  William Harris
-                  <div class="small"><span class="fas fa-circle chat-online"></span> Online</div>
-                </div>
-              </div>
-            </a>
-            <a href="#" class="list-group-item list-group-item-action border-0">
-              <div class="d-flex align-items-start">
-                <img src="https://bootdey.com/img/Content/avatar/avatar3.png" class="rounded-circle mr-1" alt="Sharon Lessman" width="40" height="40">
-                <div class="flex-grow-1 ml-3">
-                  Sharon Lessman
-                  <div class="small"><span class="fas fa-circle chat-online"></span> Online</div>
-                </div>
-              </div>
-            </a>
-            <a href="#" class="list-group-item list-group-item-action border-0">
-              <div class="d-flex align-items-start">
-                <img src="https://bootdey.com/img/Content/avatar/avatar4.png" class="rounded-circle mr-1" alt="Christina Mason" width="40" height="40">
-                <div class="flex-grow-1 ml-3">
-                  Christina Mason
-                  <div class="small"><span class="fas fa-circle chat-offline"></span> Offline</div>
-                </div>
-              </div>
-            </a>
-            <a href="#" class="list-group-item list-group-item-action border-0">
-              <div class="d-flex align-items-start">
-                <img src="https://bootdey.com/img/Content/avatar/avatar5.png" class="rounded-circle mr-1" alt="Fiona Green" width="40" height="40">
-                <div class="flex-grow-1 ml-3">
-                  Fiona Green
-                  <div class="small"><span class="fas fa-circle chat-offline"></span> Offline</div>
-                </div>
-              </div>
-            </a>
-            <a href="#" class="list-group-item list-group-item-action border-0">
-              <div class="d-flex align-items-start">
-                <img src="https://bootdey.com/img/Content/avatar/avatar2.png" class="rounded-circle mr-1" alt="Doris Wilder" width="40" height="40">
-                <div class="flex-grow-1 ml-3">
-                  Doris Wilder
-                  <div class="small"><span class="fas fa-circle chat-offline"></span> Offline</div>
-                </div>
-              </div>
-            </a>
-            <a href="#" class="list-group-item list-group-item-action border-0">
-              <div class="d-flex align-items-start">
-                <img src="https://bootdey.com/img/Content/avatar/avatar4.png" class="rounded-circle mr-1" alt="Haley Kennedy" width="40" height="40">
-                <div class="flex-grow-1 ml-3">
-                  Haley Kennedy
-                  <div class="small"><span class="fas fa-circle chat-offline"></span> Offline</div>
-                </div>
-              </div>
-            </a>
-            <a href="#" class="list-group-item list-group-item-action border-0">
-              <div class="d-flex align-items-start">
-                <img src="https://bootdey.com/img/Content/avatar/avatar3.png" class="rounded-circle mr-1" alt="Jennifer Chang" width="40" height="40">
-                <div class="flex-grow-1 ml-3">
-                  Jennifer Chang
-                  <div class="small"><span class="fas fa-circle chat-offline"></span> Offline</div>
-                </div>
-              </div>
-            </a>
+            <div v-else="dialog.companion.photo && !dialog.companion.imageUrl" style="margin-top:50%; margin-left:50%"
+                 class="spinner-border text-primary" role="status">
+              <span class="visually-hidden">Loading..</span>
+            </div>
+
 
             <hr class="d-block d-lg-none mt-1 mb-0">
           </div>
+
           <div class="col-12 col-lg-7 col-xl-9">
-            <div class="py-2 px-4 border-bottom d-none d-lg-block">
-              <div class="d-flex align-items-center py-1">
+            <div v-if="companion != null" class="py-2 px-4 border-bottom d-none d-lg-block">
+              <div class="d-flex align-items-center py-1" style="text-align: center">
                 <div class="position-relative">
-                  <img src="https://bootdey.com/img/Content/avatar/avatar3.png" class="rounded-circle mr-1" alt="Sharon Lessman" width="40" height="40">
+                  <img v-if="companion.photo && companion.imageUrl" :src="companion.imageUrl"
+                       class="rounded-circle mr-1"
+                       alt="img" width="65" height="65">
+                  <div v-else-if="companion.photo && !companion.imageUrl" style="margin-top:50%;"
+                       class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Loading..</span>
+                  </div>
+                  <img v-else-if="!companion.photo" src="../../img/default.png" class="rounded-circle mr-1"
+                       alt="img" width="65" height="65">
                 </div>
-                <div class="flex-grow-1 pl-3">
-                  <strong>Sharon Lessman</strong>
-                  <div class="text-muted small"><em>Typing...</em></div>
-                </div>
-                <div>
-                  <button class="btn btn-primary btn-lg mr-1 px-3"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-phone feather-lg"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg></button>
-                  <button class="btn btn-info btn-lg mr-1 px-3 d-none d-md-inline-block"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-video feather-lg"><polygon points="23 7 16 12 23 17 23 7"></polygon><rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect></svg></button>
-                  <button class="btn btn-light border btn-lg px-3"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-more-horizontal feather-lg"><circle cx="12" cy="12" r="1"></circle><circle cx="19" cy="12" r="1"></circle><circle cx="5" cy="12" r="1"></circle></svg></button>
+                <div class="flex-grow-1 pl-3" style="margin-left: 0.5rem;">
+                  <strong>{{ companion.login }}</strong>
                 </div>
               </div>
             </div>
 
-            <div class="position-relative">
-              <div class="chat-messages p-4">
+            <div class="position-relative" style="height: 100%">
+              <div v-show="companion != null" class="chat-messages p-4" ref="chat">
 
-                <div class="chat-message-right pb-4">
+                <div v-if="companion!=null" v-for="message of messages" v-bind:class="{'chat-message-right':message.sender.id !== companion.id,
+                'mb-4':message.sender.id !== companion.id, 'pb-4':message.sender.id === companion.id,
+                 'chat-message-left':message.sender.id === companion.id  }">
                   <div>
-                    <img src="https://bootdey.com/img/Content/avatar/avatar1.png" class="rounded-circle mr-1" alt="Chris Wood" width="40" height="40">
-                    <div class="text-muted small text-nowrap mt-2">2:33 am</div>
+
+                    <div v-if="message.sender.id === companion.id">
+                      <img v-if=" companion.photo && companion.imageUrl" :src="companion.imageUrl"
+                           class="rounded-circle mr-1"
+                           alt="img" width="40" height="40">
+                      <div v-else-if="companion.photo && !companion.imageUrl"
+                           class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Loading..</span>
+                      </div>
+                      <img v-else-if="!companion.photo" src="../../img/default.png" class="rounded-circle mr-1"
+                           alt="img" width="40" height="40">
+                    </div>
+                    <div v-else>
+                      <img v-if=" player.photo && imgSrc" :src="imgSrc"
+                           class="rounded-circle mr-1"
+                           alt="img" width="40" height="40">
+                      <div v-else-if="player.photo && !imgSrc"
+                           class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Loading..</span>
+                      </div>
+                      <img v-else-if="!player.photo" src="../../img/default.png" class="rounded-circle mr-1"
+                           alt="img" width="40" height="40">
+                    </div>
+
+
+                    <div class="text-muted small text-nowrap mt-2">{{ getStringDate(message.sendingTime)[0] }}</div>
+                    <div class="text-muted small text-nowrap mt-2">{{ getStringDate(message.sendingTime)[1] }}</div>
                   </div>
                   <div class="flex-shrink-1 bg-light rounded py-2 px-3 mr-3">
-                    <div class="font-weight-bold mb-1">You</div>
-                    Lorem ipsum dolor sit amet, vis erat denique in, dicunt prodesset te vix.
-                  </div>
-                </div>
-
-                <div class="chat-message-left pb-4">
-                  <div>
-                    <img src="https://bootdey.com/img/Content/avatar/avatar3.png" class="rounded-circle mr-1" alt="Sharon Lessman" width="40" height="40">
-                    <div class="text-muted small text-nowrap mt-2">2:34 am</div>
-                  </div>
-                  <div class="flex-shrink-1 bg-light rounded py-2 px-3 ml-3">
-                    <div class="font-weight-bold mb-1">Sharon Lessman</div>
-                    Sit meis deleniti eu, pri vidit meliore docendi ut, an eum erat animal commodo.
-                  </div>
-                </div>
-
-                <div class="chat-message-right mb-4">
-                  <div>
-                    <img src="https://bootdey.com/img/Content/avatar/avatar1.png" class="rounded-circle mr-1" alt="Chris Wood" width="40" height="40">
-                    <div class="text-muted small text-nowrap mt-2">2:35 am</div>
-                  </div>
-                  <div class="flex-shrink-1 bg-light rounded py-2 px-3 mr-3">
-                    <div class="font-weight-bold mb-1">You</div>
-                    Cum ea graeci tractatos.
-                  </div>
-                </div>
-
-                <div class="chat-message-left pb-4">
-                  <div>
-                    <img src="https://bootdey.com/img/Content/avatar/avatar3.png" class="rounded-circle mr-1" alt="Sharon Lessman" width="40" height="40">
-                    <div class="text-muted small text-nowrap mt-2">2:36 am</div>
-                  </div>
-                  <div class="flex-shrink-1 bg-light rounded py-2 px-3 ml-3">
-                    <div class="font-weight-bold mb-1">Sharon Lessman</div>
-                    Sed pulvinar, massa vitae interdum pulvinar, risus lectus porttitor magna, vitae commodo lectus mauris et velit.
-                    Proin ultricies placerat imperdiet. Morbi varius quam ac venenatis tempus.
-                  </div>
-                </div>
-
-                <div class="chat-message-left pb-4">
-                  <div>
-                    <img src="https://bootdey.com/img/Content/avatar/avatar3.png" class="rounded-circle mr-1" alt="Sharon Lessman" width="40" height="40">
-                    <div class="text-muted small text-nowrap mt-2">2:37 am</div>
-                  </div>
-                  <div class="flex-shrink-1 bg-light rounded py-2 px-3 ml-3">
-                    <div class="font-weight-bold mb-1">Sharon Lessman</div>
-                    Cras pulvinar, sapien id vehicula aliquet, diam velit elementum orci.
-                  </div>
-                </div>
-
-                <div class="chat-message-right mb-4">
-                  <div>
-                    <img src="https://bootdey.com/img/Content/avatar/avatar1.png" class="rounded-circle mr-1" alt="Chris Wood" width="40" height="40">
-                    <div class="text-muted small text-nowrap mt-2">2:38 am</div>
-                  </div>
-                  <div class="flex-shrink-1 bg-light rounded py-2 px-3 mr-3">
-                    <div class="font-weight-bold mb-1">You</div>
-                    Lorem ipsum dolor sit amet, vis erat denique in, dicunt prodesset te vix.
-                  </div>
-                </div>
-
-                <div class="chat-message-left pb-4">
-                  <div>
-                    <img src="https://bootdey.com/img/Content/avatar/avatar3.png" class="rounded-circle mr-1" alt="Sharon Lessman" width="40" height="40">
-                    <div class="text-muted small text-nowrap mt-2">2:39 am</div>
-                  </div>
-                  <div class="flex-shrink-1 bg-light rounded py-2 px-3 ml-3">
-                    <div class="font-weight-bold mb-1">Sharon Lessman</div>
-                    Sit meis deleniti eu, pri vidit meliore docendi ut, an eum erat animal commodo.
-                  </div>
-                </div>
-
-                <div class="chat-message-right mb-4">
-                  <div>
-                    <img src="https://bootdey.com/img/Content/avatar/avatar1.png" class="rounded-circle mr-1" alt="Chris Wood" width="40" height="40">
-                    <div class="text-muted small text-nowrap mt-2">2:40 am</div>
-                  </div>
-                  <div class="flex-shrink-1 bg-light rounded py-2 px-3 mr-3">
-                    <div class="font-weight-bold mb-1">You</div>
-                    Cum ea graeci tractatos.
-                  </div>
-                </div>
-
-                <div class="chat-message-right mb-4">
-                  <div>
-                    <img src="https://bootdey.com/img/Content/avatar/avatar1.png" class="rounded-circle mr-1" alt="Chris Wood" width="40" height="40">
-                    <div class="text-muted small text-nowrap mt-2">2:41 am</div>
-                  </div>
-                  <div class="flex-shrink-1 bg-light rounded py-2 px-3 mr-3">
-                    <div class="font-weight-bold mb-1">You</div>
-                    Morbi finibus, lorem id placerat ullamcorper, nunc enim ultrices massa, id dignissim metus urna eget purus.
-                  </div>
-                </div>
-
-                <div class="chat-message-left pb-4">
-                  <div>
-                    <img src="https://bootdey.com/img/Content/avatar/avatar3.png" class="rounded-circle mr-1" alt="Sharon Lessman" width="40" height="40">
-                    <div class="text-muted small text-nowrap mt-2">2:42 am</div>
-                  </div>
-                  <div class="flex-shrink-1 bg-light rounded py-2 px-3 ml-3">
-                    <div class="font-weight-bold mb-1">Sharon Lessman</div>
-                    Sed pulvinar, massa vitae interdum pulvinar, risus lectus porttitor magna, vitae commodo lectus mauris et velit.
-                    Proin ultricies placerat imperdiet. Morbi varius quam ac venenatis tempus.
-                  </div>
-                </div>
-
-                <div class="chat-message-right mb-4">
-                  <div>
-                    <img src="https://bootdey.com/img/Content/avatar/avatar1.png" class="rounded-circle mr-1" alt="Chris Wood" width="40" height="40">
-                    <div class="text-muted small text-nowrap mt-2">2:43 am</div>
-                  </div>
-                  <div class="flex-shrink-1 bg-light rounded py-2 px-3 mr-3">
-                    <div class="font-weight-bold mb-1">You</div>
-                    Lorem ipsum dolor sit amet, vis erat denique in, dicunt prodesset te vix.
-                  </div>
-                </div>
-
-                <div class="chat-message-left pb-4">
-                  <div>
-                    <img src="https://bootdey.com/img/Content/avatar/avatar3.png" class="rounded-circle mr-1" alt="Sharon Lessman" width="40" height="40">
-                    <div class="text-muted small text-nowrap mt-2">2:44 am</div>
-                  </div>
-                  <div class="flex-shrink-1 bg-light rounded py-2 px-3 ml-3">
-                    <div class="font-weight-bold mb-1">Sharon Lessman</div>
-                    Sit meis deleniti eu, pri vidit meliore docendi ut, an eum erat animal commodo.
+                    <div v-if="message.sender.id === player.id" class="font-weight-bold mb-1 loginInMessage">You</div>
+                    <div v-else class="font-weight-bold mb-1 loginInMessage">{{ message.sender.login }}</div>
+                    {{ message.messageText }}
                   </div>
                 </div>
 
               </div>
-            </div>
+              <div v-if="companion!=null" class="flex-grow-0 py-3 px-4 border-top">
+                <div class="input-group">
+                  <input type="text" class="form-control" placeholder="Type your message" v-model="messageInput">
+                  <button class="btn btn-primary" @click="sendMessage" :disabled="messageInput.length === 0">Send
+                  </button>
+                </div>
+              </div>
 
-            <div class="flex-grow-0 py-3 px-4 border-top">
-              <div class="input-group">
-                <input type="text" class="form-control" placeholder="Type your message">
-                <button class="btn btn-primary">Send</button>
+              <div class="chat-messages" v-else-if="companion == null"
+                   style="width:100%; height: 100%; text-align: center; ">
+                <p style="margin: auto">Choose dialog</p>
               </div>
             </div>
+
 
           </div>
         </div>
@@ -266,16 +138,329 @@
 </template>
 
 <script>
+import axios from "axios";
+import updateAuthUserInStorage from "../service/auth";
+import {fromArrayToDate, fromArrayToDateWithTime} from "../service/datetime";
+
 export default {
-  name:"ChatPage"
+  name: "ChatPage",
+  data: function () {
+    return {
+      player: null,
+      dialogs: [],
+      messages: null,
+      companion: null,
+      imgSrc: null,
+      messageInput: "",
+      dialogsIsLoaded: false,
+      newMessages:[],
+      onlineIds:[],
+      config: {
+        headers: {
+          'Content-Type': 'multipart/form-data;application/json',
+          "Access-Control-Allow-Origin": "*",
+        }
+      },
+    }
+  },
+  created() {
+    updateAuthUserInStorage(this.$store).then(() => {//get player
+      this.player = this.$store.state.player;
+      this.signUpTime = fromArrayToDate(this.player.signUpTime);
+      if (this.player.photo && this.player.photo !== '') {
+        axios.post("/api/player/image", {img_name: this.player.photo}, this.config).then((result) => {
+          this.imgSrc = "data:image/;base64, " + result.data
+          // let img = document.getElementById("player_photo");
+          // img['src'] = this.imgSrc;
+        }).catch(err => {
+          console.log("ERR:");
+          console.log(err)
+        })
+      }
+    }).then(() => {
+      this.getDialogs();
+      this.subscribeOnNewMessages()
+    })
+    this.startOnlineListListener();
+  },
+  methods: {
+    getDialogs() {
+      axios.get("/api/chat/info", {
+        params: {
+          player_id: this.player.id
+        }
+      }).then((res) => {
+        for (let dialog of res.data) {
+          this.addDialog(this.getCompanionFromDialog(dialog),[],this.dialogHasUnreadMessage(dialog),dialog.lastMessage.sendingTime);
+        }
+        this.sortDialogs();
+        this.dialogsIsLoaded = true;
+      }).then(() => {
+        this.getPhotos();
+      })
+    },
+    getPhotos() {
+      let names = [];
+      for (let dialog of this.dialogs) {
+        names.push(dialog.companion.photo);
+      }
+      axios.post("/api/player/images", names).then((res) => {
+        for (let i = 0; i < res.data.length; i++) {
+          if (res.data[i] !== null) {
+            res.data[i] = "data:image/;base64, " + res.data[i];
+          }
+          this.dialogs[i].companion.imageUrl = res.data[i];
+        }
+      })
+    },
+    getCompanionFromDialog(dialog) {
+      return dialog.player1.id === this.player.id ? dialog.player2 : dialog.player1
+    },
+    dialogHasUnreadMessage(dialog) {
+      return dialog.lastMessage.sender.id !== this.player.id && dialog.lastMessage.readingTime == null;
+    },
+    compareDates(date1, date2) {
+      for (let i = 0; i < date1.length; i++) {
+        if (date1[i] !== date2[i]) {
+          return date2[i] - date1[i];
+        }
+      }
+      return 0;
+    },
+    openDialog(dialog) {
+      this.companion = null;
+      this.openingDialog = true;
+      if (dialog.messages.isLoaded) {
+        this.messages = dialog.messages.messages;
+        this.companion = dialog.companion;
+        setTimeout(()=>{
+          this.scrollChat()
+        },100)
+        this.setReadLabelOnDialog(dialog);
+      } else {
+        axios.get("/api/chat/dialog", {
+          params: {
+            player1_id: dialog.companion.id,
+            player2_id: this.player.id
+          }
+        }).then((res) => {
+          this.messages = res.data.messages;
+          dialog.messages.messages = res.data.messages;
+          dialog.messages.isLoaded = true;
+          this.companion = dialog.companion
+          setTimeout(()=>{
+            this.scrollChat()
+          },100)
+          this.setReadLabelOnDialog(dialog);
+        })
+      }
+    },
+    getStringDate(dateArray) {
+      if(typeof(dateArray) === 'string'){
+        dateArray = dateArray.replaceAll('-','.')
+        return [dateArray.substring(8,10)+"."+dateArray.substring(5,7)+"."+dateArray.substring(0,4),dateArray.substring(11,19)]
+      }
+      let dateStr = fromArrayToDateWithTime(dateArray);
+      return [dateStr.substring(0, 10), dateStr.substring(12, 21)]
+    },
+    sendMessage() {
+      let messageText = this.messageInput;
+      this.messageInput = "";
+
+      axios.post("/api/chat/send", {
+        sender_id: this.player.id,
+        recipient_id: this.companion.id,
+        message_text: messageText
+      })
+          .catch(err => console.log(err));
+
+    },
+    subscribeOnNewMessages(){
+      this.$store.subscribe((mutation, state)=>{
+        if(mutation.type === 'addNewMessage'){
+          this.addNewMessages(state.newMessages);
+        }
+      });
+    },
+    addNewMessages(messages){
+      for(let message of messages){
+        if(message.added){
+          continue
+        }
+        this.setSenderAndRecipient(message).then(()=>{
+          let fromCurrentCompanion = this.companion && this.companion.id == message.senderId;
+          let added = false;
+          for(let dialog of this.dialogs){
+            if (dialog.companion.id == message.senderId){
+                dialog.hasUnread = true;
+              if(dialog.messages.isLoaded){
+                dialog.messages.messages.push(message);
+              }
+              dialog.lastMessageTime = message.sendingTime
+              added = true;
+            } else if(dialog.companion.id == message.recipientId){
+              if(dialog.messages.isLoaded){
+                dialog.lastMessageTime = message.sendingTime
+              }
+              dialog.messages.messages.push(message);
+              added = true;
+            }
+          }
+          if(!added){
+            let companion = message.sender;
+            this.addDialog(companion,[message], true, message.sendingTime)
+          }
+          if(fromCurrentCompanion){
+            let dialog;
+            for(let d of this.dialogs){
+              if(d.companion.id == this.companion.id){
+                this.setReadLabelOnDialog(d)
+                return;
+              }
+            }
+          }
+          message.added = true;
+          this.sortDialogs()
+        })
+      }
+    },
+    setSenderAndRecipient(message){
+      let sender = null
+      let recipient = null
+      if(message.senderId == this.player.id){
+        sender = this.player;
+      }else if(message.recipientId == this.player.id){
+        recipient = this.player;
+      }
+
+      for(let dialog of this.dialogs){
+        if(dialog.companion.id == message.recipientId){
+          recipient = dialog.companion;
+        }else if(dialog.companion.id == message.senderId){
+          sender = dialog.companion;
+        }
+      }
+      if(sender != null && recipient != null){
+        return new Promise((resolve,reject)=>{
+          message.sender = sender;
+          message.recipient = recipient;
+          resolve()
+        })
+      }else{
+        if(sender == null){
+          return axios.get("/api/player/"+message.senderId)
+              .then(res=>{
+                message.sender = res.data;
+                message.recipient = recipient;
+              })
+        }else if(recipient == null){
+          return axios.get("/api/player/"+message.recipient)
+              .then(res=>{
+                message.sender = sender;
+                message.recipient = res.data;
+              })
+        }
+      }
+    },
+    insertLineBreaks(messages){
+      for(let message of messages){
+        message.messageText = message.messageText.replace(/(.{80}(?!\s))/g, '$1\n');
+      }
+    },
+    scrollChat(){
+      let chat = this.$refs.chat;
+      chat.scrollTo(0,chat.scrollHeight)
+    },
+    addDialog(companion,messages,hasUnread,lastMessageTime){
+      this.dialogs.push({
+        companion: companion,
+        messages: {messages: messages, isLoaded: false},
+        hasUnread: hasUnread,
+        lastMessageTime: lastMessageTime
+      })
+    },
+    sortDialogs(){
+      this.dialogs.sort((d1, d2) =>
+      {
+        let d1Time = null
+        let d2Time = null
+        if(typeof (d1.lastMessageTime) == 'string'){
+          d1Time = this.getArrayTimeFromString(d1);
+        }else{
+          d1Time = d1.lastMessageTime
+        }
+        if(typeof (d2.lastMessageTime) == 'string'){
+          d2Time = this.getArrayTimeFromString(d2)
+        }else{
+          d2Time = d2.lastMessageTime;
+        }
+        return this.compareDates(d1Time,d2Time)
+      })
+    },
+    getArrayTimeFromString(d){
+      let a=[]
+      a.push(parseInt(d.lastMessageTime.substring(0,4)))
+      a.push(parseInt(d.lastMessageTime.substring(5,7)))
+      a.push(parseInt(d.lastMessageTime.substring(8,10)))
+      a.push(parseInt(d.lastMessageTime.substring(11,13)))
+      a.push(parseInt(d.lastMessageTime.substring(14,16)))
+      a.push(parseInt(d.lastMessageTime.substring(17,19)))
+      a.push(parseInt(d.lastMessageTime.substring(20,24)))
+      return a
+    },
+    setReadLabelOnDialog(dialog){
+      if(!dialog.hasUnread) return
+      let messages = dialog.messages.messages;
+      let messagesToChange = []
+      for(let message of messages){
+        if(message.readingTime == null){
+          messagesToChange.push(message);
+        }
+      }
+      axios.post("/api/chat/set_reading_time",messagesToChange);
+      dialog.hasUnread = false;
+      console.log(dialog.messages)
+    },
+    startOnlineListListener(){
+      setInterval(()=>{
+        axios.get("/api/chat/online").then((res)=>{
+          this.onlineIds = res.data;
+        })
+      },1000)
+    },
+    isOnline(playerId){
+      for(let id of this.onlineIds){
+        if(id == playerId){
+          return true;
+        }
+      }
+      return false;
+    }
+  },
+  watch:{
+    messages(newMessages, oldMessages){
+      this.insertLineBreaks(newMessages)
+      this.messages = newMessages;
+    }
+  }
 }
+//TODO: textArea, scroll table new message
 </script>
 
 <style>
+.companion {
+  padding: 10px
+}
+
+.companion:hover {
+  background: lightblue;
+  color: white;
+}
 
 .chat-online {
   color: #34ce57
 }
+
 
 .chat-offline {
   color: #e4606d
@@ -284,7 +469,7 @@ export default {
 .chat-messages {
   display: flex;
   flex-direction: column;
-  max-height: 800px;
+  height: 40rem;;
   overflow-y: scroll
 }
 
@@ -302,19 +487,37 @@ export default {
   flex-direction: row-reverse;
   margin-left: auto
 }
+
 .py-3 {
-  padding-top: 1rem!important;
-  padding-bottom: 1rem!important;
+  padding-top: 1rem !important;
+  padding-bottom: 1rem !important;
 }
+
 .px-4 {
-  padding-right: 1.5rem!important;
-  padding-left: 1.5rem!important;
+  padding-right: 1.5rem !important;
+  padding-left: 1.5rem !important;
 }
+
 .flex-grow-0 {
-  flex-grow: 0!important;
+  flex-grow: 0 !important;
 }
+
 .border-top {
-  border-top: 1px solid #dee2e6!important;
+  border-top: 1px solid #dee2e6 !important;
+}
+
+.card {
+  width: 90%;
+  margin: 0 5%;
+  height: 40% !important;
+}
+
+.players {
+  overflow-y: scroll;
+  height: 40rem;
+}
+
+.loginInMessage {
+  color: darkblue;
 }
 </style>
-

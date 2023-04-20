@@ -3,7 +3,10 @@ package ru.krey.games.dao;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.relational.core.sql.SQL;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
@@ -14,8 +17,12 @@ import ru.krey.games.utils.mapper.MessageMapper;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.sql.Timestamp;
+import java.sql.Types;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 @Component
 @RequiredArgsConstructor
@@ -23,6 +30,8 @@ public class MessageJdbcTemplate implements MessageDao {
     private static final Logger log = LoggerFactory.getLogger(MessageJdbcTemplate.class);
 
     private final JdbcTemplate jdbcTemplate;
+
+    private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
     private final MessageMapper mapper;
 
@@ -60,9 +69,10 @@ public class MessageJdbcTemplate implements MessageDao {
 
     @Override
     public List<Message> getAllMessagesBetweenPlayers(Long player1Id, Long player2Id) {
-        String condition = "WHERE m.sender_id = ? AND m.recipient_id = ? OR m.sender_id = ? AND m.recipient_id = ?";
+        String condition = "WHERE m.sender_id = ? AND m.recipient_id = ? OR m.sender_id = ? AND m.recipient_id = ? " +
+                "ORDER BY m.sending_time";
         String query = getAllMessagesWithPlayersInfo + condition;
-        return new ArrayList<>(jdbcTemplate.query(query, mapper, player1Id, player2Id, player1Id, player2Id));
+        return new ArrayList<>(jdbcTemplate.query(query, mapper, player1Id, player2Id, player2Id, player1Id));
     }
 
     @Override
@@ -114,5 +124,18 @@ public class MessageJdbcTemplate implements MessageDao {
             message.setId(keyHolder.getKey().longValue());
             return message;
         }
+    }
+
+    @Override
+    public void updateReadingTime(List<Long> ids){
+        if(ids.isEmpty()){
+            return;
+        }
+        String sql = "UPDATE message SET reading_time = (:time) WHERE message.id in (:ids)";
+        MapSqlParameterSource parameters = new MapSqlParameterSource();
+        parameters.addValue("ids",ids);
+        parameters.addValue("time",Timestamp.valueOf(LocalDateTime.now()));
+        namedParameterJdbcTemplate.update(sql,parameters);
+        log.info("Messages reading_time updated. Ids: "+ids);
     }
 }

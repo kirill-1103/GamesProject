@@ -20,7 +20,8 @@ const store = createStore({
             playerPhoto: null,
             playerGameCode: null,
             playerGameId: null,
-            inSearch: false
+            inSearch: false,
+            newMessages: []
         }
     },
     mutations: {
@@ -38,6 +39,12 @@ const store = createStore({
         },
         setInSearch(state, inSearch){
             state.inSearch = inSearch;
+        },
+        addNewMessage(state, message){
+            state.newMessages.push(message)
+        },
+        clearMessages(state){
+            state.newMessages = [];
         }
     }
 })

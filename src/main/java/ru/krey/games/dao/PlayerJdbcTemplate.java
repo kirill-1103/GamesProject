@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
@@ -22,6 +24,8 @@ public class PlayerJdbcTemplate implements PlayerDao {
 
     private static final Logger log = LoggerFactory.getLogger(PlayerJdbcTemplate.class);
     private final JdbcTemplate jdbcTemplate;
+
+    private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
     private final PlayerMapper playerMapper;
 
     @Override
@@ -138,6 +142,17 @@ public class PlayerJdbcTemplate implements PlayerDao {
     public List<Player> getPlayersWithNameStarts(String part) {
         String query = "SELECT * FROM player WHERE LOWER(player.login) LIKE CONCAT('%', ?)";
         return new ArrayList<>(jdbcTemplate.query(query, this.playerMapper, part));
+    }
+
+    @Override
+    public List<Player> getPlayersByLogins(List<String> names){
+        if(names.isEmpty()){
+            return Collections.emptyList();
+        }
+        String query = "SELECT * FROM player WHERE player.login in (:names)";
+        MapSqlParameterSource parameters = new MapSqlParameterSource();
+        parameters.addValue("names",names);
+        return new ArrayList<>(namedParameterJdbcTemplate.query(query,parameters,this.playerMapper));
     }
 
 }

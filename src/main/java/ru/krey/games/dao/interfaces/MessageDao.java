@@ -15,4 +15,7 @@ public interface MessageDao {
     List<Message> getAll();
 
     Message saveOrUpdate(Message message);
+
+    void updateReadingTime(List<Long> ids);
+
 }

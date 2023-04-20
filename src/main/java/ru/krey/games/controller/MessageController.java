@@ -1,9 +1,16 @@
 package ru.krey.games.controller;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.session.SessionRegistry;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 import ru.krey.games.dao.interfaces.MessageDao;
 import ru.krey.games.dao.interfaces.PlayerDao;
@@ -14,10 +21,8 @@ import ru.krey.games.dto.MessageDto;
 import ru.krey.games.error.BadRequestException;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -31,6 +36,19 @@ public class MessageController {
 
     private final SimpMessagingTemplate messagingTemplate;
 
+    private final SessionRegistry sessionRegistry;
+
+    private final static Logger log = LoggerFactory.getLogger(MessageController.class);
+
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    private static class PlayerDto{
+        String login;
+        Long id;
+    }
+
+    private List<PlayerDto> onlineList = new ArrayList<>();
 
     @GetMapping("/info")
     public List<DialogDto> getDialogsInfo(@RequestParam("player_id") Long playerId) {
@@ -107,6 +125,52 @@ public class MessageController {
         message.setId(savedMessage.getId());
         sendSocketMessage(message);
     }
+    @PostMapping("/set_reading_time")
+    public void setReadingTime(@RequestBody List<MessageDto> messages){
+        messageDao.updateReadingTime(messages.stream().map(MessageDto::getId).collect(Collectors.toList()));
+    }
+
+    @GetMapping("/online")
+    public List<Long> getOnlinePlayersIds(){
+        return this.onlineList.stream().map(PlayerDto::getId).toList();
+    }
+
+    @Scheduled(fixedRate = 5000)
+    public void sendOnlineUsers(){
+        List<String> userNames = sessionRegistry.getAllPrincipals().stream().map(pr -> ((User) pr).getUsername()).toList();
+        List<PlayerDto> newOnlines = new ArrayList<>();
+        for(String name: userNames){
+            if(!this.onlineList.stream().map(PlayerDto::getLogin).toList().contains(name)){
+//                Player player = playerDao.getOneByLogin(name).orElse(null);
+//                if(!Objects.isNull(player)){
+                PlayerDto playerDto = new PlayerDto();
+                playerDto.login = name;
+                newOnlines.add(playerDto);
+//                    this.onlineList.add(new PlayerDto(name,player.getId()));
+//                }
+            }else{
+                PlayerDto player = this.onlineList.stream().filter(p->p.login.equals(name)).findAny().get();
+                newOnlines.add(player);
+            }
+        }
+        List<String> names = new ArrayList<>();
+        for(PlayerDto playerDto : newOnlines){
+            if(Objects.isNull(playerDto.id)){
+                names.add(playerDto.login);
+            }
+        }
+
+        List<Player> newPlayers = playerDao.getPlayersByLogins(names);
+
+        for(Player player: newPlayers){
+           PlayerDto playerDto  = newOnlines.stream().filter(p->p.getLogin().equals(player.getLogin())).findAny().get();
+           playerDto.id = player.getId();
+        }
+
+
+        this.onlineList = newOnlines;
+    }
+
 
     private void sendSocketMessage(MessageDto message){
         long senderId = message.getSenderId();
@@ -116,8 +180,4 @@ public class MessageController {
         messagingTemplate.convertAndSend("/topic/chat/"+recipientId,message);
     }
 
-    static class SpringUser{
-        String login;
-        String password;
-    }
 }

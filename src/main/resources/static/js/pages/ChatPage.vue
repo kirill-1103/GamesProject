@@ -74,7 +74,9 @@
 
             <div class="position-relative" style="height: 100%">
               <div v-show="companion != null" class="chat-messages p-4" ref="chat">
-
+                <button v-if = "unreadMessageInCurrentDialog" class="scroll-button" v-on:click="scrollChat">
+                  <i class="fa fa-arrow-down" aria-hidden="true"></i>
+                </button>
                 <div v-if="companion!=null" v-for="message of messages" v-bind:class="{'chat-message-right':message.sender.id !== companion.id,
                 'mb-4':message.sender.id !== companion.id, 'pb-4':message.sender.id === companion.id,
                  'chat-message-left':message.sender.id === companion.id  }">
@@ -155,6 +157,7 @@ export default {
       dialogsIsLoaded: false,
       newMessages:[],
       onlineIds:[],
+      unreadMessageInCurrentDialog:false,
       config: {
         headers: {
           'Content-Type': 'multipart/form-data;application/json',
@@ -182,6 +185,9 @@ export default {
       this.subscribeOnNewMessages()
     })
     this.startOnlineListListener();
+  },
+  mounted() {
+    this.addScrollListener();
   },
   methods: {
     getDialogs() {
@@ -230,6 +236,7 @@ export default {
     openDialog(dialog) {
       this.companion = null;
       this.openingDialog = true;
+      this.unreadMessageInCurrentDialog = false;
       if (dialog.messages.isLoaded) {
         this.messages = dialog.messages.messages;
         this.companion = dialog.companion;
@@ -289,6 +296,7 @@ export default {
         }
         this.setSenderAndRecipient(message).then(()=>{
           let fromCurrentCompanion = this.companion && this.companion.id == message.senderId;
+          let toCurrentCompanion = this.companion && this.companion.id == message.recipientId;
           let added = false;
           for(let dialog of this.dialogs){
             if (dialog.companion.id == message.senderId){
@@ -311,7 +319,7 @@ export default {
             this.addDialog(companion,[message], true, message.sendingTime)
           }
           if(fromCurrentCompanion){
-            let dialog;
+            this.unreadMessageInCurrentDialog = true;
             for(let d of this.dialogs){
               if(d.companion.id == this.companion.id){
                 this.setReadLabelOnDialog(d)
@@ -319,10 +327,33 @@ export default {
               }
             }
           }
+          if(toCurrentCompanion){
+            setTimeout(()=>{
+              this.scrollChat();
+            },10)
+          }
+          setTimeout(()=>{
+            this.insertLineBreaks(this.messages)
+          },10)
           message.added = true;
           this.sortDialogs()
         })
       }
+    },
+    addScrollListener(){
+      let interval = setInterval(()=>{
+        let chat = this.$refs.chat;
+        if(chat){
+          chat.addEventListener("scroll",(event)=>{
+            if(Math.abs(chat.scrollHeight - chat.scrollTop - chat.offsetHeight)<10){
+              this.unreadMessageInCurrentDialog = false;
+            }
+          })
+          clearInterval(interval)
+
+        }
+      }, 500)
+
     },
     setSenderAndRecipient(message){
       let sender = null
@@ -368,8 +399,9 @@ export default {
       }
     },
     scrollChat(){
+      this.unreadMessageInCurrentDialog = false;
       let chat = this.$refs.chat;
-      chat.scrollTo(0,chat.scrollHeight)
+      chat.scrollTo(0,chat.scrollHeight);
     },
     addDialog(companion,messages,hasUnread,lastMessageTime){
       this.dialogs.push({
@@ -425,6 +457,7 @@ export default {
       setInterval(()=>{
         axios.get("/api/chat/online").then((res)=>{
           this.onlineIds = res.data;
+          // console.log(this.onlineIds)
         })
       },1000)
     },
@@ -439,12 +472,14 @@ export default {
   },
   watch:{
     messages(newMessages, oldMessages){
-      this.insertLineBreaks(newMessages)
       this.messages = newMessages;
+      this.insertLineBreaks(this.messages)
+    },
+    unreadMessageInCurrentDialog(newM,oldM){
+      console.log(newM)
     }
   }
 }
-//TODO: textArea, scroll table new message
 </script>
 
 <style>
@@ -470,7 +505,7 @@ export default {
   display: flex;
   flex-direction: column;
   height: 40rem;;
-  overflow-y: scroll
+  overflow-y: scroll;
 }
 
 .chat-message-left,
@@ -518,6 +553,18 @@ export default {
 }
 
 .loginInMessage {
-  color: darkblue;
+  color: darkslateblue;
+  font-family: "Bodoni MT";
+}
+
+.scroll-button{
+  position: absolute;
+  top: 20px;
+  right:20px;
+  width:50px;
+  height:50px;
+  border-radius: 50%;
+  opacity:.6;
+  z-index:1;
 }
 </style>

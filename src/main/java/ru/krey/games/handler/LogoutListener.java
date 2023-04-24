@@ -1,6 +1,8 @@
 package ru.krey.games.handler;
 
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationListener;
 import org.springframework.security.authentication.event.LogoutSuccessEvent;
 import org.springframework.security.core.Authentication;
@@ -15,6 +17,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class LogoutListener implements ApplicationListener<LogoutSuccessEvent> {
     private final SessionRegistry sessionRegistry;
+
+    private final static Logger log = LoggerFactory.getLogger(LogoutListener.class);
 
     @Override
     public void onApplicationEvent(LogoutSuccessEvent event){

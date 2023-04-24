@@ -136,7 +136,7 @@ public class MessageController {
     }
 
     @Scheduled(fixedRate = 5000)
-    public void sendOnlineUsers(){
+    public void updateOnlineUsers(){
         List<String> userNames = sessionRegistry.getAllPrincipals().stream().map(pr -> ((User) pr).getUsername()).toList();
         List<PlayerDto> newOnlines = new ArrayList<>();
         for(String name: userNames){

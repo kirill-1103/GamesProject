@@ -3,7 +3,7 @@
     <div class="container p-0">
 
 
-      <div class="card">
+      <div class="card card2">
         <div class="row g-0">
           <div class="col-12 col-lg-5 col-xl-3 border-right">
 
@@ -18,7 +18,7 @@
               </div>
             </div>
             <div v-if="dialogsIsLoaded" class="players">
-              <div v-for="dialog of dialogs" class="companion">
+              <div v-for="dialog of dialogs" class="companion" v-bind:class="{selected : companion && dialog.companion.id == companion.id}">
                 <a @click="openDialog(dialog)" href="#"
                    class="list-group-item list-group-item-action border-0 companion-item">
                   <div v-show="dialog.hasUnread" class="badge bg-success float-right">!</div>
@@ -158,6 +158,8 @@ export default {
       newMessages:[],
       onlineIds:[],
       unreadMessageInCurrentDialog:false,
+      newCompanionId: null,
+      photosIsLoaded:false,
       config: {
         headers: {
           'Content-Type': 'multipart/form-data;application/json',
@@ -183,6 +185,12 @@ export default {
     }).then(() => {
       this.getDialogs();
       this.subscribeOnNewMessages()
+      if(this.$route.params.id){
+        if(this.$route.params.id != this.player.id){
+          this.newCompanionId = this.$route.params.id;
+          this.getNewCompanion();
+        }
+      }
     })
     this.startOnlineListListener();
   },
@@ -217,6 +225,7 @@ export default {
           }
           this.dialogs[i].companion.imageUrl = res.data[i];
         }
+        this.photosIsLoaded = true;
       })
     },
     getCompanionFromDialog(dialog) {
@@ -239,6 +248,9 @@ export default {
       this.unreadMessageInCurrentDialog = false;
       if (dialog.messages.isLoaded) {
         this.messages = dialog.messages.messages;
+        console.log("IN OPEN:")
+        console.log(this.messages)
+        console.log(dialog)
         this.companion = dialog.companion;
         setTimeout(()=>{
           this.scrollChat()
@@ -290,6 +302,8 @@ export default {
       });
     },
     addNewMessages(messages){
+      console.log("messages:")
+      console.log(messages)
       for(let message of messages){
         if(message.added){
           continue
@@ -307,6 +321,10 @@ export default {
               dialog.lastMessageTime = message.sendingTime
               added = true;
             } else if(dialog.companion.id == message.recipientId){
+              console.log("DIALOG:")
+              console.log(dialog)
+              console.log("MESSAGE:")
+              console.log(message)
               if(dialog.messages.isLoaded){
                 dialog.lastMessageTime = message.sendingTime
               }
@@ -333,6 +351,8 @@ export default {
             },10)
           }
           setTimeout(()=>{
+            console.log("THIS MESSAGES 1")
+            console.log(this.messages)
             this.insertLineBreaks(this.messages)
           },10)
           message.added = true;
@@ -394,6 +414,9 @@ export default {
       }
     },
     insertLineBreaks(messages){
+      if(messages == null){
+        return;
+      }
       for(let message of messages){
         message.messageText = message.messageText.replace(/(.{80}(?!\s))/g, '$1\n');
       }
@@ -403,10 +426,10 @@ export default {
       let chat = this.$refs.chat;
       chat.scrollTo(0,chat.scrollHeight);
     },
-    addDialog(companion,messages,hasUnread,lastMessageTime){
+    addDialog(companion,messages,hasUnread,lastMessageTime, isLoaded=false){
       this.dialogs.push({
         companion: companion,
-        messages: {messages: messages, isLoaded: false},
+        messages: {messages: messages, isLoaded: isLoaded},
         hasUnread: hasUnread,
         lastMessageTime: lastMessageTime
       })
@@ -414,6 +437,11 @@ export default {
     sortDialogs(){
       this.dialogs.sort((d1, d2) =>
       {
+        if(!d1.lastMessageTime){
+          return -1;
+        }else if (!d2.lastMessageTime){
+          return 1;
+        }
         let d1Time = null
         let d2Time = null
         if(typeof (d1.lastMessageTime) == 'string'){
@@ -468,11 +496,53 @@ export default {
         }
       }
       return false;
+    },
+    getNewCompanion(){
+      let interval = setInterval(()=>{
+        if(this.player && this.photosIsLoaded){
+          axios.get("/api/chat/dialog",{params:{
+              player1_id: this.player.id,
+              player2_id: this.newCompanionId
+            }}).then((res)=>{
+              if(res.data.error){
+                console.log(res.data.message)
+              }else{
+                let dialogCompanion = this.getCompanionFromDialog(res.data);
+                let dialogByCompanion = this.getDialogByCompanionIfExists(dialogCompanion.id)
+                if(dialogByCompanion){
+                  // this.companion = dialogByCompanion.companion;
+                  this.openDialog(dialogByCompanion)
+                }else{
+                  axios.post("/api/player/image", {img_name:dialogCompanion.photo}, this.config).then((res) => {
+                    if(!res.data.error){
+                      dialogCompanion.imageUrl ="data:image/;base64, " + res.data;
+                    }
+                    this.addDialog(dialogCompanion,[],false,null,true);
+                    this.openDialog(this.getDialogByCompanionIfExists(dialogCompanion.id))
+                    this.sortDialogs()
+                  })
+                }
+              }
+          })
+          clearInterval(interval)
+        }
+      },100)
+    },
+    getDialogByCompanionIfExists(companionId){
+      let dialog = null;
+      this.dialogs.forEach((d)=>{
+        if(d.companion.id == companionId){
+          dialog = d;
+        }
+      })
+      return dialog;
     }
   },
   watch:{
     messages(newMessages, oldMessages){
       this.messages = newMessages;
+      console.log("THIS MESSAGES:")
+      console.log(this.messages)
       this.insertLineBreaks(this.messages)
     },
     unreadMessageInCurrentDialog(newM,oldM){
@@ -490,6 +560,10 @@ export default {
 .companion:hover {
   background: lightblue;
   color: white;
+}
+
+.companion:active{
+  color:antiquewhite;
 }
 
 .chat-online {
@@ -541,7 +615,7 @@ export default {
   border-top: 1px solid #dee2e6 !important;
 }
 
-.card {
+.card2 {
   width: 90%;
   margin: 0 5%;
   height: 40% !important;
@@ -567,4 +641,10 @@ export default {
   opacity:.6;
   z-index:1;
 }
+
+.selected{
+  background: #addffa;
+  color:white
+}
+
 </style>

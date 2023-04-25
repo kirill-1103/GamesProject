@@ -18,8 +18,8 @@ import {
     RATING_PAGE_NAME, RATING_PAGE_PATH,
     PLAYERS_LIST_PAGE_NAME, PLAYERS_LIST_PAGE_PATH,
     CHAT_PAGE_NAME, CHAT_PAGE_PATH,
-    TTT_GAME_PAGE_NAME,TTT_GAME_PAGE_PATH,
-    PLAYER_PROFILE_PAGE_NAME,PLAYER_PROFILE_PAGE_PATH
+    TTT_GAME_PAGE_NAME, TTT_GAME_PAGE_PATH,
+    PLAYER_PROFILE_PAGE_NAME, PLAYER_PROFILE_PAGE_PATH, NEW_PLAYER_CHAT_PATH
 } from "./component_names";
 
 const routes = [
@@ -32,6 +32,7 @@ const routes = [
     {path: CHAT_PAGE_PATH, name: CHAT_PAGE_NAME, component: ChatPage},
     {path: TTT_GAME_PAGE_PATH, name: TTT_GAME_PAGE_NAME, component: TttGamePage},
     {path: PLAYER_PROFILE_PAGE_PATH, name:PLAYER_PROFILE_PAGE_NAME, component: PlayerProfilePage},
+    {path: NEW_PLAYER_CHAT_PATH, name:CHAT_PAGE_NAME, component: ChatPage}
     // {path: "*",name:PROFILE_PAGE_NAME,component: ProfilePage}
 ]
 

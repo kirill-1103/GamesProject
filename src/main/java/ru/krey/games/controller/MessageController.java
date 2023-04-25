@@ -82,6 +82,7 @@ public class MessageController {
         if (messages.isEmpty()) {
             dialogDto.setPlayer1(playerDao.getOneById(player1Id).orElseThrow(() -> new BadRequestException("Player with id " + player1Id + " not exists")));
             dialogDto.setPlayer2(playerDao.getOneById(player2Id).orElseThrow(() -> new BadRequestException("Player with id " + player2Id + " not exists")));
+            dialogDto.setMessagesByList(Collections.emptyList());
         } else {
             dialogDto.setPlayer1(messages.get(0).getSender());
             dialogDto.setPlayer2(messages.get(0).getRecipient());
@@ -179,5 +180,7 @@ public class MessageController {
         messagingTemplate.convertAndSend("/topic/chat/"+senderId,message);
         messagingTemplate.convertAndSend("/topic/chat/"+recipientId,message);
     }
+
+
 
 }

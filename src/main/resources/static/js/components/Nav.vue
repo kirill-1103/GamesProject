@@ -29,7 +29,7 @@
             </li>
 
             <li class="nav-item">
-              <a class="nav-link" href="/chat">
+              <a class="nav-link" v-bind:href="chatUrl">
                 Чат
               </a>
             </li>
@@ -62,12 +62,20 @@ import {TTT_GAME_CODE} from "../service/TttGameHelper";
 export default {
   name:"Nav",
   props:['player'],
+  data:function(){
+    return {
+      chatUrl :'/chat/'
+    }
+  },
   mounted() {
     setInterval(()=>{
       if(this.$store.state.playerGameId && this.$store.state.playerGameId!==-1){
         this.$refs.currentGame.style.color = 'white'
       }else{
         this.$refs.currentGame.style.color = 'gray'
+      }
+      if(this.player){
+        this.chatUrl = '/chat/'+this.player.id
       }
     },100)
   },

@@ -41,6 +41,9 @@ public class DialogDto {
     }
 
     public void setMessagesByList(List<Message> messages){
-        this.messages.addAll(messages);
+        if(!messages.isEmpty()){
+            this.messages.addAll(messages);
+            this.lastMessage = this.messages.peek();
+        }
     }
 }

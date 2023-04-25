@@ -15,6 +15,7 @@
               <p class="text-secondary mb-1">Рейтинг: {{ player.rating }}</p>
               <p class="text-secondary mb-1">Место в топе: {{ playerTop }}</p>
               <p class="text-secondary mb-1">Дата регистрации: {{ signUpTime }}</p>
+              <button style="width: 100%" v-on:click="sendMessage">Написать</button>
             </div>
           </div>
           <div style="margin-top:50%;" v-else class="spinner-border text-primary" role="status">
@@ -79,6 +80,7 @@ import ShowGameModal from "../components/ShowGameModal.vue";
 import {fromArrayToDate, fromArrayToDateWithTime} from "../service/datetime";
 import {TTT_GAME_CODE} from "../service/TttGameHelper";
 import updateAuthUserInStorage from "../service/auth";
+import {CHAT_PAGE_NAME} from "../router/component_names";
 
 export default {
   name: 'PlayerProfilePage',
@@ -188,7 +190,7 @@ export default {
     addScrollListener() {
       this.$refs.scroll_table.addEventListener("scroll", (event) => {
         let table = this.$refs.scroll_table;
-        if (Math.abs((table.scrollHeight - table.scrollTop) - table.clientHeight)<1 && !this.waitingTable && !this.stopTable) {
+        if (Math.abs((table.scrollHeight - table.scrollTop) - table.offsetHeight)<10 && !this.waitingTable && !this.stopTable) {
           this.getGamesTable();
         }
       })
@@ -214,6 +216,9 @@ export default {
           clearInterval(interval);
         }
       }, 100)
+    },
+    sendMessage(){
+      this.$router.push({name:CHAT_PAGE_NAME,params:{id:this.player.id}})
     }
   }
 }

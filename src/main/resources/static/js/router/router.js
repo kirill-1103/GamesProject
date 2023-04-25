@@ -32,7 +32,7 @@ const routes = [
     {path: CHAT_PAGE_PATH, name: CHAT_PAGE_NAME, component: ChatPage},
     {path: TTT_GAME_PAGE_PATH, name: TTT_GAME_PAGE_NAME, component: TttGamePage},
     {path: PLAYER_PROFILE_PAGE_PATH, name:PLAYER_PROFILE_PAGE_NAME, component: PlayerProfilePage},
-    {path: NEW_PLAYER_CHAT_PATH, name:CHAT_PAGE_NAME, component: ChatPage}
+    {path: NEW_PLAYER_CHAT_PATH, name:CHAT_PAGE_NAME, component: ChatPage},
     // {path: "*",name:PROFILE_PAGE_NAME,component: ProfilePage}
 ]
 

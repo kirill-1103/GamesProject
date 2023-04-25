@@ -10,10 +10,7 @@ import ru.krey.games.dto.GameStatisticDto;
 import ru.krey.games.utils.GameUtils;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api/games")
@@ -35,8 +32,13 @@ public class GameController {
         /* ... */
 
         games.sort((game1,game2)-> -game1.getTime().compareTo(game2.getTime()));
-
-        return games.subList(Math.min(games.size()-1,from.intValue()),Math.min(games.size()-1,to.intValue()));
+        if(from >= games.size()){
+            return Collections.emptyList();
+        }
+        if(to > games.size()){
+            to = (long) games.size();
+        }
+        return games.subList(from.intValue(),to.intValue());
     }
 
     private List<GameStatisticDto> getTttGames(Long playerId){

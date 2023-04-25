@@ -26,9 +26,6 @@
   <div style="width:67%;" class="card">
     <div class="card-body">
       <div class="d-flex flex-column align-items-center text-center">
-        <!--        TODO: таблица с историей игр: номер, название игры, противник, итог, время игры
-                    При нажатии в крестиках ноликах на номер - поле + длительность игры (может быть последовательность ходов)
-                    При нажатии на противника - профиль противника-->
         <h4>История игр</h4>
         <div class="table-scroll table-div">
           <table class="table " style="overflow-y:scroll; scroll-behavior:smooth">
@@ -149,7 +146,6 @@ export default {
             if (result.data.length === 0) {
               this.stopTable = true;
               this.waitingTable = false;
-              console.log('here1')
               return;
             }
             for (let game of result.data) {
@@ -167,6 +163,9 @@ export default {
             console.log("ERROR:" + error);
             console.log(error)
           });
+          if (!this.games) {
+            this.games = []
+          }
           clearInterval(interval);
         }
       }, 100)

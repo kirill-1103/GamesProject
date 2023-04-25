@@ -132,7 +132,6 @@ export default {
     getUser(id) {
       console.log(id)
       axios.get("/api/player/" + id).then((result) => {
-        console.log('hi')
         this.player = result.data
         this.signUpTime = fromArrayToDate(this.player.signUpTime)
         if (this.player.photo && this.player.photo !== '') {

@@ -3,7 +3,7 @@
     <div class="container p-0">
 
 
-      <div class="card card2">
+      <div class="card card3">
         <div class="row g-0">
           <div class="col-12 col-lg-5 col-xl-3 border-right">
 
@@ -615,7 +615,7 @@ export default {
   border-top: 1px solid #dee2e6 !important;
 }
 
-.card2 {
+.card3 {
   width: 90%;
   margin: 0 5%;
   height: 40% !important;

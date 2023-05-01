@@ -7,9 +7,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.krey.games.dao.interfaces.PlayerDao;
+import ru.krey.games.dao.interfaces.TetrisGameDao;
 import ru.krey.games.dao.interfaces.TttGameDao;
 import ru.krey.games.domain.Player;
-import ru.krey.games.domain.TttGame;
+import ru.krey.games.domain.games.tetris.TetrisGame;
+import ru.krey.games.domain.games.ttt.TttGame;
+import ru.krey.games.domain.interfaces.Game;
 import ru.krey.games.error.BadRequestException;
 import ru.krey.games.error.NotFoundException;
 import ru.krey.games.utils.AuthUtils;
@@ -28,6 +31,8 @@ public class PlayerController {
     private final PlayerDao playerDao;
 
     private final TttGameDao tttGameDao;
+
+    private final TetrisGameDao tetrisGameDao;
     private final AuthUtils authUtils;
 
     private final ImageService imageService;
@@ -151,13 +156,20 @@ public class PlayerController {
             return null;
         }
 
-        if (player.getLastGameCode() == GameUtils.TttGameCode) {
-            TttGame game = tttGameDao.getCurrentGameByPlayerId(playerId)
+        Game game = null;
+
+
+        if (player.getLastGameCode() == GameUtils.TTT_GAME_CODE) {
+            game = tttGameDao.getCurrentGameByPlayerId(playerId)
                     .orElse(null);
-            return game == null ? null : game.getId();
         }
 
-        return null;
+        if(player.getLastGameCode() == GameUtils.TETRIS_GAME_CODE){
+            game = tetrisGameDao.getCurrentGameByPlayerId(playerId)
+                    .orElse(null);
+        }
+
+        return game == null ? null : game.getId();
     }
 
     @PostMapping("/rating")

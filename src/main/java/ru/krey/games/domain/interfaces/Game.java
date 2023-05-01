@@ -21,4 +21,6 @@ public interface Game {
 
     String getRussianName();
 
+    Long getId();
+
 }

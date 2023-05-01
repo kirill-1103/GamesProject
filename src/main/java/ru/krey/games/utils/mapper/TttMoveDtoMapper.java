@@ -2,7 +2,6 @@ package ru.krey.games.utils.mapper;
 
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
-import ru.krey.games.domain.TttMove;
 import ru.krey.games.dto.TttMoveDto;
 
 import java.sql.ResultSet;

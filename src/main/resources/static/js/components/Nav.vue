@@ -55,9 +55,9 @@
 
 <script>
 import axios from "axios";
-import {LOGIN_PAGE_NAME, TTT_GAME_PAGE_NAME} from "../router/component_names.js";
+import {LOGIN_PAGE_NAME, TETRIS_GAME_PAGE_NAME, TTT_GAME_PAGE_NAME} from "../router/component_names.js";
 import updateAuthUserInStorage from "../service/auth.js";
-import {TTT_GAME_CODE} from "../service/TttGameHelper";
+import {TETRIS_GAME_CODE, TTT_GAME_CODE} from "../service/GameHelper";
 
 export default {
   name:"Nav",
@@ -92,9 +92,12 @@ export default {
       });
     },
     goToCurrentGame(){
-      if(this.$store.state.playerGameCode === TTT_GAME_CODE
-          && this.$store.state.playerGameId !== -1 && this.$store.state.playerGameId){
-        this.$router.push({name:TTT_GAME_PAGE_NAME});
+      if(this.$store.state.playerGameId !== -1 && this.$store.state.playerGameId){
+        if(this.$store.state.playerGameCode === TTT_GAME_CODE){
+          this.$router.push({name:TTT_GAME_PAGE_NAME});
+        }else if(this.$store.state.playerGameCode === TETRIS_GAME_CODE){
+          this.$router.push({name:TETRIS_GAME_PAGE_NAME});
+        }
       }
     }
   }

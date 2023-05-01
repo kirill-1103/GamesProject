@@ -3,10 +3,9 @@ package ru.krey.games.utils.mapper;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 import ru.krey.games.domain.Player;
-import ru.krey.games.domain.TttGame;
+import ru.krey.games.domain.games.ttt.TttGame;
 
 import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 

@@ -1,6 +1,6 @@
 package ru.krey.games.dao.interfaces;
 
-import ru.krey.games.domain.TttGame;
+import ru.krey.games.domain.games.ttt.TttGame;
 
 import java.util.Optional;
 import java.util.Set;

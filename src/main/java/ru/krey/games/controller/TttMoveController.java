@@ -1,27 +1,21 @@
 package ru.krey.games.controller;
 
-import com.fasterxml.jackson.annotation.JsonAlias;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.convert.ConversionService;
-import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.web.bind.annotation.*;
 import ru.krey.games.dao.interfaces.PlayerDao;
 import ru.krey.games.dao.interfaces.TttGameDao;
 import ru.krey.games.dao.interfaces.TttMoveDao;
-import ru.krey.games.domain.TttGame;
-import ru.krey.games.domain.TttMove;
+import ru.krey.games.domain.games.ttt.TttGame;
 import ru.krey.games.dto.TttGameDto;
 import ru.krey.games.dto.TttMoveDto;
 import ru.krey.games.error.NotFoundException;
 
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Set;
 
 @RestController
 @RequiredArgsConstructor

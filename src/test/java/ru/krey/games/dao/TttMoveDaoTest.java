@@ -19,14 +19,13 @@ import ru.krey.games.dao.interfaces.TttGameDao;
 import ru.krey.games.dao.interfaces.TttMoveDao;
 import ru.krey.games.dao.service.Creator;
 import ru.krey.games.domain.Player;
-import ru.krey.games.domain.TttGame;
-import ru.krey.games.domain.TttMove;
+import ru.krey.games.domain.games.ttt.TttGame;
+import ru.krey.games.domain.games.ttt.TttMove;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @RunWith(SpringRunner.class)

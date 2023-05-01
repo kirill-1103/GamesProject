@@ -3,7 +3,7 @@ package ru.krey.games.dto.converter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
-import ru.krey.games.domain.TttMove;
+import ru.krey.games.domain.games.ttt.TttMove;
 import ru.krey.games.dto.TttMoveDto;
 
 @Component

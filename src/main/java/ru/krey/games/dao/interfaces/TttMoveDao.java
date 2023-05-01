@@ -1,6 +1,6 @@
 package ru.krey.games.dao.interfaces;
 
-import ru.krey.games.domain.TttMove;
+import ru.krey.games.domain.games.ttt.TttMove;
 import ru.krey.games.dto.TttMoveDto;
 
 import java.util.List;

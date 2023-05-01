@@ -12,6 +12,15 @@ export function connectToTttGame(gameId, callback, store){
     })
 }
 
+export function connectToTetrisGame(gameId, callback, store){
+    let stompClient = getStompClient("/socket/tetris_game");
+    stompClient.connect({},frame=>{
+        stompClient.subscribe("/topic/tetris_game/"+gameId,game=>{
+            callback(JSON.parse(game.body))
+        },(error)=>console.log("error"+JSON.stringify(error)))
+    })
+}
+
 export function connectToSearchResult(playerId, callback){
     const stompClient = getStompClient("/socket/ttt_search");
     stompClient.connect({}, frame=>{

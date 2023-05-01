@@ -1,8 +1,12 @@
 package ru.krey.games.utils;
 
 public class GameUtils {
-    public final static String TttGameName = "TttGame";
-    public final static int TttGameCode = 1;
+    public final static String TTT_GAME_NAME = "TttGame";
+    public final static int TTT_GAME_CODE = 1;
+
+    public final static String TETRIS_GAME_NAME = "TetrisGame";
+
+    public final static int TETRIS_GAME_CODE = 2;
 
 
     public final static int VICTORY_REASON_PLAYER1_WIN = 10;

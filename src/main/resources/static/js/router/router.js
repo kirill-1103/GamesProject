@@ -8,6 +8,7 @@ import PlayersListPage from "../pages/PlayersListPage.vue";
 import ChatPage from "../pages/ChatPage.vue";
 import TttGamePage from "../pages/Games/TttGamePage.vue";
 import PlayerProfilePage from "../pages/PlayerProfilePage.vue";
+import TetrisGamePage from "../pages/Games/TetrisGamePage.vue";
 
 
 import {
@@ -19,7 +20,8 @@ import {
     PLAYERS_LIST_PAGE_NAME, PLAYERS_LIST_PAGE_PATH,
     CHAT_PAGE_NAME, CHAT_PAGE_PATH,
     TTT_GAME_PAGE_NAME, TTT_GAME_PAGE_PATH,
-    PLAYER_PROFILE_PAGE_NAME, PLAYER_PROFILE_PAGE_PATH, NEW_PLAYER_CHAT_PATH
+    PLAYER_PROFILE_PAGE_NAME, PLAYER_PROFILE_PAGE_PATH, NEW_PLAYER_CHAT_PATH,
+    TETRIS_GAME_PAGE_NAME, TETRIS_GAME_PAGE_PATH
 } from "./component_names";
 
 const routes = [
@@ -33,6 +35,7 @@ const routes = [
     {path: TTT_GAME_PAGE_PATH, name: TTT_GAME_PAGE_NAME, component: TttGamePage},
     {path: PLAYER_PROFILE_PAGE_PATH, name:PLAYER_PROFILE_PAGE_NAME, component: PlayerProfilePage},
     {path: NEW_PLAYER_CHAT_PATH, name:CHAT_PAGE_NAME, component: ChatPage},
+    {path: TETRIS_GAME_PAGE_PATH, name: TETRIS_GAME_PAGE_NAME, component: TetrisGamePage}
     // {path: "*",name:PROFILE_PAGE_NAME,component: ProfilePage}
 ]
 

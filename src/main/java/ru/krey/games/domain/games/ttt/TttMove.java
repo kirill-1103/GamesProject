@@ -1,6 +1,7 @@
-package ru.krey.games.domain;
+package ru.krey.games.domain.games.ttt;
 
 import lombok.*;
+import ru.krey.games.domain.Player;
 
 import java.time.LocalDateTime;
 

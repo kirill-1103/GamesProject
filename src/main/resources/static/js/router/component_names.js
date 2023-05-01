@@ -7,6 +7,7 @@ export const PLAYERS_LIST_PAGE_NAME = "PlayersListPage"
 export const CHAT_PAGE_NAME = "ChatPage"
 export const TTT_GAME_PAGE_NAME = "TttGamePage"
 export const PLAYER_PROFILE_PAGE_NAME = "PlayerProfilePage"
+export const TETRIS_GAME_PAGE_NAME = "TetrisGamePage"
 
 
 export const REGISTER_PAGE_PATH = "/register"
@@ -19,3 +20,4 @@ export const CHAT_PAGE_PATH = "/chat"
 export const TTT_GAME_PAGE_PATH = "/game/ttt"
 export const PLAYER_PROFILE_PAGE_PATH = "/player/:id"
 export const NEW_PLAYER_CHAT_PATH = "/chat/:id"
+export const TETRIS_GAME_PAGE_PATH = "/game/tetris"

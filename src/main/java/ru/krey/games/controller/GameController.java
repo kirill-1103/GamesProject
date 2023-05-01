@@ -1,15 +1,12 @@
 package ru.krey.games.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
-import ru.krey.games.dao.interfaces.PlayerDao;
 import ru.krey.games.dao.interfaces.TttGameDao;
-import ru.krey.games.domain.TttGame;
+import ru.krey.games.domain.games.ttt.TttGame;
 import ru.krey.games.dto.GameStatisticDto;
 import ru.krey.games.utils.GameUtils;
 
-import java.time.LocalDateTime;
 import java.util.*;
 
 @RestController

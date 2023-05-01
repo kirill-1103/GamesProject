@@ -5,7 +5,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 import ru.krey.games.dao.interfaces.PlayerDao;
 import ru.krey.games.domain.Player;
-import ru.krey.games.domain.TttGame;
+import ru.krey.games.domain.games.ttt.TttGame;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

@@ -5,7 +5,7 @@ import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 import ru.krey.games.dao.interfaces.PlayerDao;
 import ru.krey.games.dao.interfaces.TttGameDao;
-import ru.krey.games.domain.TttMove;
+import ru.krey.games.domain.games.ttt.TttMove;
 import ru.krey.games.dto.TttMoveDto;
 import ru.krey.games.error.BadRequestException;
 

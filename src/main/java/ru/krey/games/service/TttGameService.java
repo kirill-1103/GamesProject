@@ -6,13 +6,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
-import ru.krey.games.controller.TttGameController;
 import ru.krey.games.dao.interfaces.PlayerDao;
 import ru.krey.games.dao.interfaces.TttGameDao;
 import ru.krey.games.dao.interfaces.TttMoveDao;
 import ru.krey.games.domain.Player;
-import ru.krey.games.domain.TttGame;
-import ru.krey.games.dto.TttGameDto;
+import ru.krey.games.domain.games.ttt.TttGame;
 import ru.krey.games.error.BadRequestException;
 import ru.krey.games.error.NotFoundException;
 import ru.krey.games.logic.ttt.TttField;
@@ -28,18 +26,7 @@ import java.util.concurrent.Executors;
 @RequiredArgsConstructor
 public class TttGameService {
     private final TttGameDao gameDao;
-
-    private final TttMoveDao moveDao;
-
-    private final static Logger log = LoggerFactory.getLogger(TttGameService.class);
-
     private final PlayerDao playerDao;
-
-    private final ConversionService conversionService;
-
-    private final SimpMessagingTemplate messagingTemplate;
-
-    private final ExecutorService executorForSave = Executors.newSingleThreadExecutor();
 
     public TttGame newGame(Long player1Id, Long player2Id,
                                Integer fieldSize, Long minutes,
@@ -79,10 +66,11 @@ public class TttGameService {
             newGame.setBasePlayerTime(minutes);
         }
         TttGame savedGame = gameDao.saveOrUpdate(newGame);
-        player1.setLastGameCode(GameUtils.TttGameCode);
+        player1.setLastGameCode(GameUtils.TTT_GAME_CODE);
         playerDao.saveOrUpdate(player1);
         if (player2 != null) {
-            player2.setLastGameCode(GameUtils.TttGameCode);
+            player2.setLastGameCode(GameUtils.TTT_GAME_CODE);
+            playerDao.saveOrUpdate(player2);
         }
         savedGame.setField(new TttField(fieldSize));
         return savedGame;

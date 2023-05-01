@@ -65,10 +65,6 @@ export default {
   components: {StartGameComponent, ProfileInTttGame, GameChatComponent, TttCanvas},
   data: function () {
     return {
-      ctx: null,
-      canvas: null,
-      width: 500,
-      height: 500,
       player: {},
       player_2: {},
       chat_b: false,
@@ -106,7 +102,6 @@ export default {
       })
     }
 
-    //TODO: Сделать запрос на профиль противника
     this.player_2.login = "Компьютер"
     this.player_2.rating = "Без рейтинга"
 

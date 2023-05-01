@@ -6,6 +6,7 @@
 
 -- drop table ttt_move;
 -- drop table ttt_game;
+-- drop table tetris_game;
 
 -- insert into ttt_game (id,player1_id,start_time,size_field,player1_time,player2_time,base_player_time)
 -- values (1,66,TIMESTAMP '2011-05-16 15:36:38', 3,3,3,3);
@@ -79,4 +80,21 @@ CREATE TABLE IF NOT EXISTS message
     sending_time TIMESTAMP NOT NULL,
     reading_time TIMESTAMP,
     message_text TEXT NOT NULL
-)
+);
+
+CREATE TABLE IF NOT EXISTS tetris_game
+(
+    id SERIAL PRIMARY KEY,
+    player1_id INTEGER NOT NULL,
+    player2_id INTEGER,
+    start_time TIMESTAMP NOT NULL,
+    end_time TIMESTAMP,
+    winner_id INTEGER,
+    duration INTEGER,
+    field_1 TEXT,
+    field_2 TEXT,
+    player1_points INTEGER NOT NULL,
+    player2_points INTEGER,
+    player1_time INTEGER NOT NULL,
+    player2_time INTEGER
+);

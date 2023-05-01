@@ -4,8 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.krey.games.dao.interfaces.TttMoveDao;
 import ru.krey.games.domain.Player;
-import ru.krey.games.domain.TttGame;
-import ru.krey.games.domain.TttMove;
+import ru.krey.games.domain.games.ttt.TttGame;
+import ru.krey.games.domain.games.ttt.TttMove;
 
 import java.time.LocalDateTime;
 

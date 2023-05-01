@@ -6,13 +6,12 @@ import org.springframework.stereotype.Component;
 import ru.krey.games.dao.interfaces.PlayerDao;
 import ru.krey.games.dao.interfaces.TttGameDao;
 import ru.krey.games.domain.Player;
-import ru.krey.games.domain.TttGame;
-import ru.krey.games.domain.TttMove;
+import ru.krey.games.domain.games.ttt.TttGame;
+import ru.krey.games.domain.games.ttt.TttMove;
 import ru.krey.games.error.NotFoundException;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Timestamp;
 
 @RequiredArgsConstructor
 @Component

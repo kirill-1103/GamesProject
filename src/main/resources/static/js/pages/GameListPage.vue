@@ -14,11 +14,11 @@
               </div>
             </div>
           </div>
-          <div class="card game-card">
+          <div class="card game-card" @click="goto_tetris">
             <div class="card-body">
               <div class="d-flex flex-column align-items-center text-center">
-                <h3>Другая игра</h3>
-                <img src="../../img/other_game.png">
+                <h3>Тетрис</h3>
+                <img src="../../img/tetris-logo.jpg">
               </div>
             </div>
           </div>
@@ -48,7 +48,7 @@
 </template>
 
 <script>
-import {TTT_GAME_PAGE_NAME} from "../router/component_names.js";
+import {TETRIS_GAME_PAGE_NAME, TTT_GAME_PAGE_NAME} from "../router/component_names.js";
 import {TTT_GAME_CODE} from "../service/TttGameHelper";
 
 export default {
@@ -62,6 +62,11 @@ export default {
     goto_ttt() {
       if (this.canGo() && this.intervalHasBeenKilled)
         this.$router.push({name: TTT_GAME_PAGE_NAME})
+    },
+    goto_tetris(){
+      if (this.canGo() && this.intervalHasBeenKilled){
+        this.$router.push({name: TETRIS_GAME_PAGE_NAME})
+      }
     },
     canGo(){
       return this.$store.state.player && this.$store.state.player.id

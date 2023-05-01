@@ -8,6 +8,8 @@ import ru.krey.games.dao.interfaces.PlayerDao;
 import ru.krey.games.dao.interfaces.TttGameDao;
 import ru.krey.games.dao.interfaces.TttMoveDao;
 import ru.krey.games.domain.*;
+import ru.krey.games.domain.games.ttt.TttGame;
+import ru.krey.games.domain.games.ttt.TttMove;
 import ru.krey.games.utils.RoleUtils;
 
 import java.time.LocalDateTime;
@@ -83,7 +85,7 @@ public class Creator {
                          .build());
      }
 
-     public TttMove createMoveWithoutPlayer(Integer x,Integer y){
+     public TttMove createMoveWithoutPlayer(Integer x, Integer y){
          Player player = getPlayerByLogin("login_for_move_1","login_for_email_1@mail.com");
          return moveDao.saveOrUpdate(TttMove.builder()
                  .game(createGame(player.getLogin(),player.getEmail(),null,null,3))

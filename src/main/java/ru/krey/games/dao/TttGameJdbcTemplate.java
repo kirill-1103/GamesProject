@@ -8,7 +8,7 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
 import ru.krey.games.dao.interfaces.TttGameDao;
-import ru.krey.games.domain.TttGame;
+import ru.krey.games.domain.games.ttt.TttGame;
 import ru.krey.games.utils.mapper.TttGameMapper;
 import ru.krey.games.utils.mapper.TttGameWithPlayerMapper;
 

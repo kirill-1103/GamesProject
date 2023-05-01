@@ -1,8 +1,8 @@
-package ru.krey.games.domain;
+package ru.krey.games.domain.games.ttt;
 
 import lombok.*;
+import ru.krey.games.domain.Player;
 import ru.krey.games.domain.interfaces.Game;
-import ru.krey.games.error.BadRequestException;
 import ru.krey.games.logic.ttt.TttField;
 import ru.krey.games.utils.GameUtils;
 
@@ -19,7 +19,7 @@ import java.util.Set;
 public class TttGame implements Game {
 
 
-    public final static String RUSSIAN_NAME = "Крестики нолики";
+    private final static String RUSSIAN_NAME = "Крестики нолики";
     private Long id;
 
     @NonNull
@@ -64,12 +64,12 @@ public class TttGame implements Game {
 
     @Override
     public String getGameName() {
-        return GameUtils.TttGameName;
+        return GameUtils.TTT_GAME_NAME;
     }
 
     @Override
     public int getGameCode() {
-        return GameUtils.TttGameCode;
+        return GameUtils.TTT_GAME_CODE;
     }
 
     @Override
@@ -137,6 +137,9 @@ public class TttGame implements Game {
         return RUSSIAN_NAME;
     }
 
+    public Long getId(){
+        return id;
+    }
 
     @Override
     public boolean equals(Object o) {

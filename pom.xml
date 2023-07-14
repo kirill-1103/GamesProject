@@ -14,7 +14,8 @@
 	<name>Games</name>
 	<description>Games</description>
 	<properties>
-		<java.version>16</java.version>
+		<java.version>11</java.version>
+		<start-class>ru.krey.games.GamesApplication</start-class>
 	</properties>
 
 
@@ -149,8 +150,10 @@
 							<artifactId>lombok</artifactId>
 						</exclude>
 					</excludes>
+					<jmxPort>9011</jmxPort>
 				</configuration>
 			</plugin>
+
 		</plugins>
 	</build>
 

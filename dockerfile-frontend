@@ -1,0 +1,17 @@
+FROM ubuntu:22.04
+
+ENV TZ=Europe/Moscow
+
+WORKDIR /
+COPY /src/main/resources .
+
+EXPOSE 8000
+
+RUN apt-get update && apt-get upgrade
+RUN apt-get install nodejs -y && apt-get install npm -y
+RUN apt-get install curl -y
+RUN npm install -g n && n lts
+
+RUN npm install vue@3.3.4 -y
+
+CMD ["npm", "start"]

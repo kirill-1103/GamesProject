@@ -4,7 +4,7 @@ const {VueLoaderPlugin} = require('vue-loader')
 module.exports = {
     mode: 'development',
     devtool: 'source-map',
-    entry: path.join(__dirname, 'src', 'main', 'resources', 'static', 'js', 'main.js'),
+    entry: path.join(__dirname, 'static', 'js', 'main.js'),
     devServer: {
         static: './dist',
         compress: true,
@@ -63,7 +63,7 @@ module.exports = {
     ],
     resolve: {
         modules: [
-            path.join(__dirname, 'src', 'main', 'resources', 'static', 'js'),
+            path.join(__dirname, 'static', 'js'),
             path.join(__dirname, 'node_modules'),
         ],
         // alias: {

@@ -10,6 +10,6 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 public class GamesApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(GamesApplication.class, args);
+		//System.out.println("hello world");
 	}
-
 }

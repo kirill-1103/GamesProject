@@ -112,7 +112,7 @@ public class MessageController {
             }
             dialogs.get(otherPlayer).addMessage(message);
         });
-        return dialogs.values().stream().toList();
+        return new ArrayList<>(dialogs.values());
     }
 
     @PostMapping("/send")
@@ -133,15 +133,15 @@ public class MessageController {
 
     @GetMapping("/online")
     public List<Long> getOnlinePlayersIds(){
-        return this.onlineList.stream().map(PlayerDto::getId).toList();
+        return this.onlineList.stream().map(PlayerDto::getId).collect(Collectors.toList());
     }
 
     @Scheduled(fixedRate = 5000)
     public void updateOnlineUsers(){
-        List<String> userNames = sessionRegistry.getAllPrincipals().stream().map(pr -> ((User) pr).getUsername()).toList();
+        List<String> userNames = sessionRegistry.getAllPrincipals().stream().map(pr -> ((User) pr).getUsername()).collect(Collectors.toList());
         List<PlayerDto> newOnlines = new ArrayList<>();
         for(String name: userNames){
-            if(!this.onlineList.stream().map(PlayerDto::getLogin).toList().contains(name)){
+            if(!this.onlineList.stream().map(PlayerDto::getLogin).collect(Collectors.toList()).contains(name)){
 //                Player player = playerDao.getOneByLogin(name).orElse(null);
 //                if(!Objects.isNull(player)){
                 PlayerDto playerDto = new PlayerDto();

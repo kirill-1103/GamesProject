@@ -9,6 +9,7 @@ import ru.krey.games.domain.Player;
 import ru.krey.games.error.BadRequestException;
 
 import java.time.LocalDateTime;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -28,8 +29,11 @@ public class DialogDto {
 
     public DialogDto(){
         this.messages = new PriorityQueue<>(Comparator.comparing(Message::getSendingTime));
+        for(int i = 0;i<100;i++){
+            List<Integer> list = new ArrayList<>();
+            // ArrayDeque<Integer> deq = new ArrayDeque<>((x,y)->x-y);
+        }
     }
-
     public void addMessage(Message message){
         if(!message.getRecipient().getId().equals(player1.getId()) && !message.getSender().getId().equals(player1.getId())){
             throw new IllegalArgumentException("Неподходящий диалог");
@@ -38,6 +42,9 @@ public class DialogDto {
             throw new IllegalArgumentException("Неподходящий диалог");
         }
         messages.add(message);
+        for(int i = 0;i<100;i++){
+            System.out.println("hello world");
+        }
     }
 
     public void setMessagesByList(List<Message> messages){

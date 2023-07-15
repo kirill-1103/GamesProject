@@ -9,7 +9,7 @@ import ru.krey.games.domain.Player;
 
 import java.util.Collection;
 
-@Component
+@Component 
 public class AuthUtils {
     public String getCurrentUsername(){
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -17,6 +17,9 @@ public class AuthUtils {
     }
     public void changeSessionUser(Player player){
         if(player.getLogin()==null || player.getPassword()==null){
+            System.out.println();
+            System.out.println("PLAYER LOGIN:____ "+player.getPassword().toString());
+            System.out.println();
             throw new RuntimeException("Player must have login and password!");
         }
         Collection<SimpleGrantedAuthority> nowAuthorities =

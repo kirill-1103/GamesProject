@@ -46,7 +46,7 @@ public class LocalImageService implements ImageService {
             throw new BadRequestException("Файл должен иметь один из следующих форматов: .jpeg, .jpg, .png, .bmp! Пользователь зарегистрирован, попробуйте изменить изображение в профиле.");
         }
 
-        File fileToSave = (new File(uploadDir.getAbsolutePath() + "\\" + fileName));
+        File fileToSave = (new File(uploadDir.getAbsolutePath() + "/" + fileName));
         log.debug(fileToSave.toString());
         img.transferTo(fileToSave);
         player.setPhoto(fileName);
@@ -59,9 +59,9 @@ public class LocalImageService implements ImageService {
     @Override
     public String getImageBase64(String imgName) throws IOException, FileNotFoundException {
         File uploadDir = getUploadDir();
-        String name = uploadDir.getAbsolutePath() + "\\" + imgName;
+        String name = uploadDir.getAbsolutePath() + "/" + imgName;
 
-        File imgFile = new File(uploadDir.getAbsolutePath() + "\\" + imgName);
+        File imgFile = new File(uploadDir.getAbsolutePath() + "/" + imgName);
         if(!imgFile.exists()){
             throw new FileNotFoundException("Файл не найден");
         }

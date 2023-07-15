@@ -12,7 +12,7 @@ public class MainController {
 
     @GetMapping(value = {"/main","/css/*","/me**", "/rating**","/chat**","/game_list**","/player_list**",
             "/error", "/login**","/auth", "/register", "/logout","/registration","/game/**",
-            "/ws**","/websocket**","/ws/**","/websocket/**","/topic/**","/player/**","/api/chat/**","/api/tetris_game/**"})
+            "/ws**","/websocket**","/ws/**","/websocket/**","/topic/**","/player/**","/api/chat/**","/api/tetris_game/**","/favicon.ico"})
     public String main(HttpServletRequest request){
         return "index";
     }

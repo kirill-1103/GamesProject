@@ -63,7 +63,7 @@ public class MessageDaoTest {
 
         Assertions.assertEquals(messagesInitSize, messages.size());
 
-        List<String> textsFromDB = messages.stream().map(Message::getMessageText).toList();
+        List<String> textsFromDB = messages.stream().map(Message::getMessageText).collect(Collectors.toList());
 
         boolean ok = true;
         for (String text : texts) {
@@ -73,8 +73,8 @@ public class MessageDaoTest {
             }
         }
 
-        List<String> sendersNames = messages.stream().map(Message::getSender).map(Player::getLogin).toList();
-        List<String> recipientNames = messages.stream().map(Message::getRecipient).map(Player::getLogin).toList();
+        List<String> sendersNames = messages.stream().map(Message::getSender).map(Player::getLogin).collect(Collectors.toList());
+        List<String> recipientNames = messages.stream().map(Message::getRecipient).map(Player::getLogin).collect(Collectors.toList());
 
         for (int i = 0; i < messagesInitSize; i++) {
             if (!sendersNames.contains("sender" + i)) {

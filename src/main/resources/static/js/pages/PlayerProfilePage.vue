@@ -136,9 +136,13 @@ export default {
         this.signUpTime = fromArrayToDate(this.player.signUpTime)
         if (this.player.photo && this.player.photo !== '') {
           axios.post("/api/player/image", {img_name: this.player.photo}, this.config).then((result) => {
-            this.imgSrc = "data:image/;base64, " + result.data;
-            let img = document.getElementById("player_photo");
-            img['src'] = this.imgSrc;
+            if(result.data.error == true){
+              this.player.photo = null;
+            }else{
+              this.imgSrc = "data:image/;base64, " + result.data;
+              let img = document.getElementById("player_photo");
+              img['src'] = this.imgSrc;
+            }
           }).catch(err => {
             console.log("ERR:");
             console.log(err)

@@ -29,7 +29,7 @@ build/
 
 
 .vscode/
-/node_modules/
+/node_modules/cd
 /.mvn/
 /yarn-error.log
 /yarn.lock
@@ -37,3 +37,5 @@ build/
 /src/main/resources/static/img/player_img/
 
 /src/main/resources/node_modules
+node_modules
+node_modules

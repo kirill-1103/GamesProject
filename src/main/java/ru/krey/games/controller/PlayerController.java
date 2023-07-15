@@ -3,6 +3,7 @@ package ru.krey.games.controller;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.env.Environment;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -40,6 +41,9 @@ public class PlayerController {
     private final LocalImageService localImageService;
 
     private final PasswordEncoder bCryptPasswordEncoder;
+
+    private final Environment env;
+
 
 
     private final static Logger log = LoggerFactory.getLogger(PlayerController.class);
@@ -88,7 +92,11 @@ public class PlayerController {
                 images.add(localImageService.getImageBase64(name));
             } catch (IOException e) {
                 log.error(e.getMessage());
-                throw new BadRequestException("Такой файл не найден.", e);
+                try {
+                    images.add(localImageService.getImageBase64(env.getProperty("player.image.default")));
+                } catch (IOException ex) {
+                    throw new BadRequestException("Дефолтная картинка не найдена.", e);
+                }
             }
         });
         return images;
@@ -128,7 +136,6 @@ public class PlayerController {
 
         Player player = playerDao.saveOrUpdate(playerFromDb);
         playerFromDb.setPassword(null);
-        player.setPassword(null);
 
         if (img != null && !img.isEmpty()) {
             try {
@@ -139,7 +146,7 @@ public class PlayerController {
         }
 
         authUtils.changeSessionUser(player);//change username and password in session
-
+        player.setPassword(null);
         return player;
     }
 

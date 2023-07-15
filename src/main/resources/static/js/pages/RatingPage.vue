@@ -105,6 +105,7 @@ export default {
               res.data[i] = "data:image/;base64, " +res.data[i];
             }
           }
+
           if (this.photos == null){
             this.photos = res.data;
           }else{

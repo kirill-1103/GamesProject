@@ -1,0 +1,9 @@
+{
+	"properties": [
+		{
+			"name": "player.image.default",
+			"type": "java.lang.String",
+			"description": "Default image name"
+		}
+	]
+}

@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.ListIterator;
 
 @Getter
 public class TetrisField {
@@ -61,6 +62,8 @@ public class TetrisField {
     private int figureIndex;
 
     private List<int[][]> nextFigures;
+    
+    private List<Integer> filledRow; 
 
     TetrisField(int height, int width, List<int[][]> figures) {
         this.height = height;
@@ -70,6 +73,7 @@ public class TetrisField {
         this.figureIndex = 0;
         this.activeFigure = nextFigures.get(figureIndex++);
         addFigure(activeFigure);
+        setFilledRow();
     }
 
     public TetrisField(List<int[][]> figures) {
@@ -102,6 +106,7 @@ public class TetrisField {
             }
             activeFigure = TetrisFigureUtils.getFigureCopy(nextFigures.get(++figureIndex));
             addFigure(activeFigure);
+            clearFieldDebug();
             return rowsNumbers;
         } else {
             moveDown();
@@ -138,7 +143,7 @@ public class TetrisField {
     private void rotate() {
         int[][] figureCopy = TetrisFigureUtils.getFigureCopy(activeFigure);
         figureCopy = TetrisFigureUtils.rotateFigure(figureCopy);
-        moveIfPossible(0, 0, figureCopy);
+        moveIfPossible(activeX, activeY, figureCopy);
     }
 
     private void moveIfPossible(int x, int y, int[][] figure) {
@@ -167,6 +172,17 @@ public class TetrisField {
             }
         }
         return true;
+    }
+
+    private void setFilledRow(){
+        filledRow = new ArrayList<Integer>();
+        filledRow.add(EMPTY_CELL);
+        filledRow.add(EMPTY_CELL);
+        for(int i = 0;i<width;i++){
+            filledRow.add(BUSY_CELL);
+        }
+        filledRow.add(EMPTY_CELL);
+        filledRow.add(EMPTY_CELL);
     }
 
     private boolean checkNewFigure(List<List<Integer>> fieldWithFigure) {
@@ -239,7 +255,13 @@ public class TetrisField {
     private List<Integer> clearRows() {
         List<Integer> rowsNumbers = new ArrayList<>();
         for (int row = 0; row < height; row++) {
-            if (field.get(row).equals(Collections.nCopies(width, BUSY_CELL))) {
+            int count = 0;
+            for(int i = 0;i<STD_WIDTH;i++){
+                if(field.get(row).get(i).equals(BUSY_CELL)){
+                    count++;
+                }
+            }
+            if(count == STD_WIDTH){
                 rowsNumbers.add(row);
                 field.set(row, Collections.nCopies(width, EMPTY_CELL));
             }
@@ -264,6 +286,31 @@ public class TetrisField {
                 field.get(y).set(x, figure[y - START_Y][x - START_X]);
             }
         }
+    }
+
+    public void clearFieldDebug(){
+        boolean clear = false;
+        for(int i = 0;i<10 && !clear;i++){
+            for(int j = 0;j<STD_WIDTH;j++){
+                if(field.get(i).get(j).equals(BUSY_CELL)){
+                    clear=true;
+                    break;
+                }
+            }
+        }
+        if(clear){
+            for(List<Integer> row : field){
+            ListIterator<Integer> iterator = row.listIterator();
+            while(iterator.hasNext()){
+                iterator.next();
+                iterator.set(EMPTY_CELL);
+            }
+        }
+        }
+    }
+
+    public boolean needFigures(){
+        return this.nextFigures.size() - this.figureIndex < 3;
     }
 
     public static String toJson(int[][] field) throws JsonProcessingException {

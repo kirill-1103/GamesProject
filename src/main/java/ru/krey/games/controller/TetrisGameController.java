@@ -23,6 +23,7 @@ import java.util.ArrayDeque;
 import java.util.Comparator;
 import java.util.Deque;
 import java.util.Set;
+import java.util.List;
 import java.util.concurrent.ConcurrentSkipListSet;
 
 /*
@@ -80,21 +81,47 @@ public class TetrisGameController {
                 .findAny().orElseThrow(()->new NotFoundException("Игра не найдена")));
     }
 
-    @Scheduled(fixedRate = 1000)
+    @Scheduled(fixedRate = 100)
     private void gameProcessing(){
         currentIterationTime = LocalDateTime.now();
         savedGames.forEach((game)->{
             updateTetrisLogic(game.getTetris1());
             updateTetrisLogic(game.getTetris2());
+            updateNextFigures(game.getTetris1(),game.getTetris2());
             messagingTemplate.convertAndSend("/topic/tetris_game/" + game.getGameId(), fromGameInfoToDto(game));
         });
+    }
+
+    @PostMapping("/move")
+    public void makeMove(@RequestParam("player_id") Long playerId,
+                            @RequestParam("game_id") Long gameId,
+                            @RequestParam("move_code") Integer moveCode){
+        TetrisGameInfo gameInfo = savedGames.stream()
+                .filter(game->game.getGameId().equals(gameId))
+                .findAny()
+                .orElseThrow(()->new NotFoundException("Game not found"));
+        if(gameInfo.getPlayer1().getId().equals(playerId)){
+            gameInfo.getTetris1().move(moveCode);
+        }else{
+            gameInfo.getTetris2().move(moveCode);
+        }
     }
 
     private void updateTetrisLogic(TetrisLogic tetris){
         if(tetris == null) return;
         tetris.addTime(loopTime);
-        if(ChronoUnit.MILLIS.between( tetris.getLastIterationTime(),currentIterationTime)>=(1500 - 100L *tetris.getSpeed())){
+        if(ChronoUnit.MILLIS.between( tetris.getLastIterationTime(),currentIterationTime)>=(600 - 100L *tetris.getSpeed())){
             tetris.next();
+        }
+    }
+
+    private void updateNextFigures(TetrisLogic tetris1, TetrisLogic tetris2){
+        if(tetris1.needFigures() || tetris2 != null && tetris2.needFigures()){
+            List<int[][]> figures = TetrisFigureUtils.generateFigures(countNextFigures);
+            tetris1.getField().addFigures(figures);
+            if(tetris2!=null){
+                tetris2.getField().addFigures(figures);
+            }
         }
     }
 

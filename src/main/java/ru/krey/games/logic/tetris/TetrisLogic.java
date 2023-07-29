@@ -26,7 +26,7 @@ public class TetrisLogic {
     public TetrisLogic(TetrisField field){
         this.field = field;
         this.points = 0;
-        this.speed = 1;
+        this.speed = 10;
         this.timeInMillis = 0;
         countNext = 0;
     }
@@ -38,7 +38,7 @@ public class TetrisLogic {
             lastRemovedRowsNumbers.removeIf(TetrisField.RESULT_LOSE::equals);
         }
         addPoints();
-        addSpeed();
+        // addSpeed();
         this.lastIterationTime = LocalDateTime.now();
     }
 
@@ -52,6 +52,10 @@ public class TetrisLogic {
 
     public boolean isEnd(){
         return lose;
+    }
+
+    public boolean needFigures(){
+        return this.field.needFigures();
     }
 
     private void addPoints(){
@@ -78,4 +82,5 @@ public class TetrisLogic {
     private void setLastIterationTime(LocalDateTime time){
         this.lastIterationTime = time;
     }
+
 }

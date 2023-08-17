@@ -55,6 +55,7 @@ import {
 	TTT_GAME_PAGE_NAME,
 } from '../router/component_names.js'
 import { TTT_GAME_CODE } from '../service/TttGameHelper'
+import {TETRIS_GAME_CODE} from "../service/GameHelper";
 
 export default {
 	name: 'GameListPage',
@@ -65,8 +66,11 @@ export default {
 	},
 	methods: {
 		goto_ttt() {
-			if (this.canGo() && this.intervalHasBeenKilled)
-				this.$router.push({ name: TTT_GAME_PAGE_NAME })
+      console.log(this.intervalHasBeenKilled);
+
+			if (this.canGo() && this.intervalHasBeenKilled){
+        this.$router.push({ name: TTT_GAME_PAGE_NAME })
+      }
 		},
 		goto_tetris() {
 			if (this.canGo() && this.intervalHasBeenKilled) {
@@ -88,10 +92,14 @@ export default {
 					if (this.$store.state.playerGameId) {
 						if (this.$store.state.playerGameId !== -1) {
 							if (this.$store.state.playerGameCode === TTT_GAME_CODE) {
+                this.intervalHasBeenKilled = true
+                clearInterval(interval)
 								this.goto_ttt()
-								this.intervalHasBeenKilled = true
-								clearInterval(interval)
-							}
+							}else if (this.$store.state.playerGameCode === TETRIS_GAME_CODE){
+                this.intervalHasBeenKilled = true
+                clearInterval(interval)
+                this.goto_tetris();
+              }
 						} else {
 							this.intervalHasBeenKilled = true
 							clearInterval(interval)

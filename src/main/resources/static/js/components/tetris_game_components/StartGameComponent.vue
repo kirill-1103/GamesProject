@@ -97,7 +97,9 @@ export default {
       let data = {
         player_id: this.$store.state.player.id
       }
-      axios.post("/api/tetris_game/stop_search", data, this.config2)
+      axios.post("/api/tetris_game/stop_search", data, this.config2).catch(r=>{
+        // console.log(r);
+      })
       this.$store.commit("setInSearch", false);
       this.alreadyStart=false;
     },

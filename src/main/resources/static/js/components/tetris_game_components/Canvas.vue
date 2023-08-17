@@ -60,6 +60,8 @@ export default {
       }, 50)
     },
     drawField() {
+      // console.log("DRAW_FIELD:");
+      // console.log(this.field)
       this.ctx.fillStyle = this.colors.mainColor;
       this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
       for (let y = TETRIS_TOP_OFFSET; y < this.field.length-TETRIS_BOTTOM_OFFSET; y++) {
@@ -124,7 +126,7 @@ export default {
   },
   watch:{
     field(newV,oldV){
-      console.log("newv")
+      // console.log("newv")
       this.drawFieldWhenCan()
     }
   }

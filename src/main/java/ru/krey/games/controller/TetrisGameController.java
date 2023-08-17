@@ -43,7 +43,7 @@ public class TetrisGameController {
 
     private final int countNextFigures = 20;
 
-    private final int loopTime = 50;
+    private final int loopTime = 25;
 
     private LocalDateTime currentIterationTime;
 
@@ -81,7 +81,7 @@ public class TetrisGameController {
                 .findAny().orElseThrow(()->new NotFoundException("Игра не найдена")));
     }
 
-    @Scheduled(fixedRate = 100)
+    @Scheduled(fixedRate = 25)
     private void gameProcessing(){
         currentIterationTime = LocalDateTime.now();
         savedGames.forEach((game)->{
@@ -89,7 +89,11 @@ public class TetrisGameController {
             updateTetrisLogic(game.getTetris2());
             updateNextFigures(game.getTetris1(),game.getTetris2());
             messagingTemplate.convertAndSend("/topic/tetris_game/" + game.getGameId(), fromGameInfoToDto(game));
+            if(!isActiveTetrisGame(game.getTetris1()) && !isActiveTetrisGame(game.getTetris2())){
+                tetrisService.saveGame(game);
+            }
         });
+        savedGames.removeIf(g-> (!isActiveTetrisGame(g.getTetris1()) && !isActiveTetrisGame(g.getTetris2())));
     }
 
     @PostMapping("/move")
@@ -107,10 +111,14 @@ public class TetrisGameController {
         }
     }
 
+    private boolean isActiveTetrisGame(TetrisLogic tetris){
+        return tetris != null && !tetris.isLose();
+    }
+
     private void updateTetrisLogic(TetrisLogic tetris){
         if(tetris == null) return;
         tetris.addTime(loopTime);
-        if(ChronoUnit.MILLIS.between( tetris.getLastIterationTime(),currentIterationTime)>=(600 - 100L *tetris.getSpeed())){
+        if(ChronoUnit.MILLIS.between( tetris.getLastIterationTime(),currentIterationTime)>=(800 - 50L *tetris.getSpeed())){
             tetris.next();
         }
     }

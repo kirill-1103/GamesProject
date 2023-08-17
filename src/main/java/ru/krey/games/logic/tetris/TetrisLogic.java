@@ -6,10 +6,13 @@ import lombok.Setter;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 
 @Getter
 public class TetrisLogic {
+    private final int MAX_SPEED = 13;
+
     private final TetrisField field;
     private int points;
     private int speed;
@@ -26,7 +29,7 @@ public class TetrisLogic {
     public TetrisLogic(TetrisField field){
         this.field = field;
         this.points = 0;
-        this.speed = 10;
+        this.speed = 1;
         this.timeInMillis = 0;
         countNext = 0;
     }
@@ -38,11 +41,13 @@ public class TetrisLogic {
             lastRemovedRowsNumbers.removeIf(TetrisField.RESULT_LOSE::equals);
         }
         addPoints();
-        // addSpeed();
+        addSpeed();
         this.lastIterationTime = LocalDateTime.now();
     }
 
     public void move(int moveCode){
+        if(moveCode == TetrisField.MOVE_DOWN && field.moveDownIsPossible())
+            this.lastIterationTime = LocalDateTime.now();
         field.move(moveCode);
     }
 
@@ -74,8 +79,9 @@ public class TetrisLogic {
     }
 
     private void addSpeed(){
-        if(++countNext%10==0){
+        if(++countNext == 6+speed*2.4 && speed < MAX_SPEED){
             speed+=1;
+            countNext = 0;
         }
     }
 

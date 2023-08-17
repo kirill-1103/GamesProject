@@ -48,7 +48,7 @@ public class TetrisField {
 
     private static final Integer START_Y = 0;
 
-    private final List<List<Integer>> field;
+    private List<List<Integer>> field;
 
     private final int height;
 
@@ -62,8 +62,8 @@ public class TetrisField {
     private int figureIndex;
 
     private List<int[][]> nextFigures;
-    
-    private List<Integer> filledRow; 
+
+    private List<Integer> filledRow;
 
     TetrisField(int height, int width, List<int[][]> figures) {
         this.height = height;
@@ -106,7 +106,7 @@ public class TetrisField {
             }
             activeFigure = TetrisFigureUtils.getFigureCopy(nextFigures.get(++figureIndex));
             addFigure(activeFigure);
-            clearFieldDebug();
+//            clearFieldDebug();
             return rowsNumbers;
         } else {
             moveDown();
@@ -126,6 +126,24 @@ public class TetrisField {
 
     public int[][] nextFigure() {
         return this.nextFigures.get(figureIndex + 1);
+    }
+
+    public boolean moveDownIsPossible(){
+        var fieldCopy = createTable();
+        if (!setFigure(fieldCopy, activeX, activeY+1, activeFigure)) {
+            return false;
+        }
+        return true;
+    }
+
+    public int[][] getFieldArray(){
+        int[][] field = new int[height][width];
+        for(int y=0;y<height;y++){
+            for(int x =0;x<width;x++){
+                field[y][x] = this.field.get(y).get(x);
+            }
+        }
+        return field;
     }
 
     private void moveDown() {
@@ -174,11 +192,11 @@ public class TetrisField {
         return true;
     }
 
-    private void setFilledRow(){
+    private void setFilledRow() {
         filledRow = new ArrayList<Integer>();
         filledRow.add(EMPTY_CELL);
         filledRow.add(EMPTY_CELL);
-        for(int i = 0;i<width;i++){
+        for (int i = 0; i < width; i++) {
             filledRow.add(BUSY_CELL);
         }
         filledRow.add(EMPTY_CELL);
@@ -188,7 +206,7 @@ public class TetrisField {
     private boolean checkNewFigure(List<List<Integer>> fieldWithFigure) {
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
-                if(fieldWithFigure.get(y).get(x).equals(ACTIVE_CELL) && this.field.get(y).get(x).equals(BUSY_CELL)){
+                if (fieldWithFigure.get(y).get(x).equals(ACTIVE_CELL) && this.field.get(y).get(x).equals(BUSY_CELL)) {
                     return false;
                 }
             }
@@ -254,62 +272,96 @@ public class TetrisField {
 
     private List<Integer> clearRows() {
         List<Integer> rowsNumbers = new ArrayList<>();
-        for (int row = 0; row < height; row++) {
+        for (int row = TOP_OFFSET; row < height - BOTTOM_OFFSET; row++) {
             int count = 0;
-            for(int i = 0;i<STD_WIDTH;i++){
-                if(field.get(row).get(i).equals(BUSY_CELL)){
+            for (int i = LEFT_OFFSET; i < width - RIGHT_OFFSET; i++) {
+                if (field.get(row).get(i).equals(BUSY_CELL)) {
                     count++;
                 }
             }
-            if(count == STD_WIDTH){
+            if (count == STD_WIDTH) {
                 rowsNumbers.add(row);
-                field.set(row, Collections.nCopies(width, EMPTY_CELL));
+                field.set(row, getEmptyRow());
             }
         }
-        for (int i = 0; i < rowsNumbers.size(); i++) {
-            shiftRows(rowsNumbers.get(i) - i);
+        if(!rowsNumbers.isEmpty()){
+            shiftRows();
         }
         return rowsNumbers;
     }
 
-    private void shiftRows(int rowNumber) {
-        for (int y = rowNumber; y > TOP_OFFSET - 1; y--) {
-            field.set(y, field.get(y - 1));
+    private void shiftRows() {
+        List<List<Integer>> newField = new ArrayList<>();
+        for(int i = 0 ;i<height;i++){
+            boolean emptyRow = true;
+            for(int j = 0;j<width;j++){
+                if(field.get(i).get(j).equals(BUSY_CELL)){
+                    emptyRow = false;
+                    break;
+                }
+            }
+            if(!emptyRow){
+                newField.add(field.get(i));
+            }
         }
+        int newFieldSize = newField.size();
+        for(int i=0;i<height-BOTTOM_OFFSET-newFieldSize;i++){
+            newField.add(0, getEmptyRow());
+        }
+        for(int i = 0;i<BOTTOM_OFFSET;i++){
+            newField.add(getEmptyRow());
+        }
+        for(int i = 0;i<height;i++){
+            for(int j=0;j<width;j++){
+                if(field.get(i).get(j).equals(ACTIVE_CELL)){
+                    newField.get(i).set(j,ACTIVE_CELL);
+                }
+            }
+        }
+        this.field = newField;
+    }
+
+    private List<Integer> getEmptyRow() {
+        List<Integer> emptyList = new ArrayList<>();
+        for (int i = 0; i < width; i++) {
+            emptyList.add(EMPTY_CELL);
+        }
+        return emptyList;
     }
 
     private void addFigure(int[][] figure) {
         this.activeX = START_X;
         this.activeY = START_Y;
-        for (int y = START_Y; y < TetrisFigureUtils.FIG_SIZE + START_Y; y++) {
-            for (int x = START_X; x < TetrisFigureUtils.FIG_SIZE + START_X; x++) {
-                field.get(y).set(x, figure[y - START_Y][x - START_X]);
-            }
-        }
+//        for (int y = START_Y; y < TetrisFigureUtils.FIG_SIZE + START_Y; y++) {
+//            for (int x = START_X; x < TetrisFigureUtils.FIG_SIZE + START_X; x++) {
+//                field.get(y).set(x, figure[y - START_Y][x - START_X]);
+//            }
+//        }
+        return;
     }
 
-    public void clearFieldDebug(){
+    public void clearFieldDebug() {
         boolean clear = false;
-        for(int i = 0;i<10 && !clear;i++){
-            for(int j = 0;j<STD_WIDTH;j++){
-                if(field.get(i).get(j).equals(BUSY_CELL)){
-                    clear=true;
+        for (int i = 0; i < 10 && !clear; i++) {
+            for (int j = 0; j < STD_WIDTH; j++) {
+                if (field.get(i).get(j).equals(BUSY_CELL)) {
+                    clear = true;
                     break;
                 }
             }
         }
-        if(clear){
-            for(List<Integer> row : field){
-            ListIterator<Integer> iterator = row.listIterator();
-            while(iterator.hasNext()){
-                iterator.next();
-                iterator.set(EMPTY_CELL);
+        if (clear) {
+            for (List<Integer> row : field) {
+                ListIterator<Integer> iterator = row.listIterator();
+                while (iterator.hasNext()) {
+                    iterator.next();
+                    iterator.set(EMPTY_CELL);
+                }
             }
-        }
         }
     }
 
-    public boolean needFigures(){
+    public boolean needFigures() {
         return this.nextFigures.size() - this.figureIndex < 3;
     }
 

@@ -6,8 +6,10 @@ import ru.krey.games.dao.interfaces.PlayerDao;
 import ru.krey.games.dao.interfaces.TetrisGameDao;
 import ru.krey.games.domain.Player;
 import ru.krey.games.domain.games.tetris.TetrisGame;
+import ru.krey.games.domain.games.tetris.TetrisGameInfo;
 import ru.krey.games.error.BadRequestException;
 import ru.krey.games.error.NotFoundException;
+import ru.krey.games.logic.tetris.TetrisLogic;
 import ru.krey.games.utils.GameUtils;
 
 import java.time.LocalDateTime;
@@ -57,4 +59,16 @@ public class TetrisService {
         }
         return savedGame;
     }
+
+    public void saveGame(TetrisGameInfo gameInfo){
+        TetrisGame game = tetrisDao.getOneById(gameInfo.getGameId())
+                .orElseThrow(()->new NotFoundException("Не удалось найти игру Тетрис с id:"+gameInfo.getGameId()));
+        game.setDuration(gameInfo.getTetris1().getTimeInMillis());
+        game.setEndTime(LocalDateTime.now());
+
+
+        game.setField1(gameInfo.getTetris1().getField().getFieldArray());
+//        game.setWinner();
+    }
+
 }

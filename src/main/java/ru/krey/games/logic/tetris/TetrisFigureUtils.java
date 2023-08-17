@@ -213,8 +213,8 @@ public class TetrisFigureUtils {
     }
 
     private static int[][] getRandomFigure() {
-        return getFigureCopy(FIGS_I[0]);
-        // return getFigureCopy(figs[(int) (Math.random() * 7)][0]);
+//        return getFigureCopy(FIGS_I[0]);
+         return getFigureCopy(figs[(int) (Math.random() * 7)][0]);
     }
 
     static int[][] rotateFigure(int[][] figure) {

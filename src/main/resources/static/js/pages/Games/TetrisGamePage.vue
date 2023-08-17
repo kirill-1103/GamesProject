@@ -72,6 +72,7 @@ export default {
 				})
 		},
 		updateState(game) {
+      // console.log(game)
 			// console.log(game)
 			this.game = game
 		},

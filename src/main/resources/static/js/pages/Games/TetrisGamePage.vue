@@ -34,6 +34,7 @@ export default {
 					'Access-Control-Allow-Origin': '*',
 				},
 			},
+      gameStopMessageShowed: false
 		}
 	},
 	created() {
@@ -72,9 +73,45 @@ export default {
 				})
 		},
 		updateState(game) {
-      // console.log(game)
 			// console.log(game)
-			this.game = game
+			this.game = game;
+      if(this.game.player1Time < 0 || this.game.player2Time < 0 ){ //кто-то сдался
+        if(this.game.player1Time < 0 && this.game.player1.id == this.player.id
+        || this.game.player2Time < 0 && this.game.player2.id == this.player.id){
+          alert("Вы сдались!")
+        }else{
+          alert("Соперник сдался!")
+        }
+      }else{
+        if(this.game.game1Stop == true || this.game.game2Stop == true){
+          if(this.game.game1Stop == true && this.game.player1.id == this.player.id
+        || this.game2Stop == true && this.game.player2.id == this.player.id){
+            if(!this.gameStopMessageShowed){
+              alert("Ваша игра завершена! Вы набрали " + this.game.player1Points + " очков")
+              this.gameStopMessageShowed = true
+            }
+          }
+          if(this.game.player2){
+            if(this.game.game1Stop && this.game.game2Stop){
+              if(this.game.player1Points > this.game.player2Points){
+                if(this.game.player1.id == this.player.id){
+                  alert("Вы выиграли!")
+                }else{
+                  alert("Вы проиграли!")
+                }
+              }else if(this.game.player1Points < this.game.player2Points){
+                if(this.game.player2.id == this.player.id){
+                  alert("Вы выиграли!")
+                }else{
+                  alert("Вы проиграли!")
+                }
+              }else{
+                alert("Ничья!")
+              }
+            }
+          }
+        }
+      }
 		},
 	},
 }

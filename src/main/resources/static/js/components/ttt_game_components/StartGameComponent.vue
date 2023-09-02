@@ -58,18 +58,18 @@
 
     </div>
   </div>
-  <TttSearchModal  :gameStarting="gameStarting" :player="$store.state.player" :stopSearch="stopSearch"/>
+  <SearchGameModal  :gameStarting="gameStarting" :player="$store.state.player" :stopSearch="stopSearch"/>
 </template>
 
 <script>
 import axios from "axios";
-import TttSearchModal from "../../components/ttt_game_components/TttSearchModal.vue";
+import SearchGameModal from "../SearchGameModal.vue";
 import {connectToSearchResult} from "../../service/ws";
 import {TTT_GAME_CODE} from "../../service/GameHelper";
 
 export default {
   name: "StartGameComponent",
-  components: {TttSearchModal},
+  components: {SearchGameModal},
   props: ["startGame"],
   data: function () {
     return {

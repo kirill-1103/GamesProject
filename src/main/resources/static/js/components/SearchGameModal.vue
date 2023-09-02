@@ -16,7 +16,7 @@
 
 <script>
 export default {
-  name: "TttSearchModal",
+  name: "SearchGameModal",
   props: ['player','stopSearch','gameStarting'],
   data:function() {
     return {

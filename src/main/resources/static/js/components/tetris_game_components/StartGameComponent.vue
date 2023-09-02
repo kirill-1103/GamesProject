@@ -15,18 +15,18 @@
 
     </div>
   </div>
-  <TttSearchModal  :gameStarting="gameStarting" :player="$store.state.player" :stopSearch="stopSearch"/>
+  <SearchGameModal  :gameStarting="gameStarting" :player="$store.state.player" :stopSearch="stopSearch"/>
 </template>
 
 <script>
 import axios from "axios";
-import TttSearchModal from "../../components/ttt_game_components/TttSearchModal.vue";
-import {connectToSearchResult} from "../../service/ws";
+import SearchGameModal from "../SearchGameModal.vue";
+import {connectToSearchResult, connectToTetrisSearchResult} from "../../service/ws";
 import {TETRIS_GAME_CODE} from "../../service/GameHelper";
 
 export default {
   name: "StartGameComponent",
-  components: {TttSearchModal},
+  components: {SearchGameModal},
   data: function () {
     return {
       alreadyStart: false,
@@ -77,12 +77,10 @@ export default {
       this.alreadyStart = true;
       let data = {
         player_id: this.$store.state.player.id,
-        size_field: this.settings.field_size,
-        base_player_time: this.settings.time,
       }
-      axios.post("/api/ttt_game/search", data, this.config2)
+      axios.post("/api/tetris_game/search", {player_id: this.$store.state.player.id,}, this.config)
           .then(()=>{      this.$store.commit("setInSearch", true);})
-      connectToSearchResult(data.player_id, this.setSettingsAndStartGame)
+      connectToTetrisSearchResult(data.player_id, this.setSettingsAndStartGame)
     },
     setSettingsAndStartGame(gameId) {
       this.gameStarting = true;
@@ -94,10 +92,8 @@ export default {
       location.reload();
     },
     stopSearch() {
-      let data = {
-        player_id: this.$store.state.player.id
-      }
-      axios.post("/api/tetris_game/stop_search", data, this.config2).catch(r=>{
+      axios.post("/api/tetris_game/stop_search", {player_id: this.$store.state.player.id}, this.config)
+          .catch(r=>{
         // console.log(r);
       })
       this.$store.commit("setInSearch", false);

@@ -30,6 +30,15 @@ export function connectToSearchResult(playerId, callback){
     })
 }
 
+export function connectToTetrisSearchResult(playerId, callback){
+    const stompClient = getStompClient("/socket/tetris_search");
+    stompClient.connect({}, frame=>{
+        stompClient.subscribe("/topic/tetris_player_search_ready/"+playerId,game=>{
+            callback(JSON.parse(game.body));
+        }, error=>console.log("error"+JSON.stringify(error)))
+    })
+}
+
 export function connectToGameMessages(gameId,gameCode,callback){
     const stompClient = getStompClient("/socket/game_messages");
     stompClient.connect({},frame=>{

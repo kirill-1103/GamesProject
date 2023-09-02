@@ -23,7 +23,7 @@ import {
 
 export default {
   name: "Canvas",
-  props: ["field", "isActive", "isShowing", "makeMove"],
+  props: ["field", "isActive", "isShowing", "makeMove", "small", "active"],
   data: function () {
     return {
       canvas: null,
@@ -37,7 +37,8 @@ export default {
         stroke: 'black'
       },
       lastMoveTime: new Date(),
-      canRotate: true
+      canRotate: true,
+      listenersAdded: false
     }
   },
   mounted() {
@@ -47,6 +48,16 @@ export default {
     this.canvas.width = this.canvasWidth;
   },
   created() {
+    if(this.small){
+      this.canvasHeight = 400;
+      this.canvasWidth = 200;
+      this.colors = {
+        mainColor: "black",
+        busyColor: "white",
+        activeColor: "blue",
+        stroke: "blue"
+      }
+    }
     this.drawFieldWhenCan();
     this.addListeners();
   },
@@ -89,17 +100,21 @@ export default {
       this.ctx.strokeRect(x * width, y * height, width, height)
     },
     addListeners() {
-      let canvasInterval = setInterval(() => {
-        if (this.canvas) {
-          if (!this.isShowing) {
-            this.addKeyboardListener();
+      if(this.active){
+        let canvasInterval = setInterval(() => {
+          if (this.canvas) {
+            if (!this.isShowing && !this.listenersAdded) {
+              this.addKeyboardListener();
+              this.listenersAdded = true;
+            }
+            clearInterval(canvasInterval)
           }
-          clearInterval(canvasInterval)
-        }
-      }, 50);
+        }, 100);
+      }
     },
     addKeyboardListener() {
       document.addEventListener("keydown", (e) => {
+        // console.log(this.isShowing)
         let time = new Date();
         if (time - this.lastMoveTime > 100) {
           if (e.code === 'ArrowLeft') {

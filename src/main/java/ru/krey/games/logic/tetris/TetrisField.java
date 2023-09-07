@@ -260,9 +260,10 @@ public class TetrisField {
     }
 
     private boolean endGame() {
-        for (int y = 0; y < height; y++) {
+        for (int y = 0; y <TOP_OFFSET; y++) {
             for (int x = 0; x < width; x++) {
-                if (field.get(y).get(x).equals(ACTIVE_CELL) && y < TOP_OFFSET) {
+                if (field.get(y).get(x).equals(ACTIVE_CELL) ||
+                field.get(y).get(x).equals(BUSY_CELL)) {
                     return true;
                 }
             }

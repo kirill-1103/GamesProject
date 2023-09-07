@@ -62,7 +62,7 @@ public class TetrisFigureUtils {
             {
                     {E, E, E, E},
                     {E, A, A, A},
-                    {E, A, E, E},
+                    {E, E, E, A},
                     {E, E, E, E}
             }
     };

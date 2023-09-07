@@ -2,7 +2,10 @@ package ru.krey.games.logic.tetris;
 
 
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
@@ -10,6 +13,7 @@ import java.util.Collections;
 import java.util.List;
 
 @Getter
+@Setter
 public class TetrisLogic {
     private final int MAX_SPEED = 13;
 
@@ -26,6 +30,7 @@ public class TetrisLogic {
     private LocalDateTime lastIterationTime = LocalDateTime.now();
 
 
+
     public TetrisLogic(TetrisField field){
         this.field = field;
         this.points = 0;
@@ -37,6 +42,7 @@ public class TetrisLogic {
     public void next(){
         lastRemovedRowsNumbers = field.nextIteration();
         if(lastRemovedRowsNumbers.contains(TetrisField.RESULT_LOSE)){
+            System.out.println("LOSE");
             this.lose = true;
             lastRemovedRowsNumbers.removeIf(TetrisField.RESULT_LOSE::equals);
         }
@@ -46,8 +52,10 @@ public class TetrisLogic {
     }
 
     public void move(int moveCode){
-        if(moveCode == TetrisField.MOVE_DOWN && field.moveDownIsPossible())
+        if(moveCode == TetrisField.MOVE_DOWN && field.moveDownIsPossible()){
             this.lastIterationTime = LocalDateTime.now();
+            System.out.println("MOVE DOWN");
+        }
         field.move(moveCode);
     }
 
@@ -70,6 +78,7 @@ public class TetrisLogic {
                 break;
             case(2):
                 this.points += 300;
+                break;
             case(3):
                 this.points += 600;
                 break;

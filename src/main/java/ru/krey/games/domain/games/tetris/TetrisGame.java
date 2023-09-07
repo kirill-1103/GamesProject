@@ -86,4 +86,17 @@ public class TetrisGame implements Game {
         return RUSSIAN_NAME;
     }
 
+    public boolean changeRating() {
+        if (this.getPlayer2() != null && this.getWinner() != null) {
+            this.getWinner().plusRating();
+            if (this.getWinner().getId().equals(this.getPlayer2().getId())) {
+                this.getPlayer1().minusRating();
+            } else {
+                this.getPlayer2().minusRating();
+            }
+            return true;
+        }
+        return false;
+    }
+
 }

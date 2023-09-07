@@ -22,8 +22,8 @@ public class TetrisService {
 
     private final PlayerDao playerDao;
 
-    public TetrisGame newGame(Long player1Id, Long player2Id){
-        if(player1Id == null){
+    public TetrisGame newGame(Long player1Id, Long player2Id) {
+        if (player1Id == null) {
             throw new BadRequestException("Не удалось создать игру Tetris.");
         }
 
@@ -53,22 +53,50 @@ public class TetrisService {
         TetrisGame savedGame = tetrisDao.saveOrUpdate(tetrisGame);
         player1.setLastGameCode(GameUtils.TETRIS_GAME_CODE);
         playerDao.saveOrUpdate(player1);
-        if(player2!=null){
+        if (player2 != null) {
             player2.setLastGameCode(GameUtils.TETRIS_GAME_CODE);
             playerDao.saveOrUpdate(player2);
         }
         return savedGame;
     }
 
-    public void saveGame(TetrisGameInfo gameInfo){
+    public void saveGame(TetrisGameInfo gameInfo) {
         TetrisGame game = tetrisDao.getOneById(gameInfo.getGameId())
-                .orElseThrow(()->new NotFoundException("Не удалось найти игру Тетрис с id:"+gameInfo.getGameId()));
-        game.setDuration(gameInfo.getTetris1().getTimeInMillis());
+                .orElseThrow(() -> new NotFoundException("Не удалось найти игру Тетрис с id:" + gameInfo.getGameId()));
+        game.setDuration(Math.abs(gameInfo.getTetris1().getTimeInMillis()));
         game.setEndTime(LocalDateTime.now());
-
-
+        game.setPlayer1(gameInfo.getPlayer1());
+        game.setPlayer1Points(gameInfo.getTetris1().getPoints());
+        game.setPlayer1Time((long) gameInfo.getTetris1().getTimeInMillis());
         game.setField1(gameInfo.getTetris1().getField().getFieldArray());
-//        game.setWinner();
+
+        if(gameInfo.getWinner() != null){
+            game.setWinner(gameInfo.getWinner());
+        }
+
+        if (gameInfo.getPlayer2() != null) {
+            game.setPlayer2(gameInfo.getPlayer2());
+            game.setField2(gameInfo.getTetris2().getField().getFieldArray());
+            if (game.getWinner() == null) {
+                game.setWinner(
+                        gameInfo.getTetris1().getPoints() > gameInfo.getTetris2().getPoints() ?
+                                gameInfo.getPlayer1() :
+                                (gameInfo.getTetris1().getPoints() == gameInfo.getTetris2().getPoints() ?
+                                        null : gameInfo.getPlayer2())
+                );
+            }
+            game.setPlayer2Points(gameInfo.getTetris2().getPoints());
+            game.setPlayer2Time((long) gameInfo.getTetris2().getTimeInMillis());
+        } else {
+            if(game.getWinner() != null){
+                game.setWinner(gameInfo.getPlayer1());
+            }
+        }
+        if (game.changeRating()) {
+            playerDao.saveOrUpdate(game.getPlayer1());
+            playerDao.saveOrUpdate(game.getPlayer2());
+        }
+        tetrisDao.saveOrUpdate(game);
     }
 
 }

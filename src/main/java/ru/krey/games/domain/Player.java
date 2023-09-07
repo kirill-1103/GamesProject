@@ -41,6 +41,7 @@ public class Player {
     @NonNull
     private String Role;
 
+
     private Integer lastGameCode;
 
     public void minusRating(){

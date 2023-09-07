@@ -55,7 +55,7 @@ public class TetrisGameJdbcTemplate implements TetrisGameDao {
             String query = "UPDATE tetris_game SET " +
                     "player1_id=?, player2_id=?, start_time=?,end_time=?," +
                     "winner_id=?, field_1=?, field_2=?, player1_time=?,player2_time=?, player1_points = ?, player2_points= ?, " +
-                    "duration =?,  WHERE id=? ";
+                    "duration =?  WHERE id=? ";
 
 
             int rows = 0;

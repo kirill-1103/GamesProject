@@ -25,7 +25,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/socket/ttt_new_game", "/socket/ttt_search", "/socket/game_messages", "/socket/chat", "/socket/tetris_game")
+        registry.addEndpoint("/socket/ttt_new_game", "/socket/ttt_search", "/socket/game_messages", "/socket/chat", "/socket/tetris_game", "/socket/tetris_search")
                 .withSockJS();
     }
 

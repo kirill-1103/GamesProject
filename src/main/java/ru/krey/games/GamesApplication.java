@@ -11,6 +11,5 @@ public class GamesApplication extends SpringBootServletInitializer {
 	public static void main(String[] args) {
 		SpringApplication.run(GamesApplication.class, args);
 		//System.out.println("hello world");
-		
 	}
 }

@@ -23,7 +23,7 @@ jobs:
         run: python3 db.py
 
       - name: Build App
-        run: docker-compose up
+        run: docker-compose up -d
 
       - name: Auth
         run: curl -i -H "Content-type':' application/x-www-form-urlencoded" --cookie coockies.txt --cookie-jar newcookies.txt -d login=john -d password=123 -L http://localhost':'8080/login

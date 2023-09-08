@@ -26,10 +26,10 @@ jobs:
         run: docker-compose up -d
 
       - name: Auth
-        run: sleep 5 && curl -i -H "Content-type':' application/x-www-form-urlencoded" --cookie coockies.txt --cookie-jar newcookies.txt -d login=kirill -d password=123 -L http://localhost':'8080/login
+        run: sleep 5 && curl -i -H "Content-type':' application/x-www-form-urlencoded" --cookie coockies.txt --cookie-jar newcookies.txt -d login=kirill -d password=123 -L http://127.0.0.1':'8080/login
 
       - name: Test Auth
-        run: curl --cookie newcookies.txt   http://localhost':'8080/api/player/authenticated >> data.txt && cat data.txt
+        run: curl --cookie newcookies.txt   http://127.0.0.1':'8080/api/player/authenticated >> data.txt && cat data.txt
 
 
 

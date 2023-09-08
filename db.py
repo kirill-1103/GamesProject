@@ -1,6 +1,5 @@
 import psycopg2
 conn = psycopg2.connect(dbname="games", user="kirill", password = "123" , host = "localhost")
-
 cursor = conn.cursor()
 
 cursor.execute("CREATE TABLE test (test1 varchar, test2 varchar)")

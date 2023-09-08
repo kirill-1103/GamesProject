@@ -95,7 +95,6 @@ VALUES ('liza','liza@mail.ru','$2a$10$M3.Ts0gg0Ldft6fB7N1tiusvTs5eR03inetM.uOQBM
 
 
 
-print(cursor.fetchall())
 
 cursor.close()
 

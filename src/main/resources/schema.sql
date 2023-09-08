@@ -70,7 +70,7 @@ CREATE TABLE IF NOT EXISTS game_message
     message TEXT NOT NULL
 );
 
-drop table message;
+-- drop table message;
 
 CREATE TABLE IF NOT EXISTS message
 (

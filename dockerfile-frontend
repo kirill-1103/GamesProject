@@ -13,5 +13,6 @@ RUN apt-get install curl -y
 RUN npm install -g n && n lts
 
 RUN npm install vue@3.3.4 -y
+RUN npm rebuild node-sass
 
 CMD ["npm", "start"]

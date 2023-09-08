@@ -8,7 +8,7 @@ cursor.execute("INSERT INTO test (test1, test2) VALUES ('1','2')")
 
 cursor.execute("SELECT * FROM test")
 
-print(cursor.fetchAll())
+print(cursor.fetchall())
 
 cursor.close()
 

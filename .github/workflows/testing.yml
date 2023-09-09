@@ -29,7 +29,7 @@ jobs:
         run: sleep 15 && curl -i -H "Content-type':' application/x-www-form-urlencoded" --cookie coockies.txt --cookie-jar newcookies.txt -d login=kirill -d password=123 -L localhost':'8080/login
 
       - name: Test Auth
-        run: curl --cookie newcookies.txtdockerdockerdockerdocker   localhost':'8080/api/player/authenticated >> data.txt && cat data.txt
+        run: curl --cookie newcookies.txt   localhost':'8080/api/player/authenticated >> data.txt && cat data.txt
 
 
 

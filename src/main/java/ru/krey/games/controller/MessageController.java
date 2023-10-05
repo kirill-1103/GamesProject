@@ -7,10 +7,12 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.convert.ConversionService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import ru.krey.games.dao.interfaces.MessageDao;
 import ru.krey.games.dao.interfaces.PlayerDao;
@@ -19,7 +21,10 @@ import ru.krey.games.domain.Player;
 import ru.krey.games.dto.DialogDto;
 import ru.krey.games.dto.MessageDto;
 import ru.krey.games.error.BadRequestException;
+import ru.krey.games.error.NotFoundException;
+import ru.krey.games.service.PlayerService;
 
+import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -29,6 +34,8 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/chat")
 public class MessageController {
     private final MessageDao messageDao;
+
+    private final PlayerService playerService;
 
     private final PlayerDao playerDao;
 
@@ -75,7 +82,13 @@ public class MessageController {
     }
 
     @GetMapping("/dialog")
-    public DialogDto getDialog(@RequestParam("player1_id") Long player1Id, @RequestParam("player2_id") Long player2Id) {
+    public ResponseEntity<?> getDialog(@RequestParam("player1_id") Long player1Id, @RequestParam("player2_id") Long player2Id, Principal principal) {
+        Player player1 = playerDao.getOneById(player1Id).orElseThrow(()->{throw new NotFoundException("игрок не найден");});
+        Player player2 = playerDao.getOneById(player2Id).orElseThrow(()->{throw new NotFoundException("игрок не найден");});
+
+        if(!player1.getLogin().equals(principal.getName()) && !player2.getLogin().equals(principal.getName())){
+            throw new BadRequestException("Нет прав доступа к сообщениям");
+        }
         List<Message> messages = messageDao.getAllMessagesBetweenPlayers(player1Id, player2Id);
         DialogDto dialogDto = new DialogDto();
         dialogDto.setMessagesByList(messages);
@@ -87,11 +100,16 @@ public class MessageController {
             dialogDto.setPlayer1(messages.get(0).getSender());
             dialogDto.setPlayer2(messages.get(0).getRecipient());
         }
-        return dialogDto;
+        return ResponseEntity.ok(dialogDto);
     }
 
     @GetMapping("")
-    public List<DialogDto> getAllDialogsByPlayer(@RequestParam("player_id") Long playerId) {
+    public List<DialogDto> getAllDialogsByPlayer(@RequestParam("player_id") Long playerId, Principal principal) {
+        Player player = playerDao.getOneById(playerId).orElseThrow(()->{throw new NotFoundException("игрок не найден");});
+
+        if(!player.getLogin().equals(principal.getName())){
+            throw new BadRequestException("Нет прав доступа к сообщениям");
+        }
         List<Message> messages = messageDao.getAllMessagesByPlayerId(playerId);
         HashMap<Player, DialogDto> dialogs = new HashMap<>();
         messages.forEach(message -> {
@@ -138,17 +156,13 @@ public class MessageController {
 
     @Scheduled(fixedRate = 5000)
     public void updateOnlineUsers(){
-        List<String> userNames = sessionRegistry.getAllPrincipals().stream().map(pr -> ((User) pr).getUsername()).collect(Collectors.toList());
+        List<String> userNames = sessionRegistry.getAllPrincipals().stream().map(pr -> ((UserDetails) pr).getUsername()).collect(Collectors.toList());
         List<PlayerDto> newOnlines = new ArrayList<>();
         for(String name: userNames){
             if(!this.onlineList.stream().map(PlayerDto::getLogin).collect(Collectors.toList()).contains(name)){
-//                Player player = playerDao.getOneByLogin(name).orElse(null);
-//                if(!Objects.isNull(player)){
                 PlayerDto playerDto = new PlayerDto();
                 playerDto.login = name;
                 newOnlines.add(playerDto);
-//                    this.onlineList.add(new PlayerDto(name,player.getId()));
-//                }
             }else{
                 PlayerDto player = this.onlineList.stream().filter(p->p.login.equals(name)).findAny().get();
                 newOnlines.add(player);

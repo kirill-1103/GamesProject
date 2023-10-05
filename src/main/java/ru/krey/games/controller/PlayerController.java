@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -11,18 +12,21 @@ import ru.krey.games.dao.interfaces.PlayerDao;
 import ru.krey.games.dao.interfaces.TetrisGameDao;
 import ru.krey.games.dao.interfaces.TttGameDao;
 import ru.krey.games.domain.Player;
-import ru.krey.games.domain.games.tetris.TetrisGame;
-import ru.krey.games.domain.games.ttt.TttGame;
 import ru.krey.games.domain.interfaces.Game;
+import ru.krey.games.dto.AuthDto;
 import ru.krey.games.error.BadRequestException;
 import ru.krey.games.error.NotFoundException;
-import ru.krey.games.utils.AuthUtils;
-import ru.krey.games.utils.GameUtils;
+import ru.krey.games.service.AuthService;
 import ru.krey.games.service.LocalImageService;
 import ru.krey.games.service.interfaces.ImageService;
+import ru.krey.games.utils.AuthUtils;
+import ru.krey.games.utils.GameUtils;
 
 import java.io.IOException;
-import java.util.*;
+import java.security.Principal;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 import java.util.function.Consumer;
 
 @RestController
@@ -44,6 +48,8 @@ public class PlayerController {
 
     private final Environment env;
 
+    private final AuthService authService;
+
 
 
     private final static Logger log = LoggerFactory.getLogger(PlayerController.class);
@@ -57,8 +63,11 @@ public class PlayerController {
     }
 
     @GetMapping("/authenticated")
-    public Player getAuthenticatedUser() {
-        Player player = playerDao.getOneByLogin(authUtils.getCurrentUsername())
+    public Player getAuthenticatedUser(Principal principal) {
+        if(principal == null || principal.getName() == null){
+            throw new BadRequestException("Авторизованного игрока нет!");
+        }
+        Player player = playerDao.getOneByLogin(principal.getName())
                 .orElseThrow(() -> new BadRequestException("Авторизованного игрока нет!"));
         player.setPassword(null);
         return player;
@@ -103,7 +112,7 @@ public class PlayerController {
     }
 
     @PostMapping("/update")
-    public Player updatePlayer(
+    public ResponseEntity<?> updatePlayer(
             @RequestParam("login") String login,
             @RequestParam("email") String email,
             @RequestParam(value = "password", required = false) String password,
@@ -144,10 +153,8 @@ public class PlayerController {
                 throw new RuntimeException("Не удалось загрузить фото. Попробуйте снова в профиле.", e);
             }
         }
-
-        authUtils.changeSessionUser(player);//change username and password in session
         player.setPassword(null);
-        return player;
+        return authService.createAuthToken(AuthDto.builder().login(login).password(password).build());
     }
 
     @PostMapping("/currentGameCode")

@@ -1,6 +1,7 @@
 package ru.krey.games.dao;
 
 import lombok.NoArgsConstructor;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
@@ -54,6 +55,11 @@ public class MessageDaoTest {
                     message.getReadingTime(), message.getMessageText());
             texts.add(text);
         }
+    }
+
+    @After
+    public void clean(){
+        jdbcTemplate.update("DELETE FROM message");
     }
 
 

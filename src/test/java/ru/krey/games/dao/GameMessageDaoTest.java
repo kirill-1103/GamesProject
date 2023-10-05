@@ -58,8 +58,8 @@ public class GameMessageDaoTest {
 
     @After
     public void remove(){
-        jdbcTemplate.update("DELETE FROM player");
         jdbcTemplate.update("DELETE FROM game_message");
+        jdbcTemplate.update("DELETE FROM player");
     }
 
 

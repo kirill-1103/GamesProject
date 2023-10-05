@@ -3,13 +3,15 @@
   <Form
   :form="form"
   :error-message='errorMessage'
+  :submit-form="submitForm"
   ></Form>
 </template>
 
 <script>
 import axios from 'axios'
-import {REGISTER_PAGE_NAME,LOGIN_PAGE_NAME} from "../router/component_names";
+import {REGISTER_PAGE_NAME, LOGIN_PAGE_NAME, PROFILE_PAGE_PATH} from "../router/component_names";
 import Form from "../components/LoginForm.vue";
+import router from "../router/router";
 
 export default {
   name: "LoginPage",
@@ -43,12 +45,16 @@ export default {
 
   methods: {
     submitForm() {
-      axios.post('/login', this.form).then(({data}) => {
-        console.log(data);
-      }).catch((error) => {
-        this.errorMessage = error.message;
-        console.log(this.errorMessage);
-
+      axios.post('/auth', this.form).then(({data}) => {
+        if(data.error){
+          this.errorMessage = data.message;
+          console.log(this.errorMessage);
+          return;
+        }
+        localStorage.setItem("jwtToken",data);
+        router.push(PROFILE_PAGE_PATH);
+        location.reload();
+        // console.log(this.$store.state.jwtToken)
       })
     }
   }

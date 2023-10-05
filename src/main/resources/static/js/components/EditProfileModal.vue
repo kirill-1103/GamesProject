@@ -93,10 +93,11 @@ export default {
       axios.post("/api/player/update",
           {login:this.form.login,password:this.form.password,email:this.form.email,player_img:img,id:this.form.id}
           , this.config).then(response => {
-            if(response.data.error){
+            if(response.data && response.data.error){
               this.errorMessage = 'Failed to updated from server. '+response.data.message
               return;
             }else{
+              localStorage["jwtToken"] = response.data;
               location.reload()
             }
           }

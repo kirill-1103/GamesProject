@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+/*TODO: с этим тоже что-то делать :(*/
 @Component
 @RequiredArgsConstructor
 public class LogoutListener implements ApplicationListener<LogoutSuccessEvent> {

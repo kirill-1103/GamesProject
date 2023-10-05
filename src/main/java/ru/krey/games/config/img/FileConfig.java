@@ -3,8 +3,14 @@ package ru.krey.games.config.img;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.relational.core.sql.In;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import ru.krey.games.service.LocalImageService;
+
+import java.io.FileOutputStream;
+import java.io.OutputStream;
+import java.util.List;
+import java.util.Optional;
 
 @Configuration
 @ComponentScan
@@ -16,13 +22,13 @@ public class FileConfig {
 //        factory.setMaxRequestSize(DataSize.parse("1MB"));
 //        return factory.createMultipartConfig();
 //    }
-
     @Bean(name = "multipartResolver")
     public CommonsMultipartResolver multipartResolver() {
         CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver();
         multipartResolver.setMaxUploadSize(LocalImageService.max_size);
         return multipartResolver;
     }
+
 //
 //    @Bean
 //    public StandardServletMultipartResolver multipartResolver() {

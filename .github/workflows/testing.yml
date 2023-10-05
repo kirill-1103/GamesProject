@@ -16,6 +16,15 @@ jobs:
           port: 5432
         id: postgres
 
+      - name: Postgres For Tests
+        uses: ikalnytskyi/action-setup-postgres@v4
+        with:
+          username: kirill
+          password: 123
+          database: gamestest
+          port: 5432
+        id: postgrestest
+
       - name: psycopg2
         run: sudo apt install python3-pip -y && pip install psycopg2
 
@@ -30,6 +39,7 @@ jobs:
 
       - name: Test Auth
         run: curl --cookie newcookies.txt   localhost':'8080/api/player/authenticated >> data.txt && cat data.txt
+
 
 
 

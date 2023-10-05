@@ -45,7 +45,6 @@ export default {
 
   created() {
     let interval = setInterval(()=>{
-      console.log('a')
       if(this.$store.state.player){
         this.$router.push("/me")
         clearInterval(interval)

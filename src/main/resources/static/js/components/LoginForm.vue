@@ -1,5 +1,5 @@
 <template>
-  <form class="form" action="/login" method="POST">
+  <form @submit.prevent="submitForm" class="form">
     <label for="login">Логин:</label>
     <input @change = changeLogin() type="text" id="login" name="login" v-model="form.login">
     <br>
@@ -21,7 +21,7 @@ import {REGISTER_PAGE_NAME} from "../router/component_names";
 export default {
   name: 'LoginForm',
 
-  props:['form','errorMessage',"testCounter"],
+  props:['form','errorMessage',"testCounter","submitForm"],
 
   methods:{
     changeLogin(){

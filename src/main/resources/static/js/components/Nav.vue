@@ -55,9 +55,15 @@
 
 <script>
 import axios from "axios";
-import {LOGIN_PAGE_NAME, TETRIS_GAME_PAGE_NAME, TTT_GAME_PAGE_NAME} from "../router/component_names.js";
+import {
+  LOGIN_PAGE_NAME,
+  LOGIN_PAGE_PATH,
+  TETRIS_GAME_PAGE_NAME,
+  TTT_GAME_PAGE_NAME
+} from "../router/component_names.js";
 import updateAuthUserInStorage from "../service/auth.js";
 import {TETRIS_GAME_CODE, TTT_GAME_CODE} from "../service/GameHelper";
+import router from "../router/router";
 
 export default {
   name:"Nav",
@@ -86,10 +92,13 @@ export default {
         return;
       }
       console.log('exit')
-      axios.post("/logout").then(()=>{
-        updateAuthUserInStorage(this.$store);
-        this.$router.push({name:LOGIN_PAGE_NAME});
-      });
+      // axios.post("/logout").then(()=>{
+      //   updateAuthUserInStorage(this.$store);
+      //   this.$router.push({name:LOGIN_PAGE_NAME});
+      // });
+      localStorage.removeItem("jwtToken")
+      router.push(LOGIN_PAGE_PATH);
+      location.reload()
     },
     goToCurrentGame(){
       if(this.$store.state.playerGameId !== -1 && this.$store.state.playerGameId){

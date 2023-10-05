@@ -1,12 +1,15 @@
 package ru.krey.games.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.krey.games.domain.Player;
+import ru.krey.games.dto.AuthDto;
 import ru.krey.games.error.BadRequestException;
 import ru.krey.games.dao.interfaces.PlayerDao;
+import ru.krey.games.service.AuthService;
 import ru.krey.games.utils.RoleUtils;
 import ru.krey.games.service.interfaces.ImageService;
 
@@ -16,12 +19,18 @@ import java.util.Objects;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping()
 public class AuthController {
-    private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final PasswordEncoder passwordEncoder;
     private final PlayerDao playerDao;
 
     private final ImageService imageService;
+
+    private final AuthService authService;
+
+    @PostMapping("/auth")
+    public ResponseEntity<?> createAuthToken(@RequestBody AuthDto authDto){
+        return authService.createAuthTokenAndAuthorized(authDto);
+    }
 
     @PostMapping("/registration")
     public Player createPlayer(@RequestParam(value = "player_img", required = false) MultipartFile image,
@@ -39,7 +48,7 @@ public class AuthController {
         Player player = Player.builder()
                         .login(login)
                         .email(email)
-                        .password(bCryptPasswordEncoder.encode(password))
+                        .password(passwordEncoder.encode(password))
                         .lastSignInTime(LocalDateTime.now())
                         .signUpTime(LocalDateTime.now())
                         .enabled(true)

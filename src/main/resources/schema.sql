@@ -28,6 +28,7 @@ CREATE TABLE IF NOT EXISTS player
     role VARCHAR(20),
     enabled BOOLEAN DEFAULT TRUE,
     last_game_code INT2,
+    active_time TIMESTAMP,
     UNIQUE (login)
 );
 

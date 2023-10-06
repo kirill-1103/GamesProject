@@ -13,6 +13,7 @@ import ru.krey.games.domain.Player;
 import ru.krey.games.error.NotFoundException;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -28,4 +29,15 @@ public class PlayerService implements UserDetailsService {
                 .orElseThrow(()->{throw new UsernameNotFoundException(String.format("User %s not found", username));});
     }
 
+    public void updateActive(String username){
+        playerDao.updateActive(username);
+    }
+
+    public List<Player> getActivePlayers(){
+        return playerDao.getActivePlayersByTimeDiff(30);
+    }
+
+    public PlayerDao getPlayerDao() {
+        return playerDao;
+    }
 }

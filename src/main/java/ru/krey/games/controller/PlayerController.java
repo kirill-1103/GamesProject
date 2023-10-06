@@ -18,6 +18,7 @@ import ru.krey.games.error.BadRequestException;
 import ru.krey.games.error.NotFoundException;
 import ru.krey.games.service.AuthService;
 import ru.krey.games.service.LocalImageService;
+import ru.krey.games.service.PlayerService;
 import ru.krey.games.service.interfaces.ImageService;
 import ru.krey.games.utils.AuthUtils;
 import ru.krey.games.utils.GameUtils;
@@ -38,8 +39,6 @@ public class PlayerController {
     private final TttGameDao tttGameDao;
 
     private final TetrisGameDao tetrisGameDao;
-    private final AuthUtils authUtils;
-
     private final ImageService imageService;
 
     private final LocalImageService localImageService;
@@ -49,6 +48,8 @@ public class PlayerController {
     private final Environment env;
 
     private final AuthService authService;
+
+    private final PlayerService playerService;
 
 
 
@@ -233,4 +234,10 @@ public class PlayerController {
         return result.subList(Math.min(result.size() - 1, from), Math.min(result.size(), to));
     }
 
+    @PostMapping("/update-active")
+    public void updateActive(Principal principal){
+        if(Objects.nonNull(principal)){
+            playerService.updateActive(principal.getName());
+        }
+    }
 }

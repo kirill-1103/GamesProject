@@ -38,6 +38,7 @@ public class AuthService {
     public ResponseEntity<?> createAuthToken(AuthDto authDto){
         UserDetails userDetails = playerService.loadUserByUsername(authDto.getLogin());
         String token = jwtUtils.generateToken(userDetails);
+//        log.debug(token);
         return new ResponseEntity<>(token, HttpStatus.OK);
     }
 

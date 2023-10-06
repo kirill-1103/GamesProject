@@ -41,7 +41,7 @@ public class SecurityConfig {
     };
 
     private static final String[] FOR_AUTHORIZED = new String[]{
-            "/api/**"
+            "/api/**","/updateToken"
     };
 
     @Bean

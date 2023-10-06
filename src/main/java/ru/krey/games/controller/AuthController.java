@@ -14,6 +14,7 @@ import ru.krey.games.utils.RoleUtils;
 import ru.krey.games.service.interfaces.ImageService;
 
 import java.io.IOException;
+import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
@@ -30,6 +31,11 @@ public class AuthController {
     @PostMapping("/auth")
     public ResponseEntity<?> createAuthToken(@RequestBody AuthDto authDto){
         return authService.createAuthTokenAndAuthorized(authDto);
+    }
+
+    @PostMapping("/updateToken")
+    public ResponseEntity<?> updateToken(Principal principal){
+        return authService.createAuthToken(AuthDto.builder().login(principal.getName()).build());
     }
 
     @PostMapping("/registration")

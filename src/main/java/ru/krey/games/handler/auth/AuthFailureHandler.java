@@ -40,6 +40,6 @@ public class AuthFailureHandler implements AuthenticationEntryPoint {
             result.put("message","Authentication failure");
         }
         JsonUtils.write(response.getWriter(),result);
-        log.debug("Не удалось выполнить запрос (ошибка аутентификации).");
+        log.debug(String.format("Не удалось выполнить запрос {%s} (ошибка аутентификации).",request.getRequestURI()));
     }
 }

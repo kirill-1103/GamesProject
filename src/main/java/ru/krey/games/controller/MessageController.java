@@ -156,34 +156,9 @@ public class MessageController {
 
     @Scheduled(fixedRate = 5000)
     public void updateOnlineUsers(){
-        List<String> userNames = sessionRegistry.getAllPrincipals().stream().map(pr -> ((UserDetails) pr).getUsername()).collect(Collectors.toList());
-        List<PlayerDto> newOnlines = new ArrayList<>();
-        for(String name: userNames){
-            if(!this.onlineList.stream().map(PlayerDto::getLogin).collect(Collectors.toList()).contains(name)){
-                PlayerDto playerDto = new PlayerDto();
-                playerDto.login = name;
-                newOnlines.add(playerDto);
-            }else{
-                PlayerDto player = this.onlineList.stream().filter(p->p.login.equals(name)).findAny().get();
-                newOnlines.add(player);
-            }
-        }
-        List<String> names = new ArrayList<>();
-        for(PlayerDto playerDto : newOnlines){
-            if(Objects.isNull(playerDto.id)){
-                names.add(playerDto.login);
-            }
-        }
-
-        List<Player> newPlayers = playerDao.getPlayersByLogins(names);
-
-        for(Player player: newPlayers){
-           PlayerDto playerDto  = newOnlines.stream().filter(p->p.getLogin().equals(player.getLogin())).findAny().get();
-           playerDto.id = player.getId();
-        }
-
-
-        this.onlineList = newOnlines;
+        List<Player> onlinePlayers = playerService.getActivePlayers();
+//        log.debug(onlinePlayers.toString());
+        this.onlineList = onlinePlayers.stream().map(pl-> new PlayerDto(pl.getLogin(),pl.getId())).collect(Collectors.toList());;
     }
 
 

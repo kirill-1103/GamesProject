@@ -13,6 +13,7 @@ import axios from 'axios'
 import updateAuthUserInStorage from '../service/auth.js'
 import { connectToChats } from '../service/ws'
 import router from "../router/router";
+import {tokenIsExpired, tokenTime, updateToken} from "../service/jwtUtils";
 
 export default {
 	components: {
@@ -30,6 +31,8 @@ export default {
 	created() {
     if(localStorage['jwtToken'] && localStorage['jwtToken'] != ''){
       axios.defaults.headers.common["Authorization"] = 'Bearer '+localStorage['jwtToken']
+      this.updateTokenInterval();
+      this.updateActiveInterval();
     }
   },
 	methods: {
@@ -62,6 +65,28 @@ export default {
       if(path.startsWith("/chat/") && path!=='/chat/'+this.$store.state.player.id){
         this.$router.replace({path: "/chat/"+this.$store.state.player.id});
       }
+    },
+    updateToken(){
+      const tokenT = tokenTime(localStorage["jwtToken"]);
+      if(tokenT == null || tokenT < 1000*60*10){
+        updateToken()
+        console.log(localStorage["jwtToken"])
+      }
+    },
+    updateTokenInterval(){
+      this.updateToken()
+      setInterval(()=>{
+        this.updateToken();
+      },1000*60);
+    },
+    updateActiveInterval(){
+      this.updateActive();
+      setInterval(()=>{
+        this.updateActive();
+      },1000*10)
+    },
+    updateActive(){
+      axios.post("/api/player/update-active");
     }
 	},
 }

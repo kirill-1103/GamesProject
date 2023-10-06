@@ -145,14 +145,31 @@ public class PlayerJdbcTemplate implements PlayerDao {
     }
 
     @Override
-    public List<Player> getPlayersByLogins(List<String> names){
-        if(names.isEmpty()){
+    public List<Player> getPlayersByLogins(List<String> names) {
+        if (names.isEmpty()) {
             return Collections.emptyList();
         }
         String query = "SELECT * FROM player WHERE player.login in (:names)";
         MapSqlParameterSource parameters = new MapSqlParameterSource();
-        parameters.addValue("names",names);
-        return new ArrayList<>(namedParameterJdbcTemplate.query(query,parameters,this.playerMapper));
+        parameters.addValue("names", names);
+        return new ArrayList<>(namedParameterJdbcTemplate.query(query, parameters, this.playerMapper));
     }
 
+    @Override
+    public void updateActive(Long id) {
+        String sql = "UPDATE player SET active_time = NOW() WHERE id = ?";
+        jdbcTemplate.update(sql, id);
+    }
+
+    @Override
+    public void updateActive(String login) {
+        String sql = "UPDATE player SET active_time = NOW() WHERE login = ?";
+        jdbcTemplate.update(sql, login);
+    }
+
+    @Override
+    public List<Player> getActivePlayersByTimeDiff(int seconds) {
+        String query = "SELECT * FROM player WHERE EXTRACT(EPOCH FROM (NOW() - active_time)) < ?";
+        return jdbcTemplate.query(query, this.playerMapper, seconds);
+    }
 }

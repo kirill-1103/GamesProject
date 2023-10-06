@@ -28,4 +28,10 @@ public interface PlayerDao {
     List<Player> getPlayersWithNameStarts(String part);
 
     List<Player> getPlayersByLogins(List<String> names);
+
+    void updateActive(String login);
+
+    void updateActive(Long id);
+
+    List<Player> getActivePlayersByTimeDiff(int seconds);
 }

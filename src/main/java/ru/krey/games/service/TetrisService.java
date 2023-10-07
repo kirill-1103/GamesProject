@@ -9,10 +9,10 @@ import ru.krey.games.domain.games.tetris.TetrisGame;
 import ru.krey.games.domain.games.tetris.TetrisGameInfo;
 import ru.krey.games.error.BadRequestException;
 import ru.krey.games.error.NotFoundException;
-import ru.krey.games.logic.tetris.TetrisLogic;
 import ru.krey.games.utils.GameUtils;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.Random;
 
 @Service
@@ -97,6 +97,10 @@ public class TetrisService {
             playerDao.saveOrUpdate(game.getPlayer2());
         }
         tetrisDao.saveOrUpdate(game);
+    }
+
+    public Optional<TetrisGame> getCurrentGameByPlayerId(Long id){
+        return tetrisDao.getCurrentGameByPlayerId(id);
     }
 
 }

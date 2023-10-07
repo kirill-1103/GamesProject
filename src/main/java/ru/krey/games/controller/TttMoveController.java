@@ -3,17 +3,13 @@ package ru.krey.games.controller;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.web.bind.annotation.*;
-import ru.krey.games.dao.interfaces.PlayerDao;
-import ru.krey.games.dao.interfaces.TttGameDao;
-import ru.krey.games.dao.interfaces.TttMoveDao;
 import ru.krey.games.domain.games.ttt.TttGame;
 import ru.krey.games.dto.TttGameDto;
 import ru.krey.games.dto.TttMoveDto;
 import ru.krey.games.error.NotFoundException;
+import ru.krey.games.service.TttGameService;
 
 import java.util.List;
 
@@ -21,15 +17,9 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("api/ttt_move")
 public class TttMoveController {
-    private final PlayerDao playerDao;
 
-    private final TttGameDao gameDao;
-
+    private final TttGameService tttGameService;
     private final ConversionService conversionService;
-
-    private final static Logger log = LoggerFactory.getLogger(TttMoveController.class);
-
-    private final TttMoveDao moveDao;
 
     @AllArgsConstructor
     @Getter
@@ -40,10 +30,9 @@ public class TttMoveController {
 
     @PostMapping("/all")
     public @ResponseBody GameWithMoves getGameWithMoves(@RequestParam("id") Long gameId){
-        TttGame game = gameDao.getOneById(gameId).orElseThrow(NotFoundException::new);
-        List<TttMoveDto> moves = moveDao.getAllByGameIdOrderedByTime(gameId);
+        TttGame game = tttGameService.getOneById(gameId).orElseThrow(NotFoundException::new);
+        List<TttMoveDto> moves = tttGameService.getGameMoves(game);
         GameWithMoves gameWithMoves = new GameWithMoves(conversionService.convert(game, TttGameDto.class), moves);
         return gameWithMoves;
     }
-
 }

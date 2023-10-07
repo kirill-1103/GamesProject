@@ -23,4 +23,9 @@ public interface Game {
 
     Long getId();
 
+    Player getWinner();
+
+    String getTextGameResultByPlayerId(Long playerId);
+
+    String getEntityNameByPlayerId(Long playerId);
 }

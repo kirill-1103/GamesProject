@@ -172,4 +172,10 @@ public class PlayerJdbcTemplate implements PlayerDao {
         String query = "SELECT * FROM player WHERE EXTRACT(EPOCH FROM (NOW() - active_time)) < ?";
         return jdbcTemplate.query(query, this.playerMapper, seconds);
     }
+
+    @Override
+    public List<Player> getPlayersByLoginOrEmail(String login, String email){
+        String query = "SELECT * FROM player WHERE login = ? OR email = ?";
+        return jdbcTemplate.query(query, this.playerMapper, login, email);
+    }
 }

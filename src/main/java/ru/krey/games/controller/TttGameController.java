@@ -16,11 +16,11 @@ import ru.krey.games.error.NotFoundException;
 import ru.krey.games.logic.ttt.TttField;
 import ru.krey.games.service.TttGameService;
 import ru.krey.games.service.TttMoveService;
+import ru.krey.games.state.GameKeeper;
 import ru.krey.games.utils.GameUtils;
 
 import java.time.LocalDateTime;
 import java.util.*;
-import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -40,10 +40,9 @@ public class TttGameController {
 
     private final ExecutorService executorForSave = Executors.newSingleThreadExecutor();
 
-    private final Set<TttGame> savedGames = new ConcurrentSkipListSet<>(Comparator.comparingLong(TttGame::getId));
-
     private final Deque<TttSearchDto> searches = new ArrayDeque<>();
 
+    private final GameKeeper gameKeeper;
 
     @PostMapping("/new")
     public @ResponseBody TttGameDto newGame(
@@ -53,22 +52,23 @@ public class TttGameController {
     ) {
 
         TttGame savedGame = gameService.newGame(player1Id, player2Id, fieldSize, minutes, complexity);
-        savedGames.add(savedGame);
+        gameKeeper.addGame(savedGame);
         return conversionService.convert(savedGame, TttGameDto.class);
     }
 
     @GetMapping("/{id}")
     public TttGameDto getOneById(@PathVariable("id") Long id) {
-        return conversionService.convert(savedGames.stream().filter(savedGame -> savedGame.getId().equals(id))
-                .findAny()
+        return conversionService.convert(gameKeeper.getById(id)
                 .orElse(gameService.getOneById(id)
-                        .orElseThrow(() -> new NotFoundException("Игра не найдена"))), TttGameDto.class);
+                        .orElseThrow(() -> new NotFoundException("Игра не найдена"))),
+                TttGameDto.class);
     }
 
-    //    @MessageMapping("/connect")
+    //TODO: все schedule вынести в отдельные классы
     @Scheduled(fixedRate = 100)
     private void gameProcessing() {
-        savedGames.forEach((game) -> {
+        gameKeeper.forEach((g) -> {
+            TttGame game = (TttGame) g;
             if(Objects.isNull(game.getEndTime())){
                 if (Objects.isNull(game.getVictoryReasonCode())) {
                     return;
@@ -90,9 +90,9 @@ public class TttGameController {
     @PostMapping("/surrender")
     public void surrender(@RequestParam("game_id") Long gameId,
                           @RequestParam("player_id") Long playerId) {
-        TttGame game = getGameFromSaved(gameId);
+        TttGame game = (TttGame) gameKeeper.getById(gameId).orElseThrow(BadRequestException::new);
 
-        savedGames.removeIf((g) -> game.getId().equals(g.getId()));
+        gameKeeper.removeById(gameId);
 
         if (game.getPlayer1().getId().equals(playerId)) {
             game.setVictoryReasonCode((byte) GameUtils.VICTORY_REASON_PLAYER1_LOSE);
@@ -111,7 +111,7 @@ public class TttGameController {
                          @RequestParam("player_id") Long playerId,
                          @RequestParam("x") Integer x,
                          @RequestParam("y") Integer y) {
-        TttGame game = getGameFromSaved(gameId);
+        TttGame game = (TttGame) gameKeeper.getById(gameId).orElseThrow(BadRequestException::new);
 
         Player mover;
         try{
@@ -161,7 +161,7 @@ public class TttGameController {
         } else {
             TttGame savedGame = gameService.newGame(search.getPlayerId(), otherSearch.getPlayerId(),
                     otherSearch.getSizeField(), otherSearch.getBasePlayerTime(), null);
-            savedGames.add(savedGame);
+            gameKeeper.addGame(savedGame);
             messagingTemplate.convertAndSend("/topic/ttt_player_search_ready/" + savedGame.getPlayer1().getId()
                     , conversionService.convert(savedGame, TttGameDto.class));
             messagingTemplate.convertAndSend("/topic/ttt_player_search_ready/" + savedGame.getPlayer2().getId()
@@ -250,18 +250,10 @@ public class TttGameController {
         }
     }
 
-    private TttGame getGameFromSaved(Long id) {
-        return savedGames
-                .stream()
-                .filter(savedGame -> savedGame.getId().equals(id))
-                .findAny()
-                .orElseThrow(BadRequestException::new);
-    }
-
     private void saveGameInDb(TttGame game) {
         executorForSave.execute(() -> {
             gameService.setEndedGameInDb(game);
-            savedGames.removeIf((g) -> g.getId().equals(game.getId()));
+            gameKeeper.removeById(game.getId());
             messagingTemplate.convertAndSend("/topic/ttt_game/" + game.getId()
                     , conversionService.convert(game, TttGameDto.class));
             log.info("Game " + game.getId() + " saved");

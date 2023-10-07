@@ -3,6 +3,7 @@ package ru.krey.games.domain.games.ttt;
 import lombok.*;
 import ru.krey.games.domain.Player;
 import ru.krey.games.domain.interfaces.Game;
+import ru.krey.games.domain.interfaces.StorableGame;
 import ru.krey.games.logic.ttt.TttField;
 import ru.krey.games.utils.GameUtils;
 
@@ -16,7 +17,7 @@ import java.util.Set;
 @Builder
 @NoArgsConstructor
 @ToString
-public class TttGame implements Game {
+public class TttGame implements Game, StorableGame {
 
 
     private final static String RUSSIAN_NAME = "Крестики нолики";
@@ -139,6 +140,27 @@ public class TttGame implements Game {
 
     public Long getId(){
         return id;
+    }
+
+    @Override
+    public String getTextGameResultByPlayerId(Long playerId) {
+        if(this.winner != null && this.winner.getId().equals(playerId)){
+            return "Победа";
+        }else if(this.winner == null && this.victoryReasonCode.equals((byte) GameUtils.VICTORY_REASON_DRAW)){
+            return "Ничья";
+        }
+        return "Поражение";
+    }
+
+    @Override
+    public String getEntityNameByPlayerId(Long playerId) {
+        String entityName;
+        if(this.player1 != null && this.player1.getId().equals(playerId)){
+            entityName = this.player2 == null ? "Компьютер" : this.player2.getLogin();
+         }else{
+            entityName = this.player1 == null ? "Компьютер" : this.player1.getLogin();
+        }
+        return entityName;
     }
 
     @Override

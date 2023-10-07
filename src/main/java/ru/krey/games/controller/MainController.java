@@ -16,8 +16,7 @@ public class MainController {
             "/error", "/login**","/auth", "/register", "/logout","/registration","/game/**",
             "/ws**","/websocket**","/ws/**","/websocket/**","/topic/**","/player/**","/api/chat/**","/api/tetris_game/**","/favicon.ico","/auth/**","/auth","/",
             "/updateToken"})
-    public String main(HttpServletRequest request){
-//        log.debug(request.getSession().getId());
+    public String main(){
         return "index";
     }
 }

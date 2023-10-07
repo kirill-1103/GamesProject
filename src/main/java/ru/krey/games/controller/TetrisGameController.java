@@ -5,30 +5,25 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import ru.krey.games.dao.TetrisGameJdbcTemplate;
 import ru.krey.games.domain.games.tetris.TetrisGame;
 import ru.krey.games.domain.games.tetris.TetrisGameInfo;
-import ru.krey.games.domain.games.ttt.TttGame;
+import ru.krey.games.domain.interfaces.StorableGame;
 import ru.krey.games.dto.TetrisDto;
-import ru.krey.games.dto.TttGameDto;
-import ru.krey.games.dto.TttSearchDto;
 import ru.krey.games.error.BadRequestException;
 import ru.krey.games.error.NotFoundException;
 import ru.krey.games.logic.tetris.TetrisField;
 import ru.krey.games.logic.tetris.TetrisFigureUtils;
 import ru.krey.games.logic.tetris.TetrisLogic;
 import ru.krey.games.service.TetrisService;
+import ru.krey.games.state.GameKeeper;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayDeque;
-import java.util.Comparator;
 import java.util.Deque;
-import java.util.Set;
+import java.util.Iterator;
 import java.util.List;
-import java.util.concurrent.ConcurrentSkipListSet;
 
 /*
     TODO: в игре с человеком время игры и следующие фигуры устанавливаются из контроллера
@@ -41,7 +36,7 @@ import java.util.concurrent.ConcurrentSkipListSet;
 public class TetrisGameController {
     private final TetrisService tetrisService;
 
-    private final Set<TetrisGameInfo> savedGames = new ConcurrentSkipListSet<>(Comparator.comparingLong(TetrisGameInfo::getGameId));
+    private final GameKeeper gameKeeper;
 
     private final Deque<Long> searches = new ArrayDeque<>();
 
@@ -65,14 +60,13 @@ public class TetrisGameController {
     ) {
         TetrisGame newGame = tetrisService.newGame(playerId, null);
         TetrisLogic logic1 = new TetrisLogic(new TetrisField(TetrisFigureUtils.generateFigures(countNextFigures)));
-//        TetrisLogic logic2 = new TetrisLogic(new TetrisField(logic1.getField().getNextFigures()));
 
         TetrisGameInfo gameInfo = TetrisGameInfo.builder()
                 .gameId(newGame.getId())
                 .tetris1(logic1)
                 .player1(newGame.getPlayer1())
                 .build();
-        savedGames.add(gameInfo);
+        gameKeeper.addGame(gameInfo);
 
         return TetrisDto.builder()
                 .game2Stop(false)
@@ -105,7 +99,7 @@ public class TetrisGameController {
                     .player1(newGame.getPlayer1())
                     .player2(newGame.getPlayer2())
                     .build();
-            savedGames.add(gameInfo);
+            gameKeeper.addGame(gameInfo);
             messagingTemplate.convertAndSend("/topic/tetris_player_search_ready/" + newGame.getPlayer1().getId()
                     , fromGameInfoToDto(gameInfo));
             messagingTemplate.convertAndSend("/topic/tetris_player_search_ready/" + newGame.getPlayer2().getId()
@@ -126,14 +120,14 @@ public class TetrisGameController {
 
     @GetMapping("/processing/{id}")
     public TetrisDto getOneInProcess(@PathVariable Long id) {
-        return fromGameInfoToDto(savedGames.stream().filter(g -> g.getGameId().equals(id))
-                .findAny().orElseThrow(() -> new NotFoundException("Игра не найдена")));
+        return fromGameInfoToDto((TetrisGameInfo) gameKeeper.getById(id).orElseThrow(() -> new NotFoundException("Игра не найдена")));
     }
 
     @Scheduled(fixedRate = 25)
     private void gameProcessing() {
         currentIterationTime = LocalDateTime.now();
-        savedGames.forEach((game) -> {
+        gameKeeper.forEach((g) -> {
+            TetrisGameInfo game = (TetrisGameInfo) g;
             updateTetrisLogic(game.getTetris1());
             updateTetrisLogic(game.getTetris2());
             updateNextFigures(game.getTetris1(), game.getTetris2());
@@ -142,17 +136,20 @@ public class TetrisGameController {
                 tetrisService.saveGame(game);
             }
         });
-        savedGames.removeIf(g -> (!isActiveTetrisGame(g.getTetris1()) && !isActiveTetrisGame(g.getTetris2())));
+        Iterator<StorableGame> iterator = gameKeeper.iterator();
+        while(iterator.hasNext()){
+            TetrisGameInfo tGameInfo = (TetrisGameInfo) iterator.next();
+            if(!isActiveTetrisGame(tGameInfo.getTetris1()) && !isActiveTetrisGame(tGameInfo.getTetris2())){
+                iterator.remove();
+            }
+        }
     }
 
     @PostMapping("/move")
     public void makeMove(@RequestParam("player_id") Long playerId,
                          @RequestParam("game_id") Long gameId,
                          @RequestParam("move_code") Integer moveCode) {
-        TetrisGameInfo gameInfo = savedGames.stream()
-                .filter(game -> game.getGameId().equals(gameId))
-                .findAny()
-                .orElseThrow(() -> new NotFoundException("Game not found"));
+        TetrisGameInfo gameInfo = (TetrisGameInfo) gameKeeper.getById(gameId).orElseThrow(()->{throw new NotFoundException("Game not found");});
         if (gameInfo.getPlayer1().getId().equals(playerId)) {
             gameInfo.getTetris1().move(moveCode);
         } else {
@@ -163,8 +160,8 @@ public class TetrisGameController {
     @PostMapping("/surrender")
     public void surrender(@RequestParam("game_id") Long gameId,
                           @RequestParam("player_id") Long playerId) {
-        TetrisGameInfo game = getGameFromSaved(gameId);
-        savedGames.removeIf((g) -> game.getGameId().equals(g.getGameId()));
+        TetrisGameInfo game = (TetrisGameInfo) gameKeeper.getById(gameId).orElseThrow(NotFoundException::new);
+        gameKeeper.removeById(gameId);
 
         game.getTetris1().setLose(true);
         if (game.getTetris2() != null) {
@@ -183,14 +180,6 @@ public class TetrisGameController {
         tetrisService.saveGame(game);
         messagingTemplate.convertAndSend("/topic/tetris_game/" + game.getGameId(),
                 fromGameInfoToDto(game));
-    }
-
-    private TetrisGameInfo getGameFromSaved(Long id) {
-        return savedGames
-                .stream()
-                .filter(savedGame -> savedGame.getGameId().equals(id))
-                .findAny()
-                .orElseThrow(BadRequestException::new);
     }
 
     private boolean isActiveTetrisGame(TetrisLogic tetris) {

@@ -25,8 +25,6 @@ import ru.krey.games.utils.RoleUtils;
 @EnableWebSecurity(debug = false)
 @RequiredArgsConstructor
 public class SecurityConfig {
-
-
     private final UserDetailsService userService;
 
     private final JwtRequestFilter jwtRequestFilter;
@@ -60,11 +58,6 @@ public class SecurityConfig {
                 .hasAuthority(RoleUtils.ROLE_ADMIN)
                 .and()
                 .formLogin().disable()
-//                .logout()
-//                .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-//                .logoutSuccessUrl("/auth")
-//                .permitAll()
-//                .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
@@ -94,10 +87,5 @@ public class SecurityConfig {
 
     public WebSecurityCustomizer webSecurityCustomizer() {
         return (web) -> web.ignoring().antMatchers("/static/**", "/js/**", "/css/**", "/images/**", "/favicon.ico");
-    }
-
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
     }
 }

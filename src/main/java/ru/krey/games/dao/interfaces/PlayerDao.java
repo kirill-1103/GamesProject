@@ -34,4 +34,6 @@ public interface PlayerDao {
     void updateActive(Long id);
 
     List<Player> getActivePlayersByTimeDiff(int seconds);
+
+    List<Player> getPlayersByLoginOrEmail(String login, String email);
 }

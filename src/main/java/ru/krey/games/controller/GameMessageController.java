@@ -2,6 +2,7 @@ package ru.krey.games.controller;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.convert.ConversionService;
@@ -11,6 +12,7 @@ import ru.krey.games.dao.interfaces.GameMessageDao;
 import ru.krey.games.domain.GameMessage;
 import ru.krey.games.dto.GameMessageDto;
 import ru.krey.games.error.BadRequestException;
+import ru.krey.games.service.GameMessageService;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -22,22 +24,19 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("api/game_message")
 @RequiredArgsConstructor
+@Slf4j
 public class GameMessageController {
-
-    private final static Logger log = LoggerFactory.getLogger(GameMessageController.class);
-
     private final ConversionService conversionService;
 
     private final SimpMessagingTemplate messagingTemplate;
 
-    private final GameMessageDao messageDao;
-
+    private final GameMessageService gameMessageService;
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
 
     @GetMapping("/{game_id}/{game_code}")
     public List<GameMessageDto> getGameMessages(@PathVariable("game_id") @NonNull Long gameId,
                                                 @PathVariable("game_code") @NonNull Integer gameCode){
-        return messageDao.getAllByGameIdAndGameCode(gameId,gameCode)
+        return gameMessageService.getMessagesByGameIdAndCode(gameId,gameCode)
                 .stream()
                 .map(gameMessage->conversionService.convert(gameMessage,GameMessageDto.class))
                 .collect(Collectors.toList());
@@ -51,8 +50,9 @@ public class GameMessageController {
             throw new RuntimeException("Wrong GameMessage");
         }
         messageDto.setTime(LocalDateTime.now());
+
         executor.execute(()->{
-            messageDao.saveOrUpdate(conversionService.convert(messageDto, GameMessage.class));
+            gameMessageService.saveOrUpdate(conversionService.convert(messageDto, GameMessage.class));
         });
 
         messagingTemplate.convertAndSend(

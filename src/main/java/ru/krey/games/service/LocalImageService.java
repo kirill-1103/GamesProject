@@ -16,7 +16,9 @@ import ru.krey.games.service.interfaces.ImageService;
 import java.io.*;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Base64;
+import java.util.List;
 
 
 @Service
@@ -69,6 +71,27 @@ public class LocalImageService implements ImageService {
         return Base64.getEncoder().encodeToString(fileContent);
     }
 
+    @Override
+    public List<String> getImagesBase64(List<String> names) throws RuntimeException {
+        List<String> images = new ArrayList<>();
+        names.forEach((name) -> {
+            if (name == null || name.isBlank()) {
+                images.add(null);
+                return;
+            }
+            try {
+                images.add(getImageBase64(name));
+            } catch (IOException e) {
+                log.error(e.getMessage());
+                try {
+                    images.add(getImageBase64(env.getProperty("player.image.default")));
+                } catch (IOException ex) {
+                    throw new RuntimeException("Дефолтная картинка не найдена.", e);
+                }
+            }
+        });
+        return images;
+    }
 
     private File getUploadDir() throws IOException {
         String uploadPath = env.getProperty("player.image.upload.path");

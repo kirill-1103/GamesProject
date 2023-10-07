@@ -1,32 +1,34 @@
 package ru.krey.games.service;
 
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.core.convert.ConversionService;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
+import ru.krey.games.controller.TttMoveController;
 import ru.krey.games.dao.interfaces.PlayerDao;
 import ru.krey.games.dao.interfaces.TttGameDao;
 import ru.krey.games.dao.interfaces.TttMoveDao;
 import ru.krey.games.domain.Player;
 import ru.krey.games.domain.games.ttt.TttGame;
+import ru.krey.games.domain.games.ttt.TttMove;
+import ru.krey.games.dto.TttGameDto;
+import ru.krey.games.dto.TttMoveDto;
 import ru.krey.games.error.BadRequestException;
 import ru.krey.games.error.NotFoundException;
 import ru.krey.games.logic.ttt.TttField;
 import ru.krey.games.utils.GameUtils;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 import java.util.Random;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
 public class TttGameService {
     private final TttGameDao gameDao;
     private final PlayerDao playerDao;
+
+    private final TttMoveDao moveDao;
 
     public TttGame newGame(Long player1Id, Long player2Id,
                                Integer fieldSize, Long minutes,
@@ -89,4 +91,20 @@ public class TttGameService {
         }
     }
 
+    public Optional<TttGame> getCurrentGameByPlayerId(Long id){
+        return gameDao.getCurrentGameByPlayerId(id);
+    }
+
+    public Set<TttGame> getAllGamesByPlayerId(Long id){
+        return gameDao.getAllGamesWithPlayersByPlayerId(id);
+    }
+
+    public List<TttMoveDto> getGameMoves(Long gameId){
+        TttGame game = gameDao.getOneById(gameId).orElseThrow(NotFoundException::new);
+        return getGameMoves(game);
+    }
+
+    public List<TttMoveDto> getGameMoves(TttGame game){
+        return moveDao.getAllByGameIdOrderedByTime(game.getId());
+    }
 }

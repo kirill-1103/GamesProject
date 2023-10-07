@@ -86,6 +86,28 @@ public class TetrisGame implements Game {
         return RUSSIAN_NAME;
     }
 
+
+    @Override
+    public String getTextGameResultByPlayerId(Long playerId) {
+        if(this.winner != null && this.winner.getId().equals(playerId)){
+            return "Победа";
+        }else if(this.winner != null){
+            return "Поражение";
+        }
+        return "undefined";
+    }
+
+    @Override
+    public String getEntityNameByPlayerId(Long playerId) {
+        String entityName;
+        if(player1 != null && player1.getId().equals(playerId)){
+            entityName = player2 == null ? "---" : player2.getLogin();
+        }else{
+            entityName = player1 == null ? "---" : player1.getLogin();
+        }
+        return entityName;
+    }
+
     public boolean changeRating() {
         if (this.getPlayer2() != null && this.getWinner() != null) {
             this.getWinner().plusRating();

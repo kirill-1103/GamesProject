@@ -1,0 +1,79 @@
+2023-09-12 18:51:31,022 INFO [restartedMain] org.springframework.boot.StartupInfoLogger: Starting GamesApplication using Java 11.0.20.1 on kirill-ubuntu with PID 12609 (/home/kirill/projects/GamesProject/target/classes started by kirill in /home/kirill/projects/GamesProject)
+2023-09-12 18:51:31,024 DEBUG [restartedMain] org.springframework.boot.StartupInfoLogger: Running with Spring Boot v2.6.1, Spring v5.3.13
+2023-09-12 18:51:31,024 INFO [restartedMain] org.springframework.boot.SpringApplication: No active profile set, falling back to default profiles: default
+2023-09-12 18:51:31,048 INFO [restartedMain] org.springframework.boot.logging.DeferredLog: Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2023-09-12 18:51:31,048 INFO [restartedMain] org.springframework.boot.logging.DeferredLog: For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2023-09-12 18:51:31,404 INFO [restartedMain] org.springframework.data.repository.config.RepositoryConfigurationDelegate: Bootstrapping Spring Data JDBC repositories in DEFAULT mode.
+2023-09-12 18:51:31,413 INFO [restartedMain] org.springframework.data.repository.config.RepositoryConfigurationDelegate: Finished Spring Data repository scanning in 6 ms. Found 0 JDBC repository interfaces.
+2023-09-12 18:51:31,937 INFO [restartedMain] org.springframework.boot.web.embedded.tomcat.TomcatWebServer: Tomcat initialized with port(s): 8080 (http)
+2023-09-12 18:51:31,943 INFO [restartedMain] org.apache.juli.logging.DirectJDKLog: Initializing ProtocolHandler ["http-nio-8080"]
+2023-09-12 18:51:31,943 INFO [restartedMain] org.apache.juli.logging.DirectJDKLog: Starting service [Tomcat]
+2023-09-12 18:51:31,943 INFO [restartedMain] org.apache.juli.logging.DirectJDKLog: Starting Servlet engine: [Apache Tomcat/9.0.55]
+2023-09-12 18:51:31,974 INFO [restartedMain] org.apache.juli.logging.DirectJDKLog: Initializing Spring embedded WebApplicationContext
+2023-09-12 18:51:31,974 INFO [restartedMain] org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext: Root WebApplicationContext: initialization completed in 926 ms
+2023-09-12 18:51:32,027 DEBUG [restartedMain] org.springframework.web.filter.GenericFilterBean: Filter 'authenticationFilter' configured for use
+2023-09-12 18:51:32,139 INFO [restartedMain] org.springframework.security.web.DefaultSecurityFilterChain: Will secure any request with [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@4e5a3b23, org.springframework.security.web.context.SecurityContextPersistenceFilter@51f09eb2, org.springframework.security.web.header.HeaderWriterFilter@6f7cfcc6, org.springframework.security.web.authentication.logout.LogoutFilter@46db16d8, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter@740ba608, org.springframework.security.web.session.ConcurrentSessionFilter@2c94fa12, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@3f89a6fa, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@184d11d5, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@26ac3b0f, org.springframework.security.web.session.SessionManagementFilter@48abc3fc, org.springframework.security.web.access.ExceptionTranslationFilter@75c57f83, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@49543d59]
+2023-09-12 18:51:32,148 INFO [restartedMain] org.springframework.security.web.DefaultSecurityFilterChain: Will secure Ant [pattern='/static/**'] with []
+2023-09-12 18:51:32,148 INFO [restartedMain] org.springframework.security.web.DefaultSecurityFilterChain: Will secure Ant [pattern='/js/**'] with []
+2023-09-12 18:51:32,149 INFO [restartedMain] org.springframework.security.web.DefaultSecurityFilterChain: Will secure Ant [pattern='/css/**'] with []
+2023-09-12 18:51:32,149 INFO [restartedMain] org.springframework.security.web.DefaultSecurityFilterChain: Will secure Ant [pattern='/images/**'] with []
+2023-09-12 18:51:32,149 INFO [restartedMain] org.springframework.security.web.DefaultSecurityFilterChain: Will secure Ant [pattern='/favicon.ico'] with []
+2023-09-12 18:51:32,527 INFO [restartedMain] org.springframework.boot.devtools.autoconfigure.OptionalLiveReloadServer: LiveReload server is running on port 35729
+2023-09-12 18:51:32,536 INFO [restartedMain] org.apache.juli.logging.DirectJDKLog: Starting ProtocolHandler ["http-nio-8080"]
+2023-09-12 18:51:32,542 INFO [restartedMain] org.springframework.boot.web.embedded.tomcat.TomcatWebServer: Tomcat started on port(s): 8080 (http) with context path ''
+2023-09-12 18:51:32,543 INFO [restartedMain] org.springframework.core.log.CompositeLog: Starting...
+2023-09-12 18:51:32,543 INFO [restartedMain] org.springframework.core.log.CompositeLog: BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@4ec4b2fe]]
+2023-09-12 18:51:32,543 INFO [restartedMain] org.springframework.core.log.CompositeLog: Started.
+2023-09-12 18:51:32,552 INFO [restartedMain] org.springframework.boot.StartupInfoLogger: Started GamesApplication in 1.72 seconds (JVM running for 2.017)
+2023-09-12 18:52:10,993 INFO [http-nio-8080-exec-1] org.apache.juli.logging.DirectJDKLog: Initializing Spring DispatcherServlet 'dispatcherServlet'
+2023-09-12 18:52:10,994 INFO [http-nio-8080-exec-1] org.springframework.web.servlet.FrameworkServlet: Initializing Servlet 'dispatcherServlet'
+2023-09-12 18:52:10,995 INFO [http-nio-8080-exec-1] org.springframework.web.servlet.FrameworkServlet: Completed initialization in 1 ms
+2023-09-12 18:52:13,608 INFO [http-nio-8080-exec-5] ru.krey.games.handler.auth.AuthSuccessHandler: The user john has logged in.
+2023-09-12 18:52:13,641 INFO [http-nio-8080-exec-5] ru.krey.games.dao.PlayerJdbcTemplate: Update player: Player(id=6, login=john, email=john@mail.ru, password=$2a$10$Tt8kBKpE3vpOyjb5sqARXuJiqYBcDinWz3OhvYVcRr6r5NmnWyn22, signUpTime=2023-09-02T21:03:19.016701, lastSignInTime=2023-09-12T18:52:13.620660, rating=60, photo=img_2023_SEPTEMBER_2_21_3_19_john_6_john-wick-button-1596757485786.jpg, enabled=true, Role=USER, lastGameCode=2)
+2023-09-12 18:52:13,808 DEBUG [http-nio-8080-exec-1] ru.krey.games.handler.WebSocketEventHandler: WS Connected: (name:john, sessionId:14mwgejq)
+2023-09-12 18:52:15,140 DEBUG [http-nio-8080-exec-6] ru.krey.games.handler.WebSocketEventHandler: WS Disconnected: (name:john, sessionId:14mwgejq)
+2023-09-12 18:52:15,223 DEBUG [http-nio-8080-exec-7] ru.krey.games.handler.WebSocketEventHandler: WS Connected: (name:john, sessionId:nqvebxid)
+2023-09-12 18:52:16,341 DEBUG [http-nio-8080-exec-3] ru.krey.games.handler.WebSocketEventHandler: WS Disconnected: (name:john, sessionId:nqvebxid)
+2023-09-12 18:52:17,702 DEBUG [http-nio-8080-exec-1] ru.krey.games.handler.WebSocketEventHandler: WS Connected: (name:john, sessionId:udqpbseg)
+2023-09-12 18:52:18,470 DEBUG [http-nio-8080-exec-7] ru.krey.games.handler.WebSocketEventHandler: WS Disconnected: (name:john, sessionId:udqpbseg)
+2023-09-12 18:52:18,567 DEBUG [http-nio-8080-exec-1] ru.krey.games.handler.WebSocketEventHandler: WS Connected: (name:john, sessionId:s451z2uo)
+2023-09-12 18:52:19,289 DEBUG [http-nio-8080-exec-6] ru.krey.games.handler.WebSocketEventHandler: WS Disconnected: (name:john, sessionId:s451z2uo)
+2023-09-12 18:52:19,365 DEBUG [http-nio-8080-exec-7] ru.krey.games.handler.WebSocketEventHandler: WS Connected: (name:john, sessionId:ryp5vufz)
+2023-09-12 18:52:19,914 DEBUG [http-nio-8080-exec-3] ru.krey.games.handler.WebSocketEventHandler: WS Disconnected: (name:john, sessionId:ryp5vufz)
+2023-09-12 18:52:19,989 DEBUG [http-nio-8080-exec-4] ru.krey.games.handler.WebSocketEventHandler: WS Connected: (name:john, sessionId:okykfdr2)
+2023-09-12 18:52:23,128 DEBUG [http-nio-8080-exec-7] ru.krey.games.handler.WebSocketEventHandler: WS Disconnected: (name:john, sessionId:okykfdr2)
+2023-09-12 18:52:23,199 DEBUG [http-nio-8080-exec-3] ru.krey.games.handler.WebSocketEventHandler: WS Connected: (name:john, sessionId:flbngjoq)
+2023-09-12 18:52:24,569 DEBUG [http-nio-8080-exec-6] ru.krey.games.handler.WebSocketEventHandler: WS Disconnected: (name:john, sessionId:flbngjoq)
+2023-09-12 18:52:24,647 DEBUG [http-nio-8080-exec-6] ru.krey.games.handler.WebSocketEventHandler: WS Connected: (name:john, sessionId:hupvpslu)
+2023-09-12 18:52:25,194 DEBUG [http-nio-8080-exec-10] ru.krey.games.handler.WebSocketEventHandler: WS Disconnected: (name:john, sessionId:hupvpslu)
+2023-09-12 18:52:25,289 DEBUG [http-nio-8080-exec-1] ru.krey.games.handler.WebSocketEventHandler: WS Connected: (name:john, sessionId:hglyuk2k)
+2023-09-12 18:52:25,995 DEBUG [http-nio-8080-exec-8] ru.krey.games.handler.WebSocketEventHandler: WS Disconnected: (name:john, sessionId:hglyuk2k)
+2023-09-12 18:52:26,102 DEBUG [http-nio-8080-exec-8] ru.krey.games.handler.WebSocketEventHandler: WS Connected: (name:john, sessionId:qzswdqae)
+2023-09-12 18:52:31,177 DEBUG [http-nio-8080-exec-7] ru.krey.games.handler.WebSocketEventHandler: WS Disconnected: (name:john, sessionId:qzswdqae)
+2023-09-12 18:52:31,244 DEBUG [http-nio-8080-exec-9] ru.krey.games.handler.WebSocketEventHandler: WS Connected: (name:john, sessionId:235fsxbe)
+2023-09-12 18:52:32,278 INFO [MessageBroker-12] org.springframework.web.socket.config.WebSocketMessageBrokerStats: WebSocketSession[1 current WS(1)-HttpStream(0)-HttpPoll(0), 11 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(11)-CONNECTED(11)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 32, active threads = 0, queued tasks = 0, completed tasks = 96], outboundChannel[pool size = 21, active threads = 0, queued tasks = 0, completed tasks = 21], sockJsScheduler[pool size = 16, active threads = 1, queued tasks = 5, completed tasks = 3004]
+2023-09-12 18:52:39,010 DEBUG [http-nio-8080-exec-6] ru.krey.games.handler.WebSocketEventHandler: WS Disconnected: (name:john, sessionId:235fsxbe)
+2023-09-12 18:52:39,077 DEBUG [http-nio-8080-exec-9] ru.krey.games.handler.WebSocketEventHandler: WS Connected: (name:john, sessionId:vncdek1k)
+2023-09-12 18:52:39,972 DEBUG [http-nio-8080-exec-7] ru.krey.games.handler.WebSocketEventHandler: WS Disconnected: (name:john, sessionId:vncdek1k)
+2023-09-12 18:52:40,084 DEBUG [http-nio-8080-exec-7] ru.krey.games.handler.WebSocketEventHandler: WS Connected: (name:john, sessionId:jl3o0wde)
+2023-09-12 18:55:50,352 INFO [http-nio-8080-exec-7] org.apache.juli.logging.DirectJDKLog: Error parsing HTTP request header
+ Note: further occurrences of HTTP request parsing errors will be logged at DEBUG level.
+java.lang.IllegalArgumentException: Invalid character found in method name [0x160x030x010x020x000x010x000x010xfc0x030x030xb00x0e0xa1-l0xf8sH0x980xa70xaa1k0x910xbf0x1b0xe6m0xc30x0e0xd60x000x8150x1b>EKW0xbd ]. HTTP method names must be tokens
+	at org.apache.coyote.http11.Http11InputBuffer.parseRequestLine(Http11InputBuffer.java:419)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:269)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:65)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:895)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1722)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:49)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1191)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
+	at java.base/java.lang.Thread.run(Thread.java:829)
+2023-09-12 19:22:32,278 INFO [MessageBroker-5] org.springframework.web.socket.config.WebSocketMessageBrokerStats: WebSocketSession[1 current WS(1)-HttpStream(0)-HttpPoll(0), 13 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(13)-CONNECTED(13)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 114], outboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 25], sockJsScheduler[pool size = 16, active threads = 1, queued tasks = 5, completed tasks = 93796]
+2023-09-12 19:23:32,056 DEBUG [Catalina-utility-1] ru.krey.games.handler.WebSocketEventHandler: WS Disconnected: (name:john, sessionId:jl3o0wde)
+2023-09-12 19:52:32,278 INFO [MessageBroker-5] org.springframework.web.socket.config.WebSocketMessageBrokerStats: WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 13 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(13)-CONNECTED(13)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 117], outboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 26], sockJsScheduler[pool size = 16, active threads = 1, queued tasks = 4, completed tasks = 184520]
+2023-09-12 20:22:32,279 INFO [MessageBroker-1] org.springframework.web.socket.config.WebSocketMessageBrokerStats: WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 13 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(13)-CONNECTED(13)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 117], outboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 26], sockJsScheduler[pool size = 16, active threads = 1, queued tasks = 4, completed tasks = 275241]
+2023-09-12 20:52:32,279 INFO [MessageBroker-1] org.springframework.web.socket.config.WebSocketMessageBrokerStats: WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 13 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(13)-CONNECTED(13)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 117], outboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 26], sockJsScheduler[pool size = 16, active threads = 1, queued tasks = 4, completed tasks = 365962]
+2023-09-12 21:12:59,518 INFO [SpringApplicationShutdownHook] org.springframework.core.log.CompositeLog: Stopping...
+2023-09-12 21:12:59,519 INFO [SpringApplicationShutdownHook] org.springframework.core.log.CompositeLog: BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@4ec4b2fe]]
+2023-09-12 21:12:59,519 INFO [SpringApplicationShutdownHook] org.springframework.core.log.CompositeLog: Stopped.

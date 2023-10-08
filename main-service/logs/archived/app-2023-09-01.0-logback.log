@@ -1,0 +1,30 @@
+2023-09-01 22:07:52,303 INFO [restartedMain] org.springframework.boot.StartupInfoLogger: Starting GamesApplication using Java 11.0.20 on kirill-ubuntu with PID 14940 (/home/kirill/projects/GamesProject/target/classes started by kirill in /home/kirill/projects/GamesProject)
+2023-09-01 22:07:52,304 DEBUG [restartedMain] org.springframework.boot.StartupInfoLogger: Running with Spring Boot v2.6.1, Spring v5.3.13
+2023-09-01 22:07:52,304 INFO [restartedMain] org.springframework.boot.SpringApplication: No active profile set, falling back to default profiles: default
+2023-09-01 22:07:52,322 INFO [restartedMain] org.springframework.boot.logging.DeferredLog: Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2023-09-01 22:07:52,323 INFO [restartedMain] org.springframework.boot.logging.DeferredLog: For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2023-09-01 22:07:52,640 INFO [restartedMain] org.springframework.data.repository.config.RepositoryConfigurationDelegate: Bootstrapping Spring Data JDBC repositories in DEFAULT mode.
+2023-09-01 22:07:52,647 INFO [restartedMain] org.springframework.data.repository.config.RepositoryConfigurationDelegate: Finished Spring Data repository scanning in 5 ms. Found 0 JDBC repository interfaces.
+2023-09-01 22:07:53,036 INFO [restartedMain] org.springframework.boot.web.embedded.tomcat.TomcatWebServer: Tomcat initialized with port(s): 8080 (http)
+2023-09-01 22:07:53,040 INFO [restartedMain] org.apache.juli.logging.DirectJDKLog: Initializing ProtocolHandler ["http-nio-8080"]
+2023-09-01 22:07:53,040 INFO [restartedMain] org.apache.juli.logging.DirectJDKLog: Starting service [Tomcat]
+2023-09-01 22:07:53,040 INFO [restartedMain] org.apache.juli.logging.DirectJDKLog: Starting Servlet engine: [Apache Tomcat/9.0.55]
+2023-09-01 22:07:53,062 INFO [restartedMain] org.apache.juli.logging.DirectJDKLog: Initializing Spring embedded WebApplicationContext
+2023-09-01 22:07:53,063 INFO [restartedMain] org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext: Root WebApplicationContext: initialization completed in 740 ms
+2023-09-01 22:07:53,106 DEBUG [restartedMain] org.springframework.web.filter.GenericFilterBean: Filter 'authenticationFilter' configured for use
+2023-09-01 22:07:53,209 INFO [restartedMain] org.springframework.security.web.DefaultSecurityFilterChain: Will secure any request with [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@4ce9d448, org.springframework.security.web.context.SecurityContextPersistenceFilter@56895781, org.springframework.security.web.header.HeaderWriterFilter@4d517872, org.springframework.security.web.authentication.logout.LogoutFilter@719ea917, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter@68417781, org.springframework.security.web.session.ConcurrentSessionFilter@7b750bbf, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@37c19ac5, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@264189da, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@7fc95459, org.springframework.security.web.session.SessionManagementFilter@4fd68f22, org.springframework.security.web.access.ExceptionTranslationFilter@7514de86, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@6a30aeb2]
+2023-09-01 22:07:53,216 INFO [restartedMain] org.springframework.security.web.DefaultSecurityFilterChain: Will secure Ant [pattern='/static/**'] with []
+2023-09-01 22:07:53,216 INFO [restartedMain] org.springframework.security.web.DefaultSecurityFilterChain: Will secure Ant [pattern='/js/**'] with []
+2023-09-01 22:07:53,216 INFO [restartedMain] org.springframework.security.web.DefaultSecurityFilterChain: Will secure Ant [pattern='/css/**'] with []
+2023-09-01 22:07:53,217 INFO [restartedMain] org.springframework.security.web.DefaultSecurityFilterChain: Will secure Ant [pattern='/images/**'] with []
+2023-09-01 22:07:53,217 INFO [restartedMain] org.springframework.security.web.DefaultSecurityFilterChain: Will secure Ant [pattern='/favicon.ico'] with []
+2023-09-01 22:07:53,641 INFO [restartedMain] org.springframework.boot.devtools.autoconfigure.OptionalLiveReloadServer: LiveReload server is running on port 35729
+2023-09-01 22:07:53,651 INFO [restartedMain] org.apache.juli.logging.DirectJDKLog: Starting ProtocolHandler ["http-nio-8080"]
+2023-09-01 22:07:53,657 INFO [restartedMain] org.springframework.boot.web.embedded.tomcat.TomcatWebServer: Tomcat started on port(s): 8080 (http) with context path ''
+2023-09-01 22:07:53,658 INFO [restartedMain] org.springframework.core.log.CompositeLog: Starting...
+2023-09-01 22:07:53,658 INFO [restartedMain] org.springframework.core.log.CompositeLog: BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@431406d0]]
+2023-09-01 22:07:53,658 INFO [restartedMain] org.springframework.core.log.CompositeLog: Started.
+2023-09-01 22:07:53,666 INFO [restartedMain] org.springframework.boot.StartupInfoLogger: Started GamesApplication in 1.525 seconds (JVM running for 1.87)
+2023-09-01 22:08:15,267 INFO [SpringApplicationShutdownHook] org.springframework.core.log.CompositeLog: Stopping...
+2023-09-01 22:08:15,268 INFO [SpringApplicationShutdownHook] org.springframework.core.log.CompositeLog: BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@431406d0]]
+2023-09-01 22:08:15,268 INFO [SpringApplicationShutdownHook] org.springframework.core.log.CompositeLog: Stopped.

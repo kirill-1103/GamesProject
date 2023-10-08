@@ -1,0 +1,381 @@
+2023-10-07 13:35:54,673 INFO [restartedMain] org.springframework.boot.StartupInfoLogger: Starting GamesApplication using Java 11.0.20.1 on kirill-ubuntu with PID 5987 (/home/kirill/projects/GamesProject/target/classes started by kirill in /home/kirill/projects/GamesProject)
+2023-10-07 13:35:54,675 DEBUG [restartedMain] org.springframework.boot.StartupInfoLogger: Running with Spring Boot v2.7.14, Spring v5.3.29
+2023-10-07 13:35:54,676 INFO [restartedMain] org.springframework.boot.SpringApplication: No active profile set, falling back to 1 default profile: "default"
+2023-10-07 13:35:54,715 INFO [restartedMain] org.springframework.boot.logging.DeferredLog: Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2023-10-07 13:35:54,716 INFO [restartedMain] org.springframework.boot.logging.DeferredLog: For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2023-10-07 13:35:55,137 INFO [restartedMain] org.springframework.data.repository.config.RepositoryConfigurationDelegate: Bootstrapping Spring Data JDBC repositories in DEFAULT mode.
+2023-10-07 13:35:55,149 INFO [restartedMain] org.springframework.data.repository.config.RepositoryConfigurationDelegate: Finished Spring Data repository scanning in 8 ms. Found 0 JDBC repository interfaces.
+2023-10-07 13:35:55,942 INFO [restartedMain] org.springframework.boot.web.embedded.tomcat.TomcatWebServer: Tomcat initialized with port(s): 8080 (http)
+2023-10-07 13:35:55,947 INFO [restartedMain] org.apache.juli.logging.DirectJDKLog: Initializing ProtocolHandler ["http-nio-8080"]
+2023-10-07 13:35:55,949 INFO [restartedMain] org.apache.juli.logging.DirectJDKLog: Starting service [Tomcat]
+2023-10-07 13:35:55,949 INFO [restartedMain] org.apache.juli.logging.DirectJDKLog: Starting Servlet engine: [Apache Tomcat/9.0.78]
+2023-10-07 13:35:56,004 INFO [restartedMain] org.apache.juli.logging.DirectJDKLog: Initializing Spring embedded WebApplicationContext
+2023-10-07 13:35:56,004 INFO [restartedMain] org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext: Root WebApplicationContext: initialization completed in 1288 ms
+2023-10-07 13:35:56,044 DEBUG [restartedMain] org.springframework.web.filter.GenericFilterBean: Filter 'jwtRequestFilter' configured for use
+2023-10-07 13:35:56,394 INFO [restartedMain] org.springframework.security.web.DefaultSecurityFilterChain: Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@77c97241, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@55cb546c, org.springframework.security.web.context.SecurityContextPersistenceFilter@714d1f68, org.springframework.security.web.header.HeaderWriterFilter@46625aa3, org.springframework.security.web.authentication.logout.LogoutFilter@5efc5f2f, ru.krey.games.config.security.JwtRequestFilter@1e16c493, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@30eb15b7, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@65d6572c, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@ff8dc8d, org.springframework.security.web.session.SessionManagementFilter@257f5ad1, org.springframework.security.web.access.ExceptionTranslationFilter@7de2d4df, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@7b7823f]
+2023-10-07 13:35:56,396 WARN [restartedMain] org.springframework.security.config.annotation.web.builders.WebSecurity: You are asking Spring Security to ignore Ant [pattern='/static/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2023-10-07 13:35:56,396 INFO [restartedMain] org.springframework.security.web.DefaultSecurityFilterChain: Will not secure Ant [pattern='/static/**']
+2023-10-07 13:35:56,396 WARN [restartedMain] org.springframework.security.config.annotation.web.builders.WebSecurity: You are asking Spring Security to ignore Ant [pattern='/js/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2023-10-07 13:35:56,397 INFO [restartedMain] org.springframework.security.web.DefaultSecurityFilterChain: Will not secure Ant [pattern='/js/**']
+2023-10-07 13:35:56,397 WARN [restartedMain] org.springframework.security.config.annotation.web.builders.WebSecurity: You are asking Spring Security to ignore Ant [pattern='/css/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2023-10-07 13:35:56,397 INFO [restartedMain] org.springframework.security.web.DefaultSecurityFilterChain: Will not secure Ant [pattern='/css/**']
+2023-10-07 13:35:56,397 WARN [restartedMain] org.springframework.security.config.annotation.web.builders.WebSecurity: You are asking Spring Security to ignore Ant [pattern='/images/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2023-10-07 13:35:56,397 INFO [restartedMain] org.springframework.security.web.DefaultSecurityFilterChain: Will not secure Ant [pattern='/images/**']
+2023-10-07 13:35:56,397 WARN [restartedMain] org.springframework.security.config.annotation.web.builders.WebSecurity: You are asking Spring Security to ignore Ant [pattern='/favicon.ico']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2023-10-07 13:35:56,397 INFO [restartedMain] org.springframework.security.web.DefaultSecurityFilterChain: Will not secure Ant [pattern='/favicon.ico']
+2023-10-07 13:35:56,631 INFO [restartedMain] org.springframework.boot.devtools.autoconfigure.OptionalLiveReloadServer: LiveReload server is running on port 35729
+2023-10-07 13:35:56,639 INFO [restartedMain] org.apache.juli.logging.DirectJDKLog: Starting ProtocolHandler ["http-nio-8080"]
+2023-10-07 13:35:56,646 INFO [restartedMain] org.springframework.boot.web.embedded.tomcat.TomcatWebServer: Tomcat started on port(s): 8080 (http) with context path ''
+2023-10-07 13:35:56,648 INFO [restartedMain] org.springframework.core.log.CompositeLog: Starting...
+2023-10-07 13:35:56,648 INFO [restartedMain] org.springframework.core.log.CompositeLog: BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@1ebebdc3]]
+2023-10-07 13:35:56,648 INFO [restartedMain] org.springframework.core.log.CompositeLog: Started.
+2023-10-07 13:35:56,656 INFO [restartedMain] org.springframework.boot.StartupInfoLogger: Started GamesApplication in 2.221 seconds (JVM running for 2.608)
+2023-10-07 13:36:05,308 INFO [http-nio-8080-exec-1] org.apache.juli.logging.DirectJDKLog: Initializing Spring DispatcherServlet 'dispatcherServlet'
+2023-10-07 13:36:05,308 INFO [http-nio-8080-exec-1] org.springframework.web.servlet.FrameworkServlet: Initializing Servlet 'dispatcherServlet'
+2023-10-07 13:36:05,309 INFO [http-nio-8080-exec-1] org.springframework.web.servlet.FrameworkServlet: Completed initialization in 0 ms
+2023-10-07 13:36:25,224 WARN [http-nio-8080-exec-10] org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder: Empty encoded password
+2023-10-07 13:36:56,295 INFO [MessageBroker-7] org.springframework.web.socket.config.WebSocketMessageBrokerStats: WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 0 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(0)-CONNECTED(0)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], outboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], sockJsScheduler[pool size = 16, active threads = 1, queued tasks = 3, completed tasks = 2995]
+2023-10-07 13:37:04,313 INFO [SpringApplicationShutdownHook] org.springframework.core.log.CompositeLog: Stopping...
+2023-10-07 13:37:04,313 INFO [SpringApplicationShutdownHook] org.springframework.core.log.CompositeLog: BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@1ebebdc3]]
+2023-10-07 13:37:04,313 INFO [SpringApplicationShutdownHook] org.springframework.core.log.CompositeLog: Stopped.
+2023-10-07 13:37:06,240 INFO [restartedMain] org.springframework.boot.StartupInfoLogger: Starting GamesApplication using Java 11.0.20.1 on kirill-ubuntu with PID 6285 (/home/kirill/projects/GamesProject/target/classes started by kirill in /home/kirill/projects/GamesProject)
+2023-10-07 13:37:06,241 DEBUG [restartedMain] org.springframework.boot.StartupInfoLogger: Running with Spring Boot v2.7.14, Spring v5.3.29
+2023-10-07 13:37:06,242 INFO [restartedMain] org.springframework.boot.SpringApplication: No active profile set, falling back to 1 default profile: "default"
+2023-10-07 13:37:06,270 INFO [restartedMain] org.springframework.boot.logging.DeferredLog: Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2023-10-07 13:37:06,271 INFO [restartedMain] org.springframework.boot.logging.DeferredLog: For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2023-10-07 13:37:06,641 INFO [restartedMain] org.springframework.data.repository.config.RepositoryConfigurationDelegate: Bootstrapping Spring Data JDBC repositories in DEFAULT mode.
+2023-10-07 13:37:06,650 INFO [restartedMain] org.springframework.data.repository.config.RepositoryConfigurationDelegate: Finished Spring Data repository scanning in 6 ms. Found 0 JDBC repository interfaces.
+2023-10-07 13:37:07,163 INFO [restartedMain] org.springframework.boot.web.embedded.tomcat.TomcatWebServer: Tomcat initialized with port(s): 8080 (http)
+2023-10-07 13:37:07,168 INFO [restartedMain] org.apache.juli.logging.DirectJDKLog: Initializing ProtocolHandler ["http-nio-8080"]
+2023-10-07 13:37:07,169 INFO [restartedMain] org.apache.juli.logging.DirectJDKLog: Starting service [Tomcat]
+2023-10-07 13:37:07,169 INFO [restartedMain] org.apache.juli.logging.DirectJDKLog: Starting Servlet engine: [Apache Tomcat/9.0.78]
+2023-10-07 13:37:07,199 INFO [restartedMain] org.apache.juli.logging.DirectJDKLog: Initializing Spring embedded WebApplicationContext
+2023-10-07 13:37:07,199 INFO [restartedMain] org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext: Root WebApplicationContext: initialization completed in 928 ms
+2023-10-07 13:37:07,225 DEBUG [restartedMain] org.springframework.web.filter.GenericFilterBean: Filter 'jwtRequestFilter' configured for use
+2023-10-07 13:37:07,539 INFO [restartedMain] org.springframework.security.web.DefaultSecurityFilterChain: Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@6fee0389, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@7be9504e, org.springframework.security.web.context.SecurityContextPersistenceFilter@56a6a63a, org.springframework.security.web.header.HeaderWriterFilter@ea9bead, org.springframework.security.web.authentication.logout.LogoutFilter@4e6cd306, ru.krey.games.config.security.JwtRequestFilter@f7b3368, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@58705125, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@1454b74e, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@77e13f6d, org.springframework.security.web.session.SessionManagementFilter@5b44c5ed, org.springframework.security.web.access.ExceptionTranslationFilter@29c93f5c, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@11bae4fc]
+2023-10-07 13:37:07,541 WARN [restartedMain] org.springframework.security.config.annotation.web.builders.WebSecurity: You are asking Spring Security to ignore Ant [pattern='/static/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2023-10-07 13:37:07,541 INFO [restartedMain] org.springframework.security.web.DefaultSecurityFilterChain: Will not secure Ant [pattern='/static/**']
+2023-10-07 13:37:07,542 WARN [restartedMain] org.springframework.security.config.annotation.web.builders.WebSecurity: You are asking Spring Security to ignore Ant [pattern='/js/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2023-10-07 13:37:07,542 INFO [restartedMain] org.springframework.security.web.DefaultSecurityFilterChain: Will not secure Ant [pattern='/js/**']
+2023-10-07 13:37:07,542 WARN [restartedMain] org.springframework.security.config.annotation.web.builders.WebSecurity: You are asking Spring Security to ignore Ant [pattern='/css/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2023-10-07 13:37:07,542 INFO [restartedMain] org.springframework.security.web.DefaultSecurityFilterChain: Will not secure Ant [pattern='/css/**']
+2023-10-07 13:37:07,542 WARN [restartedMain] org.springframework.security.config.annotation.web.builders.WebSecurity: You are asking Spring Security to ignore Ant [pattern='/images/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2023-10-07 13:37:07,542 INFO [restartedMain] org.springframework.security.web.DefaultSecurityFilterChain: Will not secure Ant [pattern='/images/**']
+2023-10-07 13:37:07,542 WARN [restartedMain] org.springframework.security.config.annotation.web.builders.WebSecurity: You are asking Spring Security to ignore Ant [pattern='/favicon.ico']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2023-10-07 13:37:07,542 INFO [restartedMain] org.springframework.security.web.DefaultSecurityFilterChain: Will not secure Ant [pattern='/favicon.ico']
+2023-10-07 13:37:07,777 INFO [restartedMain] org.springframework.boot.devtools.autoconfigure.OptionalLiveReloadServer: LiveReload server is running on port 35729
+2023-10-07 13:37:07,786 INFO [restartedMain] org.apache.juli.logging.DirectJDKLog: Starting ProtocolHandler ["http-nio-8080"]
+2023-10-07 13:37:07,794 INFO [restartedMain] org.springframework.boot.web.embedded.tomcat.TomcatWebServer: Tomcat started on port(s): 8080 (http) with context path ''
+2023-10-07 13:37:07,795 INFO [restartedMain] org.springframework.core.log.CompositeLog: Starting...
+2023-10-07 13:37:07,795 INFO [restartedMain] org.springframework.core.log.CompositeLog: BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@54d0967f]]
+2023-10-07 13:37:07,796 INFO [restartedMain] org.springframework.core.log.CompositeLog: Started.
+2023-10-07 13:37:07,806 INFO [restartedMain] org.springframework.boot.StartupInfoLogger: Started GamesApplication in 1.777 seconds (JVM running for 2.116)
+2023-10-07 13:37:09,564 INFO [http-nio-8080-exec-1] org.apache.juli.logging.DirectJDKLog: Initializing Spring DispatcherServlet 'dispatcherServlet'
+2023-10-07 13:37:09,564 INFO [http-nio-8080-exec-1] org.springframework.web.servlet.FrameworkServlet: Initializing Servlet 'dispatcherServlet'
+2023-10-07 13:37:09,565 INFO [http-nio-8080-exec-1] org.springframework.web.servlet.FrameworkServlet: Completed initialization in 0 ms
+2023-10-07 13:37:11,783 WARN [http-nio-8080-exec-4] org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder: Empty encoded password
+2023-10-07 13:37:13,682 WARN [http-nio-8080-exec-5] org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder: Empty encoded password
+2023-10-07 13:37:14,493 WARN [http-nio-8080-exec-6] org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder: Empty encoded password
+2023-10-07 13:37:14,748 WARN [http-nio-8080-exec-7] org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder: Empty encoded password
+2023-10-07 13:37:14,923 WARN [http-nio-8080-exec-8] org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder: Empty encoded password
+2023-10-07 13:37:15,100 WARN [http-nio-8080-exec-9] org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder: Empty encoded password
+2023-10-07 13:37:15,357 WARN [http-nio-8080-exec-10] org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder: Empty encoded password
+2023-10-07 13:37:15,550 WARN [http-nio-8080-exec-1] org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder: Empty encoded password
+2023-10-07 13:37:15,717 WARN [http-nio-8080-exec-3] org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder: Empty encoded password
+2023-10-07 13:37:15,893 WARN [http-nio-8080-exec-2] org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder: Empty encoded password
+2023-10-07 13:38:07,449 INFO [MessageBroker-13] org.springframework.web.socket.config.WebSocketMessageBrokerStats: WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 0 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(0)-CONNECTED(0)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], outboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], sockJsScheduler[pool size = 16, active threads = 1, queued tasks = 3, completed tasks = 2995]
+2023-10-07 13:39:09,083 INFO [SpringApplicationShutdownHook] org.springframework.core.log.CompositeLog: Stopping...
+2023-10-07 13:39:09,083 INFO [SpringApplicationShutdownHook] org.springframework.core.log.CompositeLog: BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@54d0967f]]
+2023-10-07 13:39:09,083 INFO [SpringApplicationShutdownHook] org.springframework.core.log.CompositeLog: Stopped.
+2023-10-07 13:39:11,290 INFO [restartedMain] org.springframework.boot.StartupInfoLogger: Starting GamesApplication using Java 11.0.20.1 on kirill-ubuntu with PID 6557 (/home/kirill/projects/GamesProject/target/classes started by kirill in /home/kirill/projects/GamesProject)
+2023-10-07 13:39:11,292 DEBUG [restartedMain] org.springframework.boot.StartupInfoLogger: Running with Spring Boot v2.7.14, Spring v5.3.29
+2023-10-07 13:39:11,292 INFO [restartedMain] org.springframework.boot.SpringApplication: No active profile set, falling back to 1 default profile: "default"
+2023-10-07 13:39:11,320 INFO [restartedMain] org.springframework.boot.logging.DeferredLog: Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2023-10-07 13:39:11,321 INFO [restartedMain] org.springframework.boot.logging.DeferredLog: For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2023-10-07 13:39:11,737 INFO [restartedMain] org.springframework.data.repository.config.RepositoryConfigurationDelegate: Bootstrapping Spring Data JDBC repositories in DEFAULT mode.
+2023-10-07 13:39:11,749 INFO [restartedMain] org.springframework.data.repository.config.RepositoryConfigurationDelegate: Finished Spring Data repository scanning in 8 ms. Found 0 JDBC repository interfaces.
+2023-10-07 13:39:12,321 INFO [restartedMain] org.springframework.boot.web.embedded.tomcat.TomcatWebServer: Tomcat initialized with port(s): 8080 (http)
+2023-10-07 13:39:12,328 INFO [restartedMain] org.apache.juli.logging.DirectJDKLog: Initializing ProtocolHandler ["http-nio-8080"]
+2023-10-07 13:39:12,330 INFO [restartedMain] org.apache.juli.logging.DirectJDKLog: Starting service [Tomcat]
+2023-10-07 13:39:12,330 INFO [restartedMain] org.apache.juli.logging.DirectJDKLog: Starting Servlet engine: [Apache Tomcat/9.0.78]
+2023-10-07 13:39:12,361 INFO [restartedMain] org.apache.juli.logging.DirectJDKLog: Initializing Spring embedded WebApplicationContext
+2023-10-07 13:39:12,361 INFO [restartedMain] org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext: Root WebApplicationContext: initialization completed in 1040 ms
+2023-10-07 13:39:12,390 DEBUG [restartedMain] org.springframework.web.filter.GenericFilterBean: Filter 'jwtRequestFilter' configured for use
+2023-10-07 13:39:12,780 INFO [restartedMain] org.springframework.security.web.DefaultSecurityFilterChain: Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@2c2dcc0b, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@4c2557a4, org.springframework.security.web.context.SecurityContextPersistenceFilter@4b43ff3a, org.springframework.security.web.header.HeaderWriterFilter@c0f4d7e, org.springframework.security.web.authentication.logout.LogoutFilter@35b9e874, ru.krey.games.config.security.JwtRequestFilter@1801bda0, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@717b1a6b, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@3854ad6d, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@40a89698, org.springframework.security.web.session.SessionManagementFilter@ae3257b, org.springframework.security.web.access.ExceptionTranslationFilter@519d9d93, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@60cf50a1]
+2023-10-07 13:39:12,783 WARN [restartedMain] org.springframework.security.config.annotation.web.builders.WebSecurity: You are asking Spring Security to ignore Ant [pattern='/static/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2023-10-07 13:39:12,783 INFO [restartedMain] org.springframework.security.web.DefaultSecurityFilterChain: Will not secure Ant [pattern='/static/**']
+2023-10-07 13:39:12,784 WARN [restartedMain] org.springframework.security.config.annotation.web.builders.WebSecurity: You are asking Spring Security to ignore Ant [pattern='/js/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2023-10-07 13:39:12,784 INFO [restartedMain] org.springframework.security.web.DefaultSecurityFilterChain: Will not secure Ant [pattern='/js/**']
+2023-10-07 13:39:12,784 WARN [restartedMain] org.springframework.security.config.annotation.web.builders.WebSecurity: You are asking Spring Security to ignore Ant [pattern='/css/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2023-10-07 13:39:12,784 INFO [restartedMain] org.springframework.security.web.DefaultSecurityFilterChain: Will not secure Ant [pattern='/css/**']
+2023-10-07 13:39:12,784 WARN [restartedMain] org.springframework.security.config.annotation.web.builders.WebSecurity: You are asking Spring Security to ignore Ant [pattern='/images/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2023-10-07 13:39:12,784 INFO [restartedMain] org.springframework.security.web.DefaultSecurityFilterChain: Will not secure Ant [pattern='/images/**']
+2023-10-07 13:39:12,784 WARN [restartedMain] org.springframework.security.config.annotation.web.builders.WebSecurity: You are asking Spring Security to ignore Ant [pattern='/favicon.ico']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2023-10-07 13:39:12,784 INFO [restartedMain] org.springframework.security.web.DefaultSecurityFilterChain: Will not secure Ant [pattern='/favicon.ico']
+2023-10-07 13:39:13,045 INFO [restartedMain] org.springframework.boot.devtools.autoconfigure.OptionalLiveReloadServer: LiveReload server is running on port 35729
+2023-10-07 13:39:13,059 INFO [restartedMain] org.apache.juli.logging.DirectJDKLog: Starting ProtocolHandler ["http-nio-8080"]
+2023-10-07 13:39:13,071 INFO [restartedMain] org.springframework.boot.web.embedded.tomcat.TomcatWebServer: Tomcat started on port(s): 8080 (http) with context path ''
+2023-10-07 13:39:13,073 INFO [restartedMain] org.springframework.core.log.CompositeLog: Starting...
+2023-10-07 13:39:13,074 INFO [restartedMain] org.springframework.core.log.CompositeLog: BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@2665654b]]
+2023-10-07 13:39:13,074 INFO [restartedMain] org.springframework.core.log.CompositeLog: Started.
+2023-10-07 13:39:13,089 INFO [restartedMain] org.springframework.boot.StartupInfoLogger: Started GamesApplication in 2.027 seconds (JVM running for 2.59)
+2023-10-07 13:39:14,392 INFO [http-nio-8080-exec-1] org.apache.juli.logging.DirectJDKLog: Initializing Spring DispatcherServlet 'dispatcherServlet'
+2023-10-07 13:39:14,393 INFO [http-nio-8080-exec-1] org.springframework.web.servlet.FrameworkServlet: Initializing Servlet 'dispatcherServlet'
+2023-10-07 13:39:14,393 INFO [http-nio-8080-exec-1] org.springframework.web.servlet.FrameworkServlet: Completed initialization in 0 ms
+2023-10-07 13:45:37,227 INFO [MessageBroker-3] org.springframework.web.socket.config.WebSocketMessageBrokerStats: WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 0 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(0)-CONNECTED(0)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], outboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], sockJsScheduler[pool size = 16, active threads = 4, queued tasks = 0, completed tasks = 79]
+2023-10-07 13:48:14,875 WARN [http-nio-8080-exec-1] org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder: Empty encoded password
+2023-10-07 13:48:14,889 INFO [SpringApplicationShutdownHook] org.springframework.core.log.CompositeLog: Stopping...
+2023-10-07 13:48:14,889 INFO [SpringApplicationShutdownHook] org.springframework.core.log.CompositeLog: BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@2665654b]]
+2023-10-07 13:48:14,889 INFO [SpringApplicationShutdownHook] org.springframework.core.log.CompositeLog: Stopped.
+2023-10-07 13:53:04,416 INFO [restartedMain] org.springframework.boot.StartupInfoLogger: Starting GamesApplication using Java 11.0.20.1 on kirill-ubuntu with PID 7555 (/home/kirill/projects/GamesProject/target/classes started by kirill in /home/kirill/projects/GamesProject)
+2023-10-07 13:53:04,418 DEBUG [restartedMain] org.springframework.boot.StartupInfoLogger: Running with Spring Boot v2.7.14, Spring v5.3.29
+2023-10-07 13:53:04,418 INFO [restartedMain] org.springframework.boot.SpringApplication: No active profile set, falling back to 1 default profile: "default"
+2023-10-07 13:53:04,448 INFO [restartedMain] org.springframework.boot.logging.DeferredLog: Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2023-10-07 13:53:04,449 INFO [restartedMain] org.springframework.boot.logging.DeferredLog: For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2023-10-07 13:53:04,794 INFO [restartedMain] org.springframework.data.repository.config.RepositoryConfigurationDelegate: Bootstrapping Spring Data JDBC repositories in DEFAULT mode.
+2023-10-07 13:53:04,802 INFO [restartedMain] org.springframework.data.repository.config.RepositoryConfigurationDelegate: Finished Spring Data repository scanning in 5 ms. Found 0 JDBC repository interfaces.
+2023-10-07 13:53:05,294 INFO [restartedMain] org.springframework.boot.web.embedded.tomcat.TomcatWebServer: Tomcat initialized with port(s): 8080 (http)
+2023-10-07 13:53:05,298 INFO [restartedMain] org.apache.juli.logging.DirectJDKLog: Initializing ProtocolHandler ["http-nio-8080"]
+2023-10-07 13:53:05,300 INFO [restartedMain] org.apache.juli.logging.DirectJDKLog: Starting service [Tomcat]
+2023-10-07 13:53:05,300 INFO [restartedMain] org.apache.juli.logging.DirectJDKLog: Starting Servlet engine: [Apache Tomcat/9.0.78]
+2023-10-07 13:53:05,332 INFO [restartedMain] org.apache.juli.logging.DirectJDKLog: Initializing Spring embedded WebApplicationContext
+2023-10-07 13:53:05,332 INFO [restartedMain] org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext: Root WebApplicationContext: initialization completed in 883 ms
+2023-10-07 13:53:05,359 DEBUG [restartedMain] org.springframework.web.filter.GenericFilterBean: Filter 'jwtRequestFilter' configured for use
+2023-10-07 13:53:05,670 INFO [restartedMain] org.springframework.security.web.DefaultSecurityFilterChain: Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@55cb546c, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@ff8dc8d, org.springframework.security.web.context.SecurityContextPersistenceFilter@2e3b6a42, org.springframework.security.web.header.HeaderWriterFilter@4ed02bf8, org.springframework.security.web.authentication.logout.LogoutFilter@46895f98, ru.krey.games.config.security.JwtRequestFilter@1a7e68d5, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@65d6572c, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@7c79b2a1, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@77df6817, org.springframework.security.web.session.SessionManagementFilter@6aee9416, org.springframework.security.web.access.ExceptionTranslationFilter@4f974fc, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@5247c724]
+2023-10-07 13:53:05,672 WARN [restartedMain] org.springframework.security.config.annotation.web.builders.WebSecurity: You are asking Spring Security to ignore Ant [pattern='/static/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2023-10-07 13:53:05,673 INFO [restartedMain] org.springframework.security.web.DefaultSecurityFilterChain: Will not secure Ant [pattern='/static/**']
+2023-10-07 13:53:05,673 WARN [restartedMain] org.springframework.security.config.annotation.web.builders.WebSecurity: You are asking Spring Security to ignore Ant [pattern='/js/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2023-10-07 13:53:05,673 INFO [restartedMain] org.springframework.security.web.DefaultSecurityFilterChain: Will not secure Ant [pattern='/js/**']
+2023-10-07 13:53:05,673 WARN [restartedMain] org.springframework.security.config.annotation.web.builders.WebSecurity: You are asking Spring Security to ignore Ant [pattern='/css/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2023-10-07 13:53:05,673 INFO [restartedMain] org.springframework.security.web.DefaultSecurityFilterChain: Will not secure Ant [pattern='/css/**']
+2023-10-07 13:53:05,673 WARN [restartedMain] org.springframework.security.config.annotation.web.builders.WebSecurity: You are asking Spring Security to ignore Ant [pattern='/images/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2023-10-07 13:53:05,673 INFO [restartedMain] org.springframework.security.web.DefaultSecurityFilterChain: Will not secure Ant [pattern='/images/**']
+2023-10-07 13:53:05,673 WARN [restartedMain] org.springframework.security.config.annotation.web.builders.WebSecurity: You are asking Spring Security to ignore Ant [pattern='/favicon.ico']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2023-10-07 13:53:05,673 INFO [restartedMain] org.springframework.security.web.DefaultSecurityFilterChain: Will not secure Ant [pattern='/favicon.ico']
+2023-10-07 13:53:05,937 INFO [restartedMain] org.springframework.boot.devtools.autoconfigure.OptionalLiveReloadServer: LiveReload server is running on port 35729
+2023-10-07 13:53:05,945 INFO [restartedMain] org.apache.juli.logging.DirectJDKLog: Starting ProtocolHandler ["http-nio-8080"]
+2023-10-07 13:53:05,952 INFO [restartedMain] org.springframework.boot.web.embedded.tomcat.TomcatWebServer: Tomcat started on port(s): 8080 (http) with context path ''
+2023-10-07 13:53:05,954 INFO [restartedMain] org.springframework.core.log.CompositeLog: Starting...
+2023-10-07 13:53:05,954 INFO [restartedMain] org.springframework.core.log.CompositeLog: BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@20facfa9]]
+2023-10-07 13:53:05,954 INFO [restartedMain] org.springframework.core.log.CompositeLog: Started.
+2023-10-07 13:53:05,964 INFO [restartedMain] org.springframework.boot.StartupInfoLogger: Started GamesApplication in 1.722 seconds (JVM running for 2.016)
+2023-10-07 13:53:09,727 INFO [http-nio-8080-exec-1] org.apache.juli.logging.DirectJDKLog: Initializing Spring DispatcherServlet 'dispatcherServlet'
+2023-10-07 13:53:09,727 INFO [http-nio-8080-exec-1] org.springframework.web.servlet.FrameworkServlet: Initializing Servlet 'dispatcherServlet'
+2023-10-07 13:53:09,728 INFO [http-nio-8080-exec-1] org.springframework.web.servlet.FrameworkServlet: Completed initialization in 1 ms
+2023-10-07 13:53:11,515 DEBUG [http-nio-8080-exec-4] ru.krey.games.service.AuthService: USER john has logged in
+2023-10-07 13:53:11,654 DEBUG [http-nio-8080-exec-10] ru.krey.games.handler.auth.AuthFailureHandler: Не удалось выполнить запрос {/%7B%7BimgSrc%7D%7D} (ошибка аутентификации).
+2023-10-07 13:53:11,705 DEBUG [http-nio-8080-exec-8] ru.krey.games.handler.WebSocketEventHandler: WS Connected: (name:empty name, sessionId:vyutvrr4)
+2023-10-07 13:53:20,047 DEBUG [http-nio-8080-exec-3] ru.krey.games.handler.WebSocketEventHandler: WS Disconnected: (name:empty name, sessionId:vyutvrr4)
+2023-10-07 13:53:20,122 DEBUG [http-nio-8080-exec-5] ru.krey.games.handler.WebSocketEventHandler: WS Connected: (name:empty name, sessionId:ipnzuafx)
+2023-10-07 13:53:20,123 DEBUG [http-nio-8080-exec-4] ru.krey.games.handler.auth.AuthFailureHandler: Не удалось выполнить запрос {/%7B%7BimgSrc%7D%7D} (ошибка аутентификации).
+2023-10-07 13:53:20,848 DEBUG [http-nio-8080-exec-4] ru.krey.games.handler.WebSocketEventHandler: WS Disconnected: (name:empty name, sessionId:ipnzuafx)
+2023-10-07 13:53:20,953 DEBUG [http-nio-8080-exec-1] ru.krey.games.handler.WebSocketEventHandler: WS Connected: (name:empty name, sessionId:ghm5zvec)
+2023-10-07 13:53:21,992 DEBUG [http-nio-8080-exec-2] ru.krey.games.handler.WebSocketEventHandler: WS Disconnected: (name:empty name, sessionId:ghm5zvec)
+2023-10-07 13:53:22,071 DEBUG [http-nio-8080-exec-3] ru.krey.games.handler.WebSocketEventHandler: WS Connected: (name:empty name, sessionId:msdoibvv)
+2023-10-07 13:53:22,841 DEBUG [http-nio-8080-exec-7] ru.krey.games.handler.WebSocketEventHandler: WS Disconnected: (name:empty name, sessionId:msdoibvv)
+2023-10-07 13:53:22,919 DEBUG [http-nio-8080-exec-9] ru.krey.games.handler.WebSocketEventHandler: WS Connected: (name:empty name, sessionId:i4uqlmmp)
+2023-10-07 13:53:24,140 DEBUG [http-nio-8080-exec-4] ru.krey.games.handler.WebSocketEventHandler: WS Disconnected: (name:empty name, sessionId:i4uqlmmp)
+2023-10-07 13:53:24,212 DEBUG [http-nio-8080-exec-1] ru.krey.games.handler.WebSocketEventHandler: WS Connected: (name:empty name, sessionId:byoo404x)
+2023-10-07 13:53:27,598 DEBUG [http-nio-8080-exec-3] ru.krey.games.handler.WebSocketEventHandler: WS Disconnected: (name:empty name, sessionId:byoo404x)
+2023-10-07 13:53:27,673 DEBUG [http-nio-8080-exec-6] ru.krey.games.handler.WebSocketEventHandler: WS Connected: (name:empty name, sessionId:senw3oxg)
+2023-10-07 13:53:28,209 DEBUG [http-nio-8080-exec-4] ru.krey.games.handler.WebSocketEventHandler: WS Disconnected: (name:empty name, sessionId:senw3oxg)
+2023-10-07 13:53:28,282 DEBUG [http-nio-8080-exec-3] ru.krey.games.handler.WebSocketEventHandler: WS Connected: (name:empty name, sessionId:rdajexpq)
+2023-10-07 13:53:36,114 DEBUG [http-nio-8080-exec-5] ru.krey.games.config.security.JwtRequestFilter: Токен устарел
+2023-10-07 13:53:36,114 DEBUG [http-nio-8080-exec-2] ru.krey.games.config.security.JwtRequestFilter: Токен устарел
+2023-10-07 13:53:36,115 DEBUG [http-nio-8080-exec-2] ru.krey.games.handler.auth.AuthFailureHandler: Не удалось выполнить запрос {/updateToken} (ошибка аутентификации).
+2023-10-07 13:53:36,115 DEBUG [http-nio-8080-exec-5] ru.krey.games.handler.auth.AuthFailureHandler: Не удалось выполнить запрос {/api/player/update-active} (ошибка аутентификации).
+2023-10-07 13:53:36,121 DEBUG [http-nio-8080-exec-9] ru.krey.games.config.security.JwtRequestFilter: Токен устарел
+2023-10-07 13:53:38,762 DEBUG [http-nio-8080-exec-4] ru.krey.games.service.AuthService: USER benedict has logged in
+2023-10-07 13:53:38,983 DEBUG [http-nio-8080-exec-7] ru.krey.games.handler.auth.AuthFailureHandler: Не удалось выполнить запрос {/%7B%7BimgSrc%7D%7D} (ошибка аутентификации).
+2023-10-07 13:53:38,988 DEBUG [http-nio-8080-exec-5] ru.krey.games.handler.WebSocketEventHandler: WS Connected: (name:empty name, sessionId:uern1yt3)
+2023-10-07 13:53:41,530 DEBUG [http-nio-8080-exec-8] ru.krey.games.handler.WebSocketEventHandler: WS Disconnected: (name:empty name, sessionId:uern1yt3)
+2023-10-07 13:53:41,721 DEBUG [http-nio-8080-exec-7] ru.krey.games.handler.WebSocketEventHandler: WS Connected: (name:empty name, sessionId:4dtslosj)
+2023-10-07 13:53:43,462 INFO [http-nio-8080-exec-10] ru.krey.games.controller.TttGameController: Player with id 7 has stopped searching
+2023-10-07 13:53:45,544 INFO [http-nio-8080-exec-1] ru.krey.games.controller.TttGameController: Player with id 6 has stopped searching
+2023-10-07 13:53:47,534 DEBUG [http-nio-8080-exec-4] ru.krey.games.handler.WebSocketEventHandler: WS Connected: (name:empty name, sessionId:rpjzls4l)
+2023-10-07 13:53:49,394 DEBUG [http-nio-8080-exec-5] ru.krey.games.handler.WebSocketEventHandler: WS Connected: (name:empty name, sessionId:uzuezd4q)
+2023-10-07 13:53:49,432 INFO [http-nio-8080-exec-10] ru.krey.games.dao.TttGameJdbcTemplate: Save TttGame: TttGame(id=null, player1=Player(id=7, login=benedict, email=ben@mail.ru, password=$2a$10$pW2xTaOppvTnW1X/ImkJV.Rh2klXWtnsDLGPyx2tqu5bKFmfcFUMe, signUpTime=2023-09-02T21:05:20.773900, lastSignInTime=2023-09-02T21:05:25.017200, rating=30, photo=img_2023_SEPTEMBER_2_21_5_20_benedict_7_без_имени.jpeg, enabled=true, Role=USER, lastGameCode=0), player2=Player(id=6, login=john, email=john@mail.ru, password=$2a$10$Tt8kBKpE3vpOyjb5sqARXuJiqYBcDinWz3OhvYVcRr6r5NmnWyn22, signUpTime=2023-09-02T21:03:19.016701, lastSignInTime=2023-10-04T18:38:42.387643, rating=60, photo=img_2023_SEPTEMBER_2_21_3_19_john_6_john-wick-button-1596757485786.jpg, enabled=true, Role=USER, lastGameCode=1), startTime=2023-10-07T13:53:49.406680, endTime=null, winner=null, sizeField=3, player1Time=3030, player2Time=3000, basePlayerTime=3000, actualDuration=0, complexity=null, victoryReasonCode=null, queue=0, field=null, diffTime=1)
+2023-10-07 13:53:49,485 INFO [http-nio-8080-exec-10] ru.krey.games.dao.PlayerJdbcTemplate: Update player: Player(id=7, login=benedict, email=ben@mail.ru, password=$2a$10$pW2xTaOppvTnW1X/ImkJV.Rh2klXWtnsDLGPyx2tqu5bKFmfcFUMe, signUpTime=2023-09-02T21:05:20.773900, lastSignInTime=2023-09-02T21:05:25.017200, rating=30, photo=img_2023_SEPTEMBER_2_21_5_20_benedict_7_без_имени.jpeg, enabled=true, Role=USER, lastGameCode=1)
+2023-10-07 13:53:49,510 INFO [http-nio-8080-exec-10] ru.krey.games.dao.PlayerJdbcTemplate: Update player: Player(id=6, login=john, email=john@mail.ru, password=$2a$10$Tt8kBKpE3vpOyjb5sqARXuJiqYBcDinWz3OhvYVcRr6r5NmnWyn22, signUpTime=2023-09-02T21:03:19.016701, lastSignInTime=2023-10-04T18:38:42.387643, rating=60, photo=img_2023_SEPTEMBER_2_21_3_19_john_6_john-wick-button-1596757485786.jpg, enabled=true, Role=USER, lastGameCode=1)
+2023-10-07 13:53:49,538 DEBUG [http-nio-8080-exec-3] ru.krey.games.handler.WebSocketEventHandler: WS Disconnected: (name:empty name, sessionId:uzuezd4q)
+2023-10-07 13:53:49,538 DEBUG [http-nio-8080-exec-9] ru.krey.games.handler.WebSocketEventHandler: WS Disconnected: (name:empty name, sessionId:4dtslosj)
+2023-10-07 13:53:49,546 DEBUG [http-nio-8080-exec-2] ru.krey.games.handler.WebSocketEventHandler: WS Disconnected: (name:empty name, sessionId:rpjzls4l)
+2023-10-07 13:53:49,546 DEBUG [http-nio-8080-exec-6] ru.krey.games.handler.WebSocketEventHandler: WS Disconnected: (name:empty name, sessionId:rdajexpq)
+2023-10-07 13:53:49,647 INFO [http-nio-8080-exec-4] ru.krey.games.controller.TttGameController: Player with id 6 has stopped searching
+2023-10-07 13:53:49,668 DEBUG [http-nio-8080-exec-10] ru.krey.games.handler.WebSocketEventHandler: WS Connected: (name:empty name, sessionId:fqlg3jlq)
+2023-10-07 13:53:49,793 INFO [http-nio-8080-exec-9] ru.krey.games.controller.TttGameController: Player with id 7 has stopped searching
+2023-10-07 13:53:49,824 DEBUG [http-nio-8080-exec-10] ru.krey.games.handler.WebSocketEventHandler: WS Connected: (name:empty name, sessionId:decl3rkt)
+2023-10-07 13:53:49,876 DEBUG [http-nio-8080-exec-7] ru.krey.games.handler.WebSocketEventHandler: WS Connected: (name:empty name, sessionId:fkgb5ymz)
+2023-10-07 13:53:49,904 DEBUG [http-nio-8080-exec-7] ru.krey.games.handler.WebSocketEventHandler: WS Connected: (name:empty name, sessionId:5ixqjxf2)
+2023-10-07 13:53:49,973 DEBUG [http-nio-8080-exec-6] ru.krey.games.handler.WebSocketEventHandler: WS Connected: (name:empty name, sessionId:sqav4n24)
+2023-10-07 13:53:50,016 DEBUG [http-nio-8080-exec-3] ru.krey.games.handler.WebSocketEventHandler: WS Connected: (name:empty name, sessionId:rdux1lxr)
+2023-10-07 13:54:03,618 DEBUG [http-nio-8080-exec-2] ru.krey.games.handler.WebSocketEventHandler: WS Disconnected: (name:empty name, sessionId:sqav4n24)
+2023-10-07 13:54:03,618 DEBUG [http-nio-8080-exec-10] ru.krey.games.handler.WebSocketEventHandler: WS Disconnected: (name:empty name, sessionId:rdux1lxr)
+2023-10-07 13:54:03,618 DEBUG [http-nio-8080-exec-1] ru.krey.games.handler.WebSocketEventHandler: WS Disconnected: (name:empty name, sessionId:decl3rkt)
+2023-10-07 13:54:03,749 INFO [http-nio-8080-exec-1] ru.krey.games.controller.TttGameController: Player with id 7 has stopped searching
+2023-10-07 13:54:03,761 DEBUG [http-nio-8080-exec-9] ru.krey.games.handler.WebSocketEventHandler: WS Connected: (name:empty name, sessionId:3upo50zb)
+2023-10-07 13:54:03,877 DEBUG [http-nio-8080-exec-9] ru.krey.games.handler.WebSocketEventHandler: WS Connected: (name:empty name, sessionId:k3skvrjl)
+2023-10-07 13:54:03,967 DEBUG [http-nio-8080-exec-10] ru.krey.games.handler.WebSocketEventHandler: WS Connected: (name:empty name, sessionId:jsejfeof)
+2023-10-07 13:54:05,582 INFO [MessageBroker-12] org.springframework.web.socket.config.WebSocketMessageBrokerStats: WebSocketSession[6 current WS(6)-HttpStream(0)-HttpPoll(0), 21 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(21)-CONNECTED(21)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 32, active threads = 0, queued tasks = 0, completed tasks = 171], outboundChannel[pool size = 32, active threads = 0, queued tasks = 0, completed tasks = 348], sockJsScheduler[pool size = 16, active threads = 1, queued tasks = 10, completed tasks = 3005]
+2023-10-07 13:54:05,740 DEBUG [http-nio-8080-exec-9] ru.krey.games.handler.WebSocketEventHandler: WS Disconnected: (name:empty name, sessionId:fqlg3jlq)
+2023-10-07 13:54:05,740 DEBUG [http-nio-8080-exec-6] ru.krey.games.handler.WebSocketEventHandler: WS Disconnected: (name:empty name, sessionId:5ixqjxf2)
+2023-10-07 13:54:05,740 DEBUG [http-nio-8080-exec-5] ru.krey.games.handler.WebSocketEventHandler: WS Disconnected: (name:empty name, sessionId:fkgb5ymz)
+2023-10-07 13:54:05,853 INFO [http-nio-8080-exec-3] ru.krey.games.controller.TttGameController: Player with id 6 has stopped searching
+2023-10-07 13:54:05,864 DEBUG [http-nio-8080-exec-7] ru.krey.games.handler.WebSocketEventHandler: WS Connected: (name:empty name, sessionId:icwg24xa)
+2023-10-07 13:54:05,990 DEBUG [http-nio-8080-exec-6] ru.krey.games.handler.WebSocketEventHandler: WS Connected: (name:empty name, sessionId:ri0dq3fq)
+2023-10-07 13:54:06,078 DEBUG [http-nio-8080-exec-4] ru.krey.games.handler.WebSocketEventHandler: WS Connected: (name:empty name, sessionId:iumemea0)
+2023-10-07 13:54:07,455 DEBUG [http-nio-8080-exec-2] ru.krey.games.handler.WebSocketEventHandler: WS Disconnected: (name:empty name, sessionId:jsejfeof)
+2023-10-07 13:54:07,456 DEBUG [http-nio-8080-exec-1] ru.krey.games.handler.WebSocketEventHandler: WS Disconnected: (name:empty name, sessionId:k3skvrjl)
+2023-10-07 13:54:07,455 DEBUG [http-nio-8080-exec-6] ru.krey.games.handler.WebSocketEventHandler: WS Disconnected: (name:empty name, sessionId:3upo50zb)
+2023-10-07 13:54:07,571 INFO [http-nio-8080-exec-1] ru.krey.games.controller.TttGameController: Player with id 7 has stopped searching
+2023-10-07 13:54:07,579 DEBUG [http-nio-8080-exec-10] ru.krey.games.handler.WebSocketEventHandler: WS Connected: (name:empty name, sessionId:aljagfmb)
+2023-10-07 13:54:07,708 DEBUG [http-nio-8080-exec-10] ru.krey.games.handler.WebSocketEventHandler: WS Connected: (name:empty name, sessionId:o2jgjffw)
+2023-10-07 13:54:07,798 DEBUG [http-nio-8080-exec-4] ru.krey.games.handler.WebSocketEventHandler: WS Connected: (name:empty name, sessionId:2vnem1uu)
+2023-10-07 13:54:08,183 DEBUG [http-nio-8080-exec-2] ru.krey.games.handler.WebSocketEventHandler: WS Disconnected: (name:empty name, sessionId:aljagfmb)
+2023-10-07 13:54:08,183 DEBUG [http-nio-8080-exec-10] ru.krey.games.handler.WebSocketEventHandler: WS Disconnected: (name:empty name, sessionId:o2jgjffw)
+2023-10-07 13:54:08,183 DEBUG [http-nio-8080-exec-7] ru.krey.games.handler.WebSocketEventHandler: WS Disconnected: (name:empty name, sessionId:2vnem1uu)
+2023-10-07 13:54:08,308 INFO [http-nio-8080-exec-10] ru.krey.games.controller.TttGameController: Player with id 7 has stopped searching
+2023-10-07 13:54:08,324 DEBUG [http-nio-8080-exec-10] ru.krey.games.handler.WebSocketEventHandler: WS Connected: (name:empty name, sessionId:viopicyz)
+2023-10-07 13:54:08,431 DEBUG [http-nio-8080-exec-3] ru.krey.games.handler.WebSocketEventHandler: WS Connected: (name:empty name, sessionId:ffc10bka)
+2023-10-07 13:54:08,527 DEBUG [http-nio-8080-exec-2] ru.krey.games.handler.WebSocketEventHandler: WS Connected: (name:empty name, sessionId:hms4bio5)
+2023-10-07 13:54:09,025 DEBUG [http-nio-8080-exec-10] ru.krey.games.handler.WebSocketEventHandler: WS Disconnected: (name:empty name, sessionId:ffc10bka)
+2023-10-07 13:54:09,025 DEBUG [http-nio-8080-exec-8] ru.krey.games.handler.WebSocketEventHandler: WS Disconnected: (name:empty name, sessionId:viopicyz)
+2023-10-07 13:54:09,025 DEBUG [http-nio-8080-exec-3] ru.krey.games.handler.WebSocketEventHandler: WS Disconnected: (name:empty name, sessionId:hms4bio5)
+2023-10-07 13:54:09,150 INFO [http-nio-8080-exec-10] ru.krey.games.controller.TttGameController: Player with id 7 has stopped searching
+2023-10-07 13:54:09,166 DEBUG [http-nio-8080-exec-10] ru.krey.games.handler.WebSocketEventHandler: WS Connected: (name:empty name, sessionId:41mcx4gr)
+2023-10-07 13:54:09,279 DEBUG [http-nio-8080-exec-3] ru.krey.games.handler.WebSocketEventHandler: WS Connected: (name:empty name, sessionId:xjz2q2hz)
+2023-10-07 13:54:09,369 DEBUG [http-nio-8080-exec-7] ru.krey.games.handler.WebSocketEventHandler: WS Connected: (name:empty name, sessionId:zqcor2mw)
+2023-10-07 13:54:09,800 DEBUG [http-nio-8080-exec-10] ru.krey.games.handler.WebSocketEventHandler: WS Disconnected: (name:empty name, sessionId:zqcor2mw)
+2023-10-07 13:54:09,800 DEBUG [http-nio-8080-exec-5] ru.krey.games.handler.WebSocketEventHandler: WS Disconnected: (name:empty name, sessionId:xjz2q2hz)
+2023-10-07 13:54:09,801 DEBUG [http-nio-8080-exec-3] ru.krey.games.handler.WebSocketEventHandler: WS Disconnected: (name:empty name, sessionId:41mcx4gr)
+2023-10-07 13:54:09,916 INFO [http-nio-8080-exec-6] ru.krey.games.controller.TttGameController: Player with id 7 has stopped searching
+2023-10-07 13:54:09,926 DEBUG [http-nio-8080-exec-4] ru.krey.games.handler.WebSocketEventHandler: WS Connected: (name:empty name, sessionId:ni1ryvt0)
+2023-10-07 13:54:10,032 DEBUG [http-nio-8080-exec-1] ru.krey.games.handler.WebSocketEventHandler: WS Connected: (name:empty name, sessionId:sskc05ol)
+2023-10-07 13:54:10,124 DEBUG [http-nio-8080-exec-7] ru.krey.games.handler.WebSocketEventHandler: WS Connected: (name:empty name, sessionId:1vzj5toi)
+2023-10-07 13:54:10,675 DEBUG [http-nio-8080-exec-4] ru.krey.games.handler.WebSocketEventHandler: WS Disconnected: (name:empty name, sessionId:ni1ryvt0)
+2023-10-07 13:54:10,675 DEBUG [http-nio-8080-exec-1] ru.krey.games.handler.WebSocketEventHandler: WS Disconnected: (name:empty name, sessionId:1vzj5toi)
+2023-10-07 13:54:10,675 DEBUG [http-nio-8080-exec-9] ru.krey.games.handler.WebSocketEventHandler: WS Disconnected: (name:empty name, sessionId:sskc05ol)
+2023-10-07 13:54:10,797 INFO [http-nio-8080-exec-1] ru.krey.games.controller.TttGameController: Player with id 7 has stopped searching
+2023-10-07 13:54:10,806 DEBUG [http-nio-8080-exec-5] ru.krey.games.handler.WebSocketEventHandler: WS Connected: (name:empty name, sessionId:rbnkvn0x)
+2023-10-07 13:54:10,907 DEBUG [http-nio-8080-exec-3] ru.krey.games.handler.WebSocketEventHandler: WS Connected: (name:empty name, sessionId:jscbuyym)
+2023-10-07 13:54:11,015 DEBUG [http-nio-8080-exec-9] ru.krey.games.handler.WebSocketEventHandler: WS Connected: (name:empty name, sessionId:5hwjp1of)
+2023-10-07 13:54:11,445 DEBUG [http-nio-8080-exec-2] ru.krey.games.handler.WebSocketEventHandler: WS Disconnected: (name:empty name, sessionId:rbnkvn0x)
+2023-10-07 13:54:11,445 DEBUG [http-nio-8080-exec-5] ru.krey.games.handler.WebSocketEventHandler: WS Disconnected: (name:empty name, sessionId:5hwjp1of)
+2023-10-07 13:54:11,445 DEBUG [http-nio-8080-exec-3] ru.krey.games.handler.WebSocketEventHandler: WS Disconnected: (name:empty name, sessionId:jscbuyym)
+2023-10-07 13:54:11,565 INFO [http-nio-8080-exec-1] ru.krey.games.controller.TttGameController: Player with id 7 has stopped searching
+2023-10-07 13:54:11,577 DEBUG [http-nio-8080-exec-6] ru.krey.games.handler.WebSocketEventHandler: WS Connected: (name:empty name, sessionId:p0emu5lg)
+2023-10-07 13:54:11,700 DEBUG [http-nio-8080-exec-6] ru.krey.games.handler.WebSocketEventHandler: WS Connected: (name:empty name, sessionId:lwwojctz)
+2023-10-07 13:54:11,775 DEBUG [http-nio-8080-exec-3] ru.krey.games.handler.WebSocketEventHandler: WS Connected: (name:empty name, sessionId:vhysg5nw)
+2023-10-07 13:54:15,523 INFO [http-nio-8080-exec-8] ru.krey.games.dao.TttMoveJdbcTemplate: Save TttMove: ru.krey.games.domain.games.ttt.TttMove@32cd56ce
+2023-10-07 13:54:16,787 INFO [http-nio-8080-exec-1] ru.krey.games.dao.TttMoveJdbcTemplate: Save TttMove: ru.krey.games.domain.games.ttt.TttMove@cfa6c73c
+2023-10-07 13:54:17,668 INFO [http-nio-8080-exec-5] ru.krey.games.dao.TttMoveJdbcTemplate: Save TttMove: ru.krey.games.domain.games.ttt.TttMove@db3cd07
+2023-10-07 13:54:20,261 INFO [http-nio-8080-exec-4] ru.krey.games.dao.TttMoveJdbcTemplate: Save TttMove: ru.krey.games.domain.games.ttt.TttMove@7d91e20f
+2023-10-07 13:54:21,065 INFO [http-nio-8080-exec-7] ru.krey.games.dao.TttMoveJdbcTemplate: Save TttMove: ru.krey.games.domain.games.ttt.TttMove@d5f30131
+2023-10-07 13:54:22,204 INFO [http-nio-8080-exec-9] ru.krey.games.dao.TttMoveJdbcTemplate: Save TttMove: ru.krey.games.domain.games.ttt.TttMove@43e02b72
+2023-10-07 13:54:22,254 INFO [pool-2-thread-1] ru.krey.games.dao.PlayerJdbcTemplate: Update player: Player(id=7, login=benedict, email=ben@mail.ru, password=$2a$10$pW2xTaOppvTnW1X/ImkJV.Rh2klXWtnsDLGPyx2tqu5bKFmfcFUMe, signUpTime=2023-09-02T21:05:20.773900, lastSignInTime=2023-09-02T21:05:25.017200, rating=0, photo=img_2023_SEPTEMBER_2_21_5_20_benedict_7_без_имени.jpeg, enabled=true, Role=USER, lastGameCode=0)
+2023-10-07 13:54:22,278 INFO [pool-2-thread-1] ru.krey.games.dao.PlayerJdbcTemplate: Update player: Player(id=6, login=john, email=john@mail.ru, password=$2a$10$Tt8kBKpE3vpOyjb5sqARXuJiqYBcDinWz3OhvYVcRr6r5NmnWyn22, signUpTime=2023-09-02T21:03:19.016701, lastSignInTime=2023-10-04T18:38:42.387643, rating=90, photo=img_2023_SEPTEMBER_2_21_3_19_john_6_john-wick-button-1596757485786.jpg, enabled=true, Role=USER, lastGameCode=1)
+2023-10-07 13:54:22,298 INFO [pool-2-thread-1] ru.krey.games.controller.TttGameController: Game 6 saved
+2023-10-07 13:54:31,560 INFO [pool-1-thread-1] ru.krey.games.dao.GameMessageJdbcTemplate: Save GameMessage: GameMessage(id=null, gameId=6, gameCode=1, sender=Player(id=7, login=benedict, email=ben@mail.ru, password=$2a$10$pW2xTaOppvTnW1X/ImkJV.Rh2klXWtnsDLGPyx2tqu5bKFmfcFUMe, signUpTime=2023-09-02T21:05:20.773900, lastSignInTime=2023-09-02T21:05:25.017200, rating=0, photo=img_2023_SEPTEMBER_2_21_5_20_benedict_7_без_имени.jpeg, enabled=true, Role=USER, lastGameCode=0), time=2023-10-07T13:54:31.546824, message=fdg)
+2023-10-07 13:54:32,477 INFO [pool-1-thread-1] ru.krey.games.dao.GameMessageJdbcTemplate: Save GameMessage: GameMessage(id=null, gameId=6, gameCode=1, sender=Player(id=7, login=benedict, email=ben@mail.ru, password=$2a$10$pW2xTaOppvTnW1X/ImkJV.Rh2klXWtnsDLGPyx2tqu5bKFmfcFUMe, signUpTime=2023-09-02T21:05:20.773900, lastSignInTime=2023-09-02T21:05:25.017200, rating=0, photo=img_2023_SEPTEMBER_2_21_5_20_benedict_7_без_имени.jpeg, enabled=true, Role=USER, lastGameCode=0), time=2023-10-07T13:54:32.470170, message=sdfsdf)
+2023-10-07 13:54:34,940 INFO [pool-1-thread-1] ru.krey.games.dao.GameMessageJdbcTemplate: Save GameMessage: GameMessage(id=null, gameId=6, gameCode=1, sender=Player(id=6, login=john, email=john@mail.ru, password=$2a$10$Tt8kBKpE3vpOyjb5sqARXuJiqYBcDinWz3OhvYVcRr6r5NmnWyn22, signUpTime=2023-09-02T21:03:19.016701, lastSignInTime=2023-10-04T18:38:42.387643, rating=90, photo=img_2023_SEPTEMBER_2_21_3_19_john_6_john-wick-button-1596757485786.jpg, enabled=true, Role=USER, lastGameCode=1), time=2023-10-07T13:54:34.933858, message=sdf)
+2023-10-07 13:54:35,360 INFO [pool-1-thread-1] ru.krey.games.dao.GameMessageJdbcTemplate: Save GameMessage: GameMessage(id=null, gameId=6, gameCode=1, sender=Player(id=6, login=john, email=john@mail.ru, password=$2a$10$Tt8kBKpE3vpOyjb5sqARXuJiqYBcDinWz3OhvYVcRr6r5NmnWyn22, signUpTime=2023-09-02T21:03:19.016701, lastSignInTime=2023-10-04T18:38:42.387643, rating=90, photo=img_2023_SEPTEMBER_2_21_3_19_john_6_john-wick-button-1596757485786.jpg, enabled=true, Role=USER, lastGameCode=1), time=2023-10-07T13:54:35.353153, message=sdf)
+2023-10-07 13:54:47,824 DEBUG [http-nio-8080-exec-8] ru.krey.games.handler.WebSocketEventHandler: WS Disconnected: (name:empty name, sessionId:lwwojctz)
+2023-10-07 13:54:47,824 DEBUG [http-nio-8080-exec-6] ru.krey.games.handler.WebSocketEventHandler: WS Disconnected: (name:empty name, sessionId:vhysg5nw)
+2023-10-07 13:54:47,824 DEBUG [http-nio-8080-exec-5] ru.krey.games.handler.WebSocketEventHandler: WS Disconnected: (name:empty name, sessionId:p0emu5lg)
+2023-10-07 13:54:47,963 INFO [http-nio-8080-exec-1] ru.krey.games.controller.TttGameController: Player with id 7 has stopped searching
+2023-10-07 13:54:47,976 DEBUG [http-nio-8080-exec-6] ru.krey.games.handler.WebSocketEventHandler: WS Connected: (name:empty name, sessionId:jegzxlmd)
+2023-10-07 13:54:49,515 DEBUG [http-nio-8080-exec-5] ru.krey.games.handler.WebSocketEventHandler: WS Disconnected: (name:empty name, sessionId:iumemea0)
+2023-10-07 13:54:49,515 DEBUG [http-nio-8080-exec-1] ru.krey.games.handler.WebSocketEventHandler: WS Disconnected: (name:empty name, sessionId:icwg24xa)
+2023-10-07 13:54:49,515 DEBUG [http-nio-8080-exec-4] ru.krey.games.handler.WebSocketEventHandler: WS Disconnected: (name:empty name, sessionId:ri0dq3fq)
+2023-10-07 13:54:49,613 INFO [http-nio-8080-exec-2] ru.krey.games.controller.TttGameController: Player with id 6 has stopped searching
+2023-10-07 13:54:49,633 DEBUG [http-nio-8080-exec-10] ru.krey.games.handler.WebSocketEventHandler: WS Connected: (name:empty name, sessionId:j2sxbn3z)
+2023-10-07 13:54:50,423 DEBUG [http-nio-8080-exec-4] ru.krey.games.handler.WebSocketEventHandler: WS Disconnected: (name:empty name, sessionId:j2sxbn3z)
+2023-10-07 13:54:50,496 DEBUG [http-nio-8080-exec-10] ru.krey.games.handler.auth.AuthFailureHandler: Не удалось выполнить запрос {/%7B%7BimgSrc%7D%7D} (ошибка аутентификации).
+2023-10-07 13:54:50,503 DEBUG [http-nio-8080-exec-1] ru.krey.games.handler.WebSocketEventHandler: WS Connected: (name:empty name, sessionId:5law0jye)
+2023-10-07 13:57:24,478 DEBUG [http-nio-8080-exec-10] ru.krey.games.handler.WebSocketEventHandler: WS Disconnected: (name:empty name, sessionId:jegzxlmd)
+2023-10-07 13:57:24,715 DEBUG [http-nio-8080-exec-5] ru.krey.games.handler.WebSocketEventHandler: WS Connected: (name:empty name, sessionId:kbuflvcu)
+2023-10-07 13:57:25,674 INFO [http-nio-8080-exec-1] ru.krey.games.controller.TetrisGameController: Player with id 7 has stopped searching
+2023-10-07 13:57:27,088 DEBUG [http-nio-8080-exec-3] ru.krey.games.handler.WebSocketEventHandler: WS Disconnected: (name:empty name, sessionId:5law0jye)
+2023-10-07 13:57:27,186 DEBUG [http-nio-8080-exec-1] ru.krey.games.handler.WebSocketEventHandler: WS Connected: (name:empty name, sessionId:jhfalqvu)
+2023-10-07 13:57:28,014 INFO [http-nio-8080-exec-4] ru.krey.games.controller.TetrisGameController: Player with id 6 has stopped searching
+2023-10-07 13:57:28,874 DEBUG [http-nio-8080-exec-1] ru.krey.games.handler.WebSocketEventHandler: WS Connected: (name:empty name, sessionId:05khlnob)
+2023-10-07 13:57:30,292 DEBUG [http-nio-8080-exec-6] ru.krey.games.handler.WebSocketEventHandler: WS Connected: (name:empty name, sessionId:atm3gq5d)
+2023-10-07 13:57:30,311 INFO [http-nio-8080-exec-10] ru.krey.games.dao.TetrisGameJdbcTemplate: Save TetrisGame: TetrisGame(id=null, player1=Player(id=6, login=john, email=john@mail.ru, password=$2a$10$Tt8kBKpE3vpOyjb5sqARXuJiqYBcDinWz3OhvYVcRr6r5NmnWyn22, signUpTime=2023-09-02T21:03:19.016701, lastSignInTime=2023-10-04T18:38:42.387643, rating=90, photo=img_2023_SEPTEMBER_2_21_3_19_john_6_john-wick-button-1596757485786.jpg, enabled=true, Role=USER, lastGameCode=1), player2=Player(id=7, login=benedict, email=ben@mail.ru, password=$2a$10$pW2xTaOppvTnW1X/ImkJV.Rh2klXWtnsDLGPyx2tqu5bKFmfcFUMe, signUpTime=2023-09-02T21:05:20.773900, lastSignInTime=2023-09-02T21:05:25.017200, rating=0, photo=img_2023_SEPTEMBER_2_21_5_20_benedict_7_без_имени.jpeg, enabled=true, Role=USER, lastGameCode=0), startTime=2023-10-07T13:57:30.304658, player1Time=0, player2Time=0, player1Points=0, player2Points=0, endTime=null, winner=null, duration=0, field1=null, field2=null)
+2023-10-07 13:57:30,341 INFO [http-nio-8080-exec-10] ru.krey.games.dao.PlayerJdbcTemplate: Update player: Player(id=6, login=john, email=john@mail.ru, password=$2a$10$Tt8kBKpE3vpOyjb5sqARXuJiqYBcDinWz3OhvYVcRr6r5NmnWyn22, signUpTime=2023-09-02T21:03:19.016701, lastSignInTime=2023-10-04T18:38:42.387643, rating=90, photo=img_2023_SEPTEMBER_2_21_3_19_john_6_john-wick-button-1596757485786.jpg, enabled=true, Role=USER, lastGameCode=2)
+2023-10-07 13:57:30,362 INFO [http-nio-8080-exec-10] ru.krey.games.dao.PlayerJdbcTemplate: Update player: Player(id=7, login=benedict, email=ben@mail.ru, password=$2a$10$pW2xTaOppvTnW1X/ImkJV.Rh2klXWtnsDLGPyx2tqu5bKFmfcFUMe, signUpTime=2023-09-02T21:05:20.773900, lastSignInTime=2023-09-02T21:05:25.017200, rating=0, photo=img_2023_SEPTEMBER_2_21_5_20_benedict_7_без_имени.jpeg, enabled=true, Role=USER, lastGameCode=2)
+2023-10-07 13:57:30,387 DEBUG [http-nio-8080-exec-1] ru.krey.games.handler.WebSocketEventHandler: WS Disconnected: (name:empty name, sessionId:atm3gq5d)
+2023-10-07 13:57:30,387 DEBUG [http-nio-8080-exec-8] ru.krey.games.handler.WebSocketEventHandler: WS Disconnected: (name:empty name, sessionId:kbuflvcu)
+2023-10-07 13:57:30,392 DEBUG [http-nio-8080-exec-7] ru.krey.games.handler.WebSocketEventHandler: WS Disconnected: (name:empty name, sessionId:05khlnob)
+2023-10-07 13:57:30,392 DEBUG [http-nio-8080-exec-3] ru.krey.games.handler.WebSocketEventHandler: WS Disconnected: (name:empty name, sessionId:jhfalqvu)
+2023-10-07 13:57:30,487 INFO [http-nio-8080-exec-9] ru.krey.games.controller.TetrisGameController: Player with id 6 has stopped searching
+2023-10-07 13:57:30,510 DEBUG [http-nio-8080-exec-2] ru.krey.games.handler.WebSocketEventHandler: WS Connected: (name:empty name, sessionId:lbvlvm4y)
+2023-10-07 13:57:30,564 INFO [http-nio-8080-exec-2] ru.krey.games.controller.TetrisGameController: Player with id 7 has stopped searching
+2023-10-07 13:57:30,584 DEBUG [http-nio-8080-exec-9] ru.krey.games.handler.WebSocketEventHandler: WS Connected: (name:empty name, sessionId:rxj1dyih)
+2023-10-07 13:57:30,594 DEBUG [http-nio-8080-exec-6] ru.krey.games.handler.WebSocketEventHandler: WS Connected: (name:empty name, sessionId:ud4njwyw)
+2023-10-07 13:57:30,655 DEBUG [http-nio-8080-exec-3] ru.krey.games.handler.WebSocketEventHandler: WS Connected: (name:empty name, sessionId:jp2xkuwx)
+2023-10-07 13:58:02,138 INFO [http-nio-8080-exec-2] ru.krey.games.dao.PlayerJdbcTemplate: Update player: Player(id=6, login=john, email=john@mail.ru, password=$2a$10$Tt8kBKpE3vpOyjb5sqARXuJiqYBcDinWz3OhvYVcRr6r5NmnWyn22, signUpTime=2023-09-02T21:03:19.016701, lastSignInTime=2023-10-04T18:38:42.387643, rating=60, photo=img_2023_SEPTEMBER_2_21_3_19_john_6_john-wick-button-1596757485786.jpg, enabled=true, Role=USER, lastGameCode=1)
+2023-10-07 13:58:02,161 INFO [http-nio-8080-exec-2] ru.krey.games.dao.PlayerJdbcTemplate: Update player: Player(id=7, login=benedict, email=ben@mail.ru, password=$2a$10$pW2xTaOppvTnW1X/ImkJV.Rh2klXWtnsDLGPyx2tqu5bKFmfcFUMe, signUpTime=2023-09-02T21:05:20.773900, lastSignInTime=2023-09-02T21:05:25.017200, rating=30, photo=img_2023_SEPTEMBER_2_21_5_20_benedict_7_без_имени.jpeg, enabled=true, Role=USER, lastGameCode=0)
+2023-10-07 13:58:09,222 DEBUG [http-nio-8080-exec-6] ru.krey.games.handler.WebSocketEventHandler: WS Disconnected: (name:empty name, sessionId:jp2xkuwx)
+2023-10-07 13:58:09,222 DEBUG [http-nio-8080-exec-4] ru.krey.games.handler.WebSocketEventHandler: WS Disconnected: (name:empty name, sessionId:ud4njwyw)
+2023-10-07 13:58:09,348 DEBUG [http-nio-8080-exec-10] ru.krey.games.handler.auth.AuthFailureHandler: Не удалось выполнить запрос {/%7B%7BimgSrc%7D%7D} (ошибка аутентификации).
+2023-10-07 13:58:09,373 DEBUG [http-nio-8080-exec-9] ru.krey.games.handler.WebSocketEventHandler: WS Connected: (name:empty name, sessionId:5fkeku1w)
+2023-10-07 13:58:11,009 DEBUG [http-nio-8080-exec-6] ru.krey.games.handler.WebSocketEventHandler: WS Disconnected: (name:empty name, sessionId:lbvlvm4y)
+2023-10-07 13:58:11,009 DEBUG [http-nio-8080-exec-7] ru.krey.games.handler.WebSocketEventHandler: WS Disconnected: (name:empty name, sessionId:rxj1dyih)
+2023-10-07 13:58:11,119 DEBUG [http-nio-8080-exec-9] ru.krey.games.handler.auth.AuthFailureHandler: Не удалось выполнить запрос {/%7B%7BimgSrc%7D%7D} (ошибка аутентификации).
+2023-10-07 13:58:11,132 DEBUG [http-nio-8080-exec-1] ru.krey.games.handler.WebSocketEventHandler: WS Connected: (name:empty name, sessionId:k0fiy1au)
+2023-10-07 13:59:45,941 DEBUG [http-nio-8080-exec-4] ru.krey.games.handler.WebSocketEventHandler: WS Disconnected: (name:empty name, sessionId:k0fiy1au)
+2023-10-07 13:59:46,018 DEBUG [http-nio-8080-exec-7] ru.krey.games.handler.WebSocketEventHandler: WS Connected: (name:empty name, sessionId:sm1d0hjb)
+2023-10-07 13:59:46,956 INFO [http-nio-8080-exec-6] ru.krey.games.controller.TetrisGameController: Player with id 6 has stopped searching
+2023-10-07 13:59:48,233 DEBUG [http-nio-8080-exec-7] ru.krey.games.handler.WebSocketEventHandler: WS Connected: (name:empty name, sessionId:timyk0hk)
+2023-10-07 13:59:49,590 INFO [http-nio-8080-exec-10] ru.krey.games.controller.TetrisGameController: Player with id 6 has stopped searching
+2023-10-07 14:24:05,582 INFO [MessageBroker-8] org.springframework.web.socket.config.WebSocketMessageBrokerStats: WebSocketSession[3 current WS(3)-HttpStream(0)-HttpPoll(0), 57 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(57)-CONNECTED(57)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 504], outboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 3284], sockJsScheduler[pool size = 16, active threads = 1, queued tasks = 7, completed tasks = 93926]
+2023-10-07 14:54:05,583 INFO [MessageBroker-7] org.springframework.web.socket.config.WebSocketMessageBrokerStats: WebSocketSession[3 current WS(3)-HttpStream(0)-HttpPoll(0), 57 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(57)-CONNECTED(57)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 504], outboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 3284], sockJsScheduler[pool size = 16, active threads = 1, queued tasks = 7, completed tasks = 184863]
+2023-10-07 15:18:03,105 DEBUG [SpringApplicationShutdownHook] ru.krey.games.handler.WebSocketEventHandler: WS Disconnected: (name:empty name, sessionId:timyk0hk)
+2023-10-07 15:18:03,106 DEBUG [SpringApplicationShutdownHook] ru.krey.games.handler.WebSocketEventHandler: WS Disconnected: (name:empty name, sessionId:5fkeku1w)
+2023-10-07 15:18:03,106 DEBUG [SpringApplicationShutdownHook] ru.krey.games.handler.WebSocketEventHandler: WS Disconnected: (name:empty name, sessionId:sm1d0hjb)
+2023-10-07 15:18:03,106 INFO [SpringApplicationShutdownHook] org.springframework.core.log.CompositeLog: Stopping...
+2023-10-07 15:18:03,106 INFO [SpringApplicationShutdownHook] org.springframework.core.log.CompositeLog: BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@20facfa9]]
+2023-10-07 15:18:03,106 INFO [SpringApplicationShutdownHook] org.springframework.core.log.CompositeLog: Stopped.
+2023-10-07 15:18:08,088 INFO [restartedMain] org.springframework.boot.StartupInfoLogger: Starting GamesApplication using Java 11.0.20.1 on kirill-ubuntu with PID 13069 (/home/kirill/projects/GamesProject/target/classes started by kirill in /home/kirill/projects/GamesProject)
+2023-10-07 15:18:08,089 DEBUG [restartedMain] org.springframework.boot.StartupInfoLogger: Running with Spring Boot v2.7.14, Spring v5.3.29
+2023-10-07 15:18:08,090 INFO [restartedMain] org.springframework.boot.SpringApplication: No active profile set, falling back to 1 default profile: "default"
+2023-10-07 15:18:08,122 INFO [restartedMain] org.springframework.boot.logging.DeferredLog: Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2023-10-07 15:18:08,123 INFO [restartedMain] org.springframework.boot.logging.DeferredLog: For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2023-10-07 15:18:08,508 INFO [restartedMain] org.springframework.data.repository.config.RepositoryConfigurationDelegate: Bootstrapping Spring Data JDBC repositories in DEFAULT mode.
+2023-10-07 15:18:08,518 INFO [restartedMain] org.springframework.data.repository.config.RepositoryConfigurationDelegate: Finished Spring Data repository scanning in 6 ms. Found 0 JDBC repository interfaces.
+2023-10-07 15:18:09,024 INFO [restartedMain] org.springframework.boot.web.embedded.tomcat.TomcatWebServer: Tomcat initialized with port(s): 8080 (http)
+2023-10-07 15:18:09,029 INFO [restartedMain] org.apache.juli.logging.DirectJDKLog: Initializing ProtocolHandler ["http-nio-8080"]
+2023-10-07 15:18:09,030 INFO [restartedMain] org.apache.juli.logging.DirectJDKLog: Starting service [Tomcat]
+2023-10-07 15:18:09,030 INFO [restartedMain] org.apache.juli.logging.DirectJDKLog: Starting Servlet engine: [Apache Tomcat/9.0.78]
+2023-10-07 15:18:09,060 INFO [restartedMain] org.apache.juli.logging.DirectJDKLog: Initializing Spring embedded WebApplicationContext
+2023-10-07 15:18:09,061 INFO [restartedMain] org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext: Root WebApplicationContext: initialization completed in 938 ms
+2023-10-07 15:18:09,091 DEBUG [restartedMain] org.springframework.web.filter.GenericFilterBean: Filter 'jwtRequestFilter' configured for use
+2023-10-07 15:18:09,402 INFO [restartedMain] org.springframework.security.web.DefaultSecurityFilterChain: Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@ac75c9, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@333a753d, org.springframework.security.web.context.SecurityContextPersistenceFilter@71f6caa2, org.springframework.security.web.header.HeaderWriterFilter@79e35eb7, org.springframework.security.web.authentication.logout.LogoutFilter@2965f708, ru.krey.games.config.security.JwtRequestFilter@60c2e095, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@11a3e864, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@1e7d3733, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@22bf98ce, org.springframework.security.web.session.SessionManagementFilter@58af68e2, org.springframework.security.web.access.ExceptionTranslationFilter@475715c9, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@36e9a712]
+2023-10-07 15:18:09,405 WARN [restartedMain] org.springframework.security.config.annotation.web.builders.WebSecurity: You are asking Spring Security to ignore Ant [pattern='/static/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2023-10-07 15:18:09,405 INFO [restartedMain] org.springframework.security.web.DefaultSecurityFilterChain: Will not secure Ant [pattern='/static/**']
+2023-10-07 15:18:09,405 WARN [restartedMain] org.springframework.security.config.annotation.web.builders.WebSecurity: You are asking Spring Security to ignore Ant [pattern='/js/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2023-10-07 15:18:09,405 INFO [restartedMain] org.springframework.security.web.DefaultSecurityFilterChain: Will not secure Ant [pattern='/js/**']
+2023-10-07 15:18:09,405 WARN [restartedMain] org.springframework.security.config.annotation.web.builders.WebSecurity: You are asking Spring Security to ignore Ant [pattern='/css/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2023-10-07 15:18:09,405 INFO [restartedMain] org.springframework.security.web.DefaultSecurityFilterChain: Will not secure Ant [pattern='/css/**']
+2023-10-07 15:18:09,405 WARN [restartedMain] org.springframework.security.config.annotation.web.builders.WebSecurity: You are asking Spring Security to ignore Ant [pattern='/images/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2023-10-07 15:18:09,406 INFO [restartedMain] org.springframework.security.web.DefaultSecurityFilterChain: Will not secure Ant [pattern='/images/**']
+2023-10-07 15:18:09,406 WARN [restartedMain] org.springframework.security.config.annotation.web.builders.WebSecurity: You are asking Spring Security to ignore Ant [pattern='/favicon.ico']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2023-10-07 15:18:09,406 INFO [restartedMain] org.springframework.security.web.DefaultSecurityFilterChain: Will not secure Ant [pattern='/favicon.ico']
+2023-10-07 15:18:09,636 INFO [restartedMain] org.springframework.boot.devtools.autoconfigure.OptionalLiveReloadServer: LiveReload server is running on port 35729
+2023-10-07 15:18:09,647 INFO [restartedMain] org.apache.juli.logging.DirectJDKLog: Starting ProtocolHandler ["http-nio-8080"]
+2023-10-07 15:18:09,656 INFO [restartedMain] org.springframework.boot.web.embedded.tomcat.TomcatWebServer: Tomcat started on port(s): 8080 (http) with context path ''
+2023-10-07 15:18:09,658 INFO [restartedMain] org.springframework.core.log.CompositeLog: Starting...
+2023-10-07 15:18:09,658 INFO [restartedMain] org.springframework.core.log.CompositeLog: BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@6ceb6747]]
+2023-10-07 15:18:09,658 INFO [restartedMain] org.springframework.core.log.CompositeLog: Started.
+2023-10-07 15:18:09,666 INFO [restartedMain] org.springframework.boot.StartupInfoLogger: Started GamesApplication in 1.77 seconds (JVM running for 2.061)
+2023-10-07 15:18:11,433 INFO [http-nio-8080-exec-1] org.apache.juli.logging.DirectJDKLog: Initializing Spring DispatcherServlet 'dispatcherServlet'
+2023-10-07 15:18:11,433 INFO [http-nio-8080-exec-1] org.springframework.web.servlet.FrameworkServlet: Initializing Servlet 'dispatcherServlet'
+2023-10-07 15:18:11,433 INFO [http-nio-8080-exec-1] org.springframework.web.servlet.FrameworkServlet: Completed initialization in 0 ms
+2023-10-07 15:18:11,606 DEBUG [http-nio-8080-exec-1] ru.krey.games.service.AuthService: USER john has logged in
+2023-10-07 15:18:11,702 DEBUG [http-nio-8080-exec-8] ru.krey.games.handler.auth.AuthFailureHandler: Не удалось выполнить запрос {/%7B%7BimgSrc%7D%7D} (ошибка аутентификации).
+2023-10-07 15:18:11,969 DEBUG [http-nio-8080-exec-3] ru.krey.games.handler.auth.AuthFailureHandler: Не удалось выполнить запрос {/%7B%7BimgSrc%7D%7D} (ошибка аутентификации).
+2023-10-07 15:18:12,014 DEBUG [http-nio-8080-exec-9] ru.krey.games.handler.WebSocketEventHandler: WS Connected: (name:empty name, sessionId:xyf0l0mj)
+2023-10-07 15:18:32,070 DEBUG [SpringApplicationShutdownHook] ru.krey.games.handler.WebSocketEventHandler: WS Disconnected: (name:empty name, sessionId:xyf0l0mj)
+2023-10-07 15:18:32,071 INFO [SpringApplicationShutdownHook] org.springframework.core.log.CompositeLog: Stopping...
+2023-10-07 15:18:32,071 INFO [SpringApplicationShutdownHook] org.springframework.core.log.CompositeLog: BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@6ceb6747]]
+2023-10-07 15:18:32,071 INFO [SpringApplicationShutdownHook] org.springframework.core.log.CompositeLog: Stopped.

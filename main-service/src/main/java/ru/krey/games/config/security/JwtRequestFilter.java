@@ -4,16 +4,13 @@ import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.SignatureException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-import ru.krey.games.utils.JwtTokenUtils;
+import ru.krey.libs.jwtlib.utils.JwtUtils;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -32,7 +29,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
     private final static Integer HEADER_AUTH_OFFSET = 7;
 
-    private final JwtTokenUtils jwtTokenUtils;
+    private final JwtUtils jwtUtils;
 
     //get username,roles from jwtToken and set authentication to context
     @Override
@@ -46,7 +43,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         if(authHeader != null && authHeader.startsWith(HEADER_AUTH_STARTS_WITH)){
             jwt = authHeader.substring(HEADER_AUTH_OFFSET);
             try{
-                username = jwtTokenUtils.getUsername(jwt);
+                username = jwtUtils.getUsername(jwt);
             }catch (ExpiredJwtException e){
                 log.debug("Токен устарел");
             }catch(SignatureException e){
@@ -58,7 +55,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             Authentication authentication = new UsernamePasswordAuthenticationToken(
                     username,
                     null,
-                    jwtTokenUtils.getRoles(jwt).stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList())
+                    jwtUtils.getRoles(jwt).stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList())
             );
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }

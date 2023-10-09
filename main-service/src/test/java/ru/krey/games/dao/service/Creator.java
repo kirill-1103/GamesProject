@@ -10,7 +10,6 @@ import ru.krey.games.dao.interfaces.TttMoveDao;
 import ru.krey.games.domain.*;
 import ru.krey.games.domain.games.ttt.TttGame;
 import ru.krey.games.domain.games.ttt.TttMove;
-import ru.krey.games.utils.RoleUtils;
 
 import java.time.LocalDateTime;
 import java.util.Optional;

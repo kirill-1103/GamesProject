@@ -6,7 +6,7 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = {"ru.krey.games", "ru.krey.lib"})
 @EnableScheduling
 @EnableDiscoveryClient
 public class GamesApplication extends SpringBootServletInitializer {

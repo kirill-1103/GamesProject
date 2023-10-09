@@ -14,7 +14,7 @@ import ru.krey.games.error.BadRequestException;
 import ru.krey.games.error.NotFoundException;
 import ru.krey.games.service.interfaces.ImageService;
 import ru.krey.games.utils.GameUtils;
-import ru.krey.games.utils.RoleUtils;
+import ru.krey.lib.securitylib.utils.RoleUtils;
 
 import java.io.IOException;
 import java.time.LocalDateTime;

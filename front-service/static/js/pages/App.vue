@@ -14,6 +14,7 @@ import updateAuthUserInStorage from '../service/auth.js'
 import { connectToChats } from '../service/ws'
 import router from "../router/router";
 import {tokenIsExpired, tokenTime, updateToken} from "../service/jwtUtils";
+import {oneByIdPath, UPDATE_ACTIVE_PATH} from "../service/api/player";
 
 export default {
 	components: {
@@ -56,7 +57,7 @@ export default {
 			this.$store.commit('addNewMessage', message)
 		},
     testfunc(){
-      axios.get("/api/player/2").then((data)=>{
+      axios.get(oneByIdPath(2)).then((data)=>{
          console.log(data);
       })
     },
@@ -86,7 +87,7 @@ export default {
       },1000*10)
     },
     updateActive(){
-      axios.post("/api/player/update-active");
+      axios.post(UPDATE_ACTIVE_PATH);
     }
 	},
 }

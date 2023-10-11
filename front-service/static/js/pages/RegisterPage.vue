@@ -11,6 +11,8 @@
 import {LOGIN_PAGE_NAME} from "../router/component_names";
 import axios from "axios";
 import RegisterForm from "../components/RegisterForm.vue";
+import {REGISTRATION_PATH} from "../service/api/auth";
+import {IMG_SIZE_PATH} from "../service/api/settings";
 
 export default {
   name: "RegisterPage",
@@ -50,7 +52,7 @@ export default {
         clearInterval(interval)
       }
     },100)
-    axios.get("/api/settings/img_size").then(result=>{
+    axios.get(IMG_SIZE_PATH).then(result=>{
       console.log('max file size:', result.data);
       this.max_file_size = result.data;
     })
@@ -66,7 +68,7 @@ export default {
       }
       let img = this.form.img_file;
       this.form.img_file = null;
-      axios.post("/registration",
+      axios.post(REGISTRATION_PATH,
           {login:this.form.login,password:this.form.password,email:this.form.email,player_img:img}
           ,this.config2)
           .then(result=>{
@@ -79,25 +81,6 @@ export default {
           console.log(error)
           this.errorMessage = 'Failed to register from server. '+error.response.data.message
       })
-      // axios.post("/registration",this.form,this.config1).then((result)=>{
-      //   if(this.form.img_file){
-      //     this.form.img_file
-      //     console.log(this.form.img_file)
-      //     this.saveImg({image:this.form.img_file,player_id:result.data.id}).then(()=>{
-      //       if(this.badFileRequest){
-      //         this.badFileRequest=false;
-      //         alert("Не удалось загрузить фотографию. Попробуйте позже - в разделе профиль.")
-      //       }
-      //       this.$router.push({name:LOGIN_PAGE_NAME})
-      //     });
-      //   }else{
-      //     this.$router.push({name:LOGIN_PAGE_NAME})
-      //   }
-      //   // console.log(result.data)
-      // }).catch(error=>{
-      //   console.log(error)
-      //   this.errorMessage = 'Failed to register from server. '+error.response.data.message
-      // })
     },
     saveImg(img_file){
       return axios.post("/api/file/player_image",img_file,this.config2).then((result)=>{

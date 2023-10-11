@@ -37,6 +37,8 @@
 <script>
 import axios from "axios";
 import {reformatTime} from "../../service/datetime";
+import {IMAGE_PATH} from "../../service/api/player";
+import {TETRIS_SURRENDER_PATH} from "../../service/api/tetris";
 
 export default {
   name: "ProfileInTetrisGame",
@@ -61,14 +63,14 @@ export default {
     surrender_f() {
       if (!this.alreadySurrendered && !this.game.endTime) {
         this.alreadySurrendered = true;
-        axios.post("/api/tetris_game/surrender", {game_id: this.game.gameId, player_id: this.player.id}, this.config)
+        axios.post(TETRIS_SURRENDER_PATH, {game_id: this.game.gameId, player_id: this.player.id}, this.config)
       } else {
         alert("Игра уже завершена")
       }
     },
     getPhoto() {
       if(this.player.photo){
-        axios.post("/api/player/image", {img_name: this.player.photo}, this.config)
+        axios.post(IMAGE_PATH, {img_name: this.player.photo}, this.config)
             .then((result)=>{
               this.imgData = "data:image/;base64, "+result.data;
               console.log(this.imgData)

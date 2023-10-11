@@ -12,6 +12,7 @@ import axios from 'axios'
 import {REGISTER_PAGE_NAME, LOGIN_PAGE_NAME, PROFILE_PAGE_PATH} from "../router/component_names";
 import Form from "../components/LoginForm.vue";
 import router from "../router/router";
+import {AUTHORIZATION_PATH} from "../service/api/auth";
 
 export default {
   name: "LoginPage",
@@ -45,7 +46,7 @@ export default {
 
   methods: {
     submitForm() {
-      axios.post('/auth', this.form).then(({data}) => {
+      axios.post(AUTHORIZATION_PATH, this.form).then(({data}) => {
         if(data.error){
           this.errorMessage = data.message;
           console.log(this.errorMessage);

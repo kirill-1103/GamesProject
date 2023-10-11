@@ -52,6 +52,7 @@
 
 <script>
 import axios from "axios";
+import {IMAGES_PATH, RATING_PATH} from "../service/api/player";
 
 export default {
   name: "RatingPage",
@@ -80,7 +81,7 @@ export default {
   methods: {
     getPlayers() {
       this.waitingTable = true;
-      axios.post("/api/player/rating", {from: this.from, to: this.to}, this.config).then((res) => {
+      axios.post(RATING_PATH, {from: this.from, to: this.to}, this.config).then((res) => {
         if (res.data.length === 0) {
           this.stopTable = true;
           this.waitingTable = false;
@@ -99,7 +100,7 @@ export default {
         for (let player of this.players){
           names.push(player.photo);
         }
-        axios.post("/api/player/images",names.slice(this.from-this.batchSize,this.to-this.batchSize)).then((res)=>{
+        axios.post(IMAGES_PATH,names.slice(this.from-this.batchSize,this.to-this.batchSize)).then((res)=>{
           for (let i = 0;i<res.data.length;i++){
             if (res.data[i]!==null){
               res.data[i] = "data:image/;base64, " +res.data[i];

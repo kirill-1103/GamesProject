@@ -49,6 +49,8 @@
 <script>
 import {checkLogin, checkEmail, checkPasswordEmptyOk} from "../service/correct_form.js";
 import axios from "axios";
+import {UPDATE_PATH} from "../service/api/player";
+import {IMG_SIZE_PATH} from "../service/api/settings";
 
 
 export default {
@@ -90,7 +92,7 @@ export default {
       }
       let img = this.form.photo;
       this.form.photo = null;
-      axios.post("/api/player/update",
+      axios.post(UPDATE_PATH,
           {login:this.form.login,password:this.form.password,email:this.form.email,player_img:img,id:this.form.id}
           , this.config).then(response => {
             if(response.data && response.data.error){
@@ -108,7 +110,7 @@ export default {
     }
   },
   created() {
-    axios.get("/api/settings/img_size").then(result => {
+    axios.get(IMG_SIZE_PATH).then(result => {
       console.log('max file size:', result.data);
       this.max_file_size = result.data;
     })
@@ -151,7 +153,7 @@ export default {
 <style>
 .button-close {
   width: 30%;
-  background-color: gray;
+  background-color: rgb(128, 128, 128);
 }
 
 .button-close:hover {

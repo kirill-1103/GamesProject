@@ -1,8 +1,6 @@
 package ru.krey.games.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -14,16 +12,19 @@ import ru.krey.games.error.BadRequestException;
 import ru.krey.games.error.NotFoundException;
 import ru.krey.games.service.interfaces.ImageService;
 import ru.krey.games.utils.GameUtils;
-import ru.krey.lib.securitylib.utils.RoleUtils;
+import ru.krey.libs.securitylib.utils.RoleUtils;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Consumer;
 
 @Service
 @RequiredArgsConstructor
-public class PlayerService implements UserDetailsService {
+public class PlayerService {
 
     private final PlayerDao playerDao;
 
@@ -35,10 +36,6 @@ public class PlayerService implements UserDetailsService {
 
     private final TetrisService tetrisService;
 
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return getOneByLogin(username);
-    }
 
     public void updateActive(String username) {
         playerDao.updateActive(username);
@@ -171,7 +168,7 @@ public class PlayerService implements UserDetailsService {
                 .signUpTime(LocalDateTime.now())
                 .enabled(true)
                 .rating(0)
-                .Role(RoleUtils.ROLE_USER)
+                .role(RoleUtils.ROLE_USER)
                 .build();
     }
 

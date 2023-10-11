@@ -20,6 +20,7 @@ import updateAuthUserInStorage from '../../service/auth'
 import axios from 'axios'
 import { connectToTetrisGame, connectToTttGame } from '../../service/ws'
 import GameComponent from '../../components/tetris_game_components/GameComponent.vue'
+import {tetrisOneInProcessByIdPath} from "../../service/api/tetris";
 export default {
 	name: 'TetrisGamePage',
 	components: { GameComponent, StartGameComponent },
@@ -63,7 +64,7 @@ export default {
 		},
 		updateGameFromDb() {
 			axios
-				.get('/api/tetris_game/processing/' + this.$store.state.playerGameId)
+				.get(tetrisOneInProcessByIdPath(this.$store.state.playerGameId))
 				.then(response => {
 					this.game = response.data
 					connectToTetrisGame(this.game.gameId, this.updateState, this.$store)

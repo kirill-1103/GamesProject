@@ -44,6 +44,7 @@ import TttCanvas from "./TttCanvas.vue";
 import {fromArrayToHoursMinutesSeconds, reformatTime} from "../../service/datetime";
 import ReplayChatComponent from "../ReplayChatComponent.vue";
 import axios from "axios";
+import {gameMessagesByCodeAndIdPath} from "../../service/api/game_message";
 
 export default {
   name: "ShowTttGameComponent",
@@ -85,7 +86,7 @@ export default {
     getMessages(){
       let interval = setInterval(()=>{
         if(this.game && this.game.game && this.game.game.id && this.game.game.gameCode){
-          axios.get("/api/game_message/"+this.game.game.id+"/"+this.game.game.gameCode)
+          axios.get(gameMessagesByCodeAndIdPath(this.game.game.id,this.game.game.gameCode))
               .then(messages=>{
                 this.messages = messages.data;
                 for (let mess of this.messages){

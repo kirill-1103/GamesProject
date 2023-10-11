@@ -44,6 +44,7 @@
 import {connectToGameMessages} from "../service/ws";
 import axios from "axios";
 import {fromArrayToHoursMinutesSeconds, fromStringToHoursMinutesSeconds} from "../service/datetime";
+import {NEW_PATH} from "../service/api/game_message";
 
 export default{
   name:'GameChatComponent',
@@ -75,7 +76,7 @@ export default{
         sender_id: this.player.id,
         message: messageFromInput
       }
-      axios.post("/api/game_message/new",data,this.config);
+      axios.post(NEW_PATH,data,this.config);
       this.$refs.textForSend.value = '';
     },
     isMe(message){

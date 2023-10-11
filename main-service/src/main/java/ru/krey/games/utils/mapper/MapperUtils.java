@@ -20,7 +20,7 @@ public class MapperUtils {
                 .rating(rs.getInt(prefix + "rating"))
                 .lastSignInTime(rs.getTimestamp(prefix + "last_sign_in_time").toLocalDateTime())
                 .signUpTime(rs.getTimestamp(prefix + "sign_up_time").toLocalDateTime())
-                .Role(rs.getString(prefix + "role"))
+                .role(rs.getString(prefix + "role"))
                 .lastGameCode(rs.getInt(prefix + "last_game_code"))
                 .build();
     }

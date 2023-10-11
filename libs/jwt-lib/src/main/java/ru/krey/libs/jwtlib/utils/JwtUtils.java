@@ -45,6 +45,11 @@ public class JwtUtils {
         return getAllClaimsByToken(token).get(CLAIM_ROLES, List.class);
     }
 
+    public Long getTimeLeftMs(String token){
+        Claims claims = getAllClaimsByToken(token);
+        return claims.getExpiration().getTime() - new Date().getTime();
+    }
+
     private Claims getAllClaimsByToken(String token) {
         return Jwts.parser()
                 .setSigningKey(secret)

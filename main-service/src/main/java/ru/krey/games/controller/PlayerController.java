@@ -7,9 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.krey.games.domain.Player;
 import ru.krey.games.domain.interfaces.Game;
-import ru.krey.games.dto.AuthDto;
 import ru.krey.games.error.BadRequestException;
-import ru.krey.games.service.AuthService;
 import ru.krey.games.service.LocalImageService;
 import ru.krey.games.service.PlayerService;
 import ru.krey.games.service.interfaces.ImageService;
@@ -29,13 +27,16 @@ public class PlayerController {
 
     private final LocalImageService localImageService;
 
-    private final AuthService authService;
-
     private final PlayerService playerService;
 
     @GetMapping("/{id}")
     public Player getOneById(@PathVariable Long id) {
         return playerService.getOneById(id);
+    }
+
+    @GetMapping("/login/{login}")
+    public Player getOneByLogin(@PathVariable String login) {
+        return playerService.getOneByLogin(login);
     }
 
     @GetMapping("/authenticated")
@@ -75,12 +76,30 @@ public class PlayerController {
             @RequestParam("id") Long id,
             @RequestParam(value = "player_img", required = false) MultipartFile img
     ) {
+//        if (login == null || login.isBlank() ||
+//                email == null || email.isBlank()) {
+//            throw new BadRequestException("Не все поля заполнены.");
+//        }
+//        Player player = playerService.updatePlayer(login, email, password, id, img);
+//        return authService.createAuthToken(AuthDto.builder().login(player.getLogin()).build());
+        return null;
+    }
+
+    @PostMapping("/new")
+    public ResponseEntity<?> createPlayer(@RequestParam(value = "player_img", required = false) MultipartFile image,
+                                          @RequestParam("login") String login,
+                                          @RequestParam("email") String email,
+                                          @RequestParam("password") String password
+    ) {
         if (login == null || login.isBlank() ||
-                email == null || email.isBlank()) {
+                email == null || email.isBlank() ||
+                password == null || password.isBlank()) {
             throw new BadRequestException("Не все поля заполнены.");
         }
-        Player player = playerService.updatePlayer(login, email, password, id, img);
-        return authService.createAuthToken(AuthDto.builder().login(player.getLogin()).build());
+
+
+        playerService.createPlayer(image, login, email, password);
+        return ResponseEntity.ok(true);
     }
 
     @PostMapping("/currentGameCode")

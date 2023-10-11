@@ -37,6 +37,7 @@
 <script>
   import axios from "axios";
   import {reformatTime} from "../../service/datetime";
+  import {TTT_SURRENDER_PATH} from "../../service/api/ttt";
 
   export default {
     name:"ProfileInTttGame",
@@ -57,7 +58,7 @@
       surrender_f(){
         if(!this.alreadySurrendered && !this.game.endTime ){
           this.alreadySurrendered = true;
-          axios.post("/api/ttt_game/surrender",{game_id:this.game.id,player_id:this.player.id},this.config)
+          axios.post(TTT_SURRENDER_PATH,{game_id:this.game.id,player_id:this.player.id},this.config)
         }else{
           alert("Игра уже завершена")
         }

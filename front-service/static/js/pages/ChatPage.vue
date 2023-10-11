@@ -265,6 +265,8 @@
 import axios from 'axios'
 import updateAuthUserInStorage from '../service/auth'
 import { fromArrayToDate, fromArrayToDateWithTime } from '../service/datetime'
+import {IMAGE_PATH, IMAGES_PATH, oneByIdPath} from "../service/api/player";
+import {DIALOG_PATH, INFO_LIST_PATH, ONLINE_PATH, SEND_PATH, SET_READING_TIME_PATH} from "../service/api/message";
 
 export default {
 	name: 'ChatPage',
@@ -299,7 +301,7 @@ export default {
 				if (this.player.photo && this.player.photo !== '') {
 					axios
 						.post(
-							'/api/player/image',
+							IMAGE_PATH,
 							{ img_name: this.player.photo },
 							this.config
 						)
@@ -332,7 +334,7 @@ export default {
 	methods: {
 		getDialogs() {
 			axios
-				.get('/api/chat/info', {
+				.get(INFO_LIST_PATH, {
 					params: {
 						player_id: this.player.id,
 					},
@@ -358,7 +360,7 @@ export default {
 			for (let dialog of this.dialogs) {
 				names.push(dialog.companion.photo)
 			}
-			axios.post('/api/player/images', names).then(res => {
+			axios.post(IMAGES_PATH, names).then(res => {
 				console.log(res.data)
 				for (let i = 0; i < res.data.length; i++) {
 					if (res.data[i] !== null) {
@@ -404,7 +406,7 @@ export default {
 				this.setReadLabelOnDialog(dialog)
 			} else {
 				axios
-					.get('/api/chat/dialog', {
+					.get(DIALOG_PATH, {
 						params: {
 							player1_id: dialog.companion.id,
 							player2_id: this.player.id,
@@ -442,7 +444,7 @@ export default {
 			this.messageInput = ''
 
 			axios
-				.post('/api/chat/send', {
+				.post(SEND_PATH, {
 					sender_id: this.player.id,
 					recipient_id: this.companion.id,
 					message_text: messageText,
@@ -557,12 +559,12 @@ export default {
 				})
 			} else {
 				if (sender == null) {
-					return axios.get('/api/player/' + message.senderId).then(res => {
+					return axios.get(oneByIdPath(message.senderId)).then(res => {
 						message.sender = res.data
 						message.recipient = recipient
 					})
 				} else if (recipient == null) {
-					return axios.get('/api/player/' + message.recipient).then(res => {
+					return axios.get(oneByIdPath( message.recipient)).then(res => {
 						message.sender = sender
 						message.recipient = res.data
 					})
@@ -641,13 +643,13 @@ export default {
 					messagesToChange.push(message)
 				}
 			}
-			axios.post('/api/chat/set_reading_time', messagesToChange)
+			axios.post(SET_READING_TIME_PATH, messagesToChange)
 			dialog.hasUnread = false
 			console.log(dialog.messages)
 		},
 		startOnlineListListener() {
 			setInterval(() => {
-				axios.get('/api/chat/online').then(res => {
+				axios.get(ONLINE_PATH).then(res => {
 					this.onlineIds = res.data
 					// console.log(this.onlineIds)
 				})
@@ -665,7 +667,7 @@ export default {
 			let interval = setInterval(() => {
 				if (this.player && this.photosIsLoaded) {
 					axios
-						.get('/api/chat/dialog', {
+						.get(DIALOG_PATH, {
 							params: {
 								player1_id: this.player.id,
 								player2_id: this.newCompanionId,
@@ -687,7 +689,7 @@ export default {
 									if (dialogCompanion.photo) {
 										axios
 											.post(
-												'/api/player/image',
+												IMAGE_PATH,
 												{ img_name: dialogCompanion.photo },
 												this.config
 											)

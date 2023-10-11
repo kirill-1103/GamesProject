@@ -8,7 +8,6 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import ru.krey.games.domain.ExceptionResponse;
 import ru.krey.games.error.BadRequestException;
 import ru.krey.games.error.NotFoundException;
-import ru.krey.games.error.SecurityAuthenticationException;
 
 
 @ControllerAdvice
@@ -17,12 +16,6 @@ public class ExceptionsHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<ExceptionResponse> handleBadRequestException(BadRequestException e) {
         ExceptionResponse response = new ExceptionResponse(e.getMessage());
         return new ResponseEntity<>(response, HttpStatus.OK);
-    }
-
-    @ExceptionHandler(SecurityAuthenticationException.class)
-    public ResponseEntity<ExceptionResponse> handleAuthException(SecurityAuthenticationException e){
-        ExceptionResponse response = new ExceptionResponse(e.getMessage());
-        return new ResponseEntity<>(response,HttpStatus.OK);
     }
 
     @ExceptionHandler(NotFoundException.class)

@@ -16,6 +16,7 @@ import axios from "axios";
 import {tokenIsExpired} from "./service/jwtUtils";
 import {CHAT_PAGE_PATH, LOGIN_PAGE_PATH, paths, PROFILE_PAGE_PATH, REGISTER_PAGE_PATH} from "./router/component_names";
 import {view_server_url} from "./service/props";
+import {BASE_URL} from "./service/api/main";
 
 const store = createStore({
     state() {
@@ -83,7 +84,7 @@ router.beforeEach((to,from,next)=>{
     next()
 })
 
-axios.defaults.baseURL = "http://localhost:8080/"
+axios.defaults.baseURL = BASE_URL
 const app = createApp(App)
     .use(router)
     .use(store)

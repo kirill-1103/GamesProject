@@ -59,6 +59,9 @@ import {
   VICTORY_REASON_PLAYER2_WIN, VICTORY_REASON_PLAYER2_TIME_WIN
 } from "../../service/TttGameHelper";
 import {fromArrayToHoursMinutesSeconds, fromStringToHoursMinutesSeconds} from "../../service/datetime";
+import {IMAGE_PATH, oneByIdPath} from "../../service/api/player";
+import {gameMessagesByCodeAndIdPath} from "../../service/api/game_message";
+import {TTT_MAKE_MOVE_PATH, tttOneByPlayerIdPath} from "../../service/api/ttt";
 
 export default {
   name: "TttGamePage",
@@ -128,7 +131,7 @@ export default {
       }
     },
     updateGameFromDb() {
-      axios.get("/api/ttt_game/" + this.$store.state.playerGameId).then((response) => {
+      axios.get(tttOneByPlayerIdPath(this.$store.state.playerGameId)).then((response) => {
         this.game = response.data;
         connectToTttGame(this.game.id, this.updateState, this.$store);
       }).catch((error) => {
@@ -143,7 +146,7 @@ export default {
     },
     makeMove(x, y) {
       if (!this.game.endTime) {
-        axios.post("/api/ttt_game/make_move",
+        axios.post(TTT_MAKE_MOVE_PATH,
             {
               game_id: this.game.id,
               player_id: this.player.id,
@@ -162,10 +165,10 @@ export default {
         }else{
           id = game.player2Id
         }
-        axios.get("/api/player/"+id).then(result=>{
+        axios.get(oneByIdPath(id)).then(result=>{
           this.player_2 = result.data
           if(this.player_2.photo){
-            axios.post("/api/player/image", {img_name: this.player_2.photo}, this.config).then((result) => {
+            axios.post(IMAGE_PATH, {img_name: this.player_2.photo}, this.config).then((result) => {
               this.player_2.img_data = "data:image/;base64, " + result.data;
             }).catch(err => {
               console.log("ERR:");
@@ -251,7 +254,7 @@ export default {
     getMessages(){
       let interval = setInterval(()=>{
         if(this.game && this.game.id && this.game.gameCode){
-          axios.get("/api/game_message/"+this.game.id+"/"+this.game.gameCode)
+          axios.get(gameMessagesByCodeAndIdPath(this.game.id,this.game.gameCode))
               .then(messages=>{
                 this.messages = messages.data;
                 for (let mess of this.messages){

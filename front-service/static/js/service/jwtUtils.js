@@ -1,4 +1,5 @@
 import axios from "axios";
+import {UPDATE_TOKEN_PATH} from "./api/auth";
 
 export function tokenIsExpired(token){
     const tokenT =tokenTime(token)
@@ -27,7 +28,7 @@ export function tokenTime(token){
 }
 
 export function updateToken(){
-    axios.post("/updateToken")
+    axios.post(UPDATE_TOKEN_PATH)
         .then((data)=>{
             localStorage['jwtToken'] = data.data;
         }).catch((err)=>{

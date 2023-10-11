@@ -66,6 +66,7 @@ import axios from "axios";
 import SearchGameModal from "../SearchGameModal.vue";
 import {connectToSearchResult} from "../../service/ws";
 import {TTT_GAME_CODE} from "../../service/GameHelper";
+import {TTT_NEW_PATH, TTT_SEARCH_PATH, TTT_STOP_SEARCH_PATH} from "../../service/api/ttt";
 
 export default {
   name: "StartGameComponent",
@@ -129,7 +130,7 @@ export default {
         base_player_time: this.settings.time,
         complexity: this.settings.complexity,
       }
-      axios.post("/api/ttt_game/new", data, this.config).then((response) => {
+      axios.post(TTT_NEW_PATH, data, this.config).then((response) => {
         console.log(response.data);
         this.setSettingsAndStartGame(response.data.id)
       })
@@ -144,7 +145,7 @@ export default {
         size_field: this.settings.field_size,
         base_player_time: this.settings.time,
       }
-      axios.post("/api/ttt_game/search", data, this.config2)
+      axios.post(TTT_SEARCH_PATH, data, this.config2)
           .then(()=>{      this.$store.commit("setInSearch", true);})
       connectToSearchResult(data.player_id, this.setSettingsAndStartGame)
     },
@@ -162,7 +163,7 @@ export default {
       let data = {
         player_id: this.$store.state.player.id
       }
-      axios.post("/api/ttt_game/stop_search", data, this.config2)
+      axios.post(TTT_STOP_SEARCH_PATH, data, this.config2)
       this.$store.commit("setInSearch", false);
       this.alreadyStart=false;
     },

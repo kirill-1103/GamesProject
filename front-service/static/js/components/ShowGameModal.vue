@@ -26,6 +26,8 @@
 import axios from "axios";
 import {TTT_GAME_CODE} from "../service/TttGameHelper";
 import ShowTttGameComponent from "./ttt_game_components/ShowTttGameComponent.vue";
+import {oneByIdPath} from "../service/api/player";
+import {TTT_MOVE_ALL} from "../service/api/ttt";
 
 export default {
   name: "ShowGame",
@@ -52,7 +54,7 @@ export default {
       if (newV) {
         if (newV.code === TTT_GAME_CODE) {//show ttt game
           this.waitingGame = true;
-          axios.post("/api/ttt_move/all", {id: newV.id}, this.config).then(result => {
+          axios.post(TTT_MOVE_ALL, {id: newV.id}, this.config).then(result => {
             this.game = result.data;
             this.isTtt = true;
             this.waitingGame = false
@@ -84,7 +86,7 @@ export default {
             console.log(this.game.game)
 
             if (entityId !== -1) {
-              axios.get("/api/player/" + entityId).then((result) => {
+              axios.get(oneByIdPath(entityId)).then((result) => {
                 this.entity = result.data;
               })
             }else{

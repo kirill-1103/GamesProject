@@ -1,7 +1,7 @@
 package ru.krey.games.utils;
 
 import org.springframework.stereotype.Component;
-import ru.krey.lib.securitylib.interfaces.PathUtils;
+import ru.krey.libs.securitylib.interfaces.PathUtils;
 
 @Component
 public class PathUtilsImpl implements PathUtils {

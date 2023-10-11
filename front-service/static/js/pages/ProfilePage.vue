@@ -81,6 +81,8 @@ import {fromArrayToDate, fromArrayToDateWithTime} from "../service/datetime";
 import EditProfileModal from "../components/EditProfileModal.vue";
 import ShowGameModal from "../components/ShowGameModal.vue";
 import {TTT_GAME_CODE} from "../service/TttGameHelper"
+import {IMAGE_PATH, topPlayerByIdPath} from "../service/api/player";
+import {GAME_BY_PLAYER_PATH} from "../service/api/game";
 
 export default {
   name: "ProfilePage",
@@ -117,7 +119,7 @@ export default {
       this.player = this.$store.state.player;
       this.signUpTime = fromArrayToDate(this.player.signUpTime);
       if (this.player.photo && this.player.photo !== '') {
-        axios.post("/api/player/image", {img_name: this.player.photo}, this.config).then((result) => {
+        axios.post(IMAGE_PATH, {img_name: this.player.photo}, this.config).then((result) => {
           this.imgSrc = "data:image/;base64, " + result.data;
           let img = document.getElementById("player_photo");
           img['src'] = this.imgSrc;
@@ -138,7 +140,7 @@ export default {
       let interval = setInterval(() => {
         if (this.player.login !== null) {
           this.waitingTable = true;
-          axios.post("/api/games/byplayer", {
+          axios.post(GAME_BY_PLAYER_PATH, {
             id: this.player.id,
             from: this.from,
             to: this.to
@@ -192,7 +194,7 @@ export default {
     getPlayerTop() {
       let interval = setInterval(() => {
         if (this.player.login !== null) {
-          axios.get("/api/player/top/"+this.player.id).then(res=>{
+          axios.get(topPlayerByIdPath(this.player.id)).then(res=>{
             this.playerTop = res.data;
           })
           clearInterval(interval);

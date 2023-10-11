@@ -22,7 +22,7 @@ public class PlayerMapper implements RowMapper<Player> {
                 .rating(rs.getInt("rating"))
                 .lastSignInTime(rs.getTimestamp("last_sign_in_time").toLocalDateTime())
                 .signUpTime(rs.getTimestamp("sign_up_time").toLocalDateTime())
-                .Role(rs.getString("role"))
+                .role(rs.getString("role"))
                 .lastGameCode(rs.getInt("last_game_code"))
                 .build();
     }

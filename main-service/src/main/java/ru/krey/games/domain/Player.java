@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 @EqualsAndHashCode
 @NoArgsConstructor
 @ToString
-public class Player implements UserDetails {
+public class Player{
     private final static int CHANGE_RATING = 30;
 
     private Long id;
@@ -45,7 +45,7 @@ public class Player implements UserDetails {
     private Boolean enabled;
 
     @NonNull
-    private String Role;
+    private String role;
 
 
     private Integer lastGameCode;
@@ -58,41 +58,35 @@ public class Player implements UserDetails {
         }
     }
 
+
     public void plusRating(){
         this.rating += CHANGE_RATING;
     }
 
-    @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return Optional.of(this.getRole()).map(SimpleGrantedAuthority::new).stream().collect(Collectors.toList());
     }
 
-    @Override
     public String getPassword() {
         return password;
     }
 
-    @Override
     public String getUsername() {
         return this.login;
     }
 
-    @Override
     public boolean isAccountNonExpired() {
         return true;
     }
 
-    @Override
     public boolean isAccountNonLocked() {
         return true;
     }
 
-    @Override
     public boolean isCredentialsNonExpired() {
         return true;
     }
 
-    @Override
     public boolean isEnabled() {
         return true;
     }

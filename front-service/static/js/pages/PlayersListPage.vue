@@ -65,6 +65,7 @@
 
 <script>
 import axios from "axios";
+import {IMAGES_PATH, SEARCH_PATH} from "../service/api/player";
 
 export default {
   name: "PlayersListPage",
@@ -106,7 +107,7 @@ export default {
       if (this.stopTable){
         return
       }
-      axios.post("/api/player/search", {
+      axios.post(SEARCH_PATH, {
         search: this.stringSearch,
         from: this.from,
         to: this.to
@@ -129,7 +130,7 @@ export default {
         for (let player of this.players) {
           names.push(player.photo);
         }
-        axios.post("/api/player/images", names.slice(this.from - this.batchSize, this.to - this.batchSize)).then((res) => {
+        axios.post(IMAGES_PATH, names.slice(this.from - this.batchSize, this.to - this.batchSize)).then((res) => {
           for (let i = 0; i < res.data.length; i++) {
             if (res.data[i] !== null) {
               res.data[i] = "data:image/;base64, " + res.data[i];

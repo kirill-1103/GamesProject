@@ -88,6 +88,7 @@ import axios from 'axios'
 import Canvas from './Canvas.vue'
 import MiniCanvas from "./MiniCanvas.vue";
 import ProfileInTetrisGame from "./ProfileInTetrisGame.vue";
+import {TETRIS_MOVE_PATH} from "../../service/api/tetris";
 
 export default {
   name: 'GameComponent',
@@ -121,7 +122,7 @@ export default {
         game_id: this.game.gameId,
         move_code: moveCode,
       }
-      axios.post('/api/tetris_game/move', data, this.config).then(response => {
+      axios.post(TETRIS_MOVE_PATH, data, this.config).then(response => {
       })
     },
     toTimeFormat(millis) {

@@ -22,7 +22,7 @@
                 <td class="col2">
                   <div style="text-align: center" v-if="readyPhotos>index">
                     <img v-if="!photos[index]" src="../../img/default.png" alt="img" width="100">
-                    <img v-if="photos[index]" v-bind:src="photos[index]" id="player_photo" alt="img"  width="100"/>
+                    <img v-if="photos[index]" v-bind:src="photos[index]" id="player_photo" alt="img" width="100"/>
                   </div>
                   <div v-else>
                     <div style="margin-top:50%;" class="spinner-border text-primary" role="status">
@@ -52,14 +52,15 @@
 
 <script>
 import axios from "axios";
-import {IMAGES_PATH, RATING_PATH} from "../service/api/player";
+import {IMAGES_PATH} from "../service/api/player";
+import {playerApi} from "../service/openapi/config/player_openapi_config";
 
 export default {
   name: "RatingPage",
   data: () => {
     return {
       players: null,
-      photos:null,
+      photos: null,
       from: 0,
       to: 10,
       waitingTable: false,
@@ -70,8 +71,8 @@ export default {
           "Access-Control-Allow-Origin": "*",
         }
       },
-      readyPhotos:0,
-      batchSize:10
+      readyPhotos: 0,
+      batchSize: 10
     }
   },
   mounted() {
@@ -81,40 +82,25 @@ export default {
   methods: {
     getPlayers() {
       this.waitingTable = true;
-      axios.post(RATING_PATH, {from: this.from, to: this.to}, this.config).then((res) => {
-        if (res.data.length === 0) {
-          this.stopTable = true;
-          this.waitingTable = false;
-          return;
-        }
-        if (this.players === null) {
-          this.players = res.data;
+      playerApi.getAllOrderedByRatingStepByStep(this.from, this.to, (error, data, response) => {
+        if (error) {
+          console.error(error)
         } else {
-          this.players = this.players.concat(res.data);
-        }
-        this.from = this.to;
-        this.to += this.batchSize;
-        this.waitingTable = false;
-      }).then(()=>{
-        let names = [];
-        for (let player of this.players){
-          names.push(player.photo);
-        }
-        axios.post(IMAGES_PATH,names.slice(this.from-this.batchSize,this.to-this.batchSize)).then((res)=>{
-          for (let i = 0;i<res.data.length;i++){
-            if (res.data[i]!==null){
-              res.data[i] = "data:image/;base64, " +res.data[i];
-            }
+          if (data.length === 0) {
+            this.stopTable = true;
+            this.waitingTable = false;
+            return;
           }
-
-          if (this.photos == null){
-            this.photos = res.data;
-          }else{
-            this.photos = this.photos.concat(res.data)
+          if (this.players === null) {
+            this.players = data
+          } else {
+            this.players = this.players.concat(data)
           }
-          this.readyPhotos += res.data.length
-          // console.log(this.readyPhotos)
-        })
+          this.from = this.to;
+          this.to += this.batchSize;
+          this.waitingTable = false
+          this.setPhotos();
+        }
       })
     },
     goToPlayer(id) {
@@ -123,10 +109,31 @@ export default {
     addScrollListener() {
       this.$refs.scroll_table.addEventListener("scroll", (event) => {
         let table = this.$refs.scroll_table;
-        if (Math.abs((table.scrollHeight - table.scrollTop)-table.clientHeight) < 1 && !this.waitingTable && !this.stopTable) {
+        if (Math.abs((table.scrollHeight - table.scrollTop) - table.clientHeight) < 1 && !this.waitingTable && !this.stopTable) {
           console.log('here')
           this.getPlayers();
         }
+      })
+    },
+    setPhotos() {
+      let names = [];
+      for (let player of this.players) {
+        names.push(player.photo);
+      }
+      axios.post(IMAGES_PATH, names.slice(this.from - this.batchSize, this.to - this.batchSize)).then((res) => {
+        for (let i = 0; i < res.data.length; i++) {
+          if (res.data[i] !== null) {
+            res.data[i] = "data:image/;base64, " + res.data[i].base64;
+          }
+        }
+
+        if (this.photos == null) {
+          this.photos = res.data;
+        } else {
+          this.photos = this.photos.concat(res.data)
+        }
+        this.readyPhotos += res.data.length
+        // console.log(this.readyPhotos)
       })
     }
   }

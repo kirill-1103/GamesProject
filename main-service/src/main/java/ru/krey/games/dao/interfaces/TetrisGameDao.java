@@ -16,4 +16,6 @@ public interface TetrisGameDao {
 
     Set<TetrisGame> getAllGamesWithPlayersByPlayerId(Long playerId);
 
+    Optional<Long> getCurrentGameIdByPlayerId(Long playerId);
+
 }

@@ -16,10 +16,19 @@ spring:
           uri: lb://auth-service
           predicates:
             - Path=/auth/**
+        - id: player_route
+          uri: lb://player-service
+          predicates:
+            - Path=/api/player/**
+        - id: file_route
+          uri: lb://file-service
+          predicates:
+            - Path=/api/file/**
         - id: other_route
           uri: lb://main-service
           predicates:
           - Path=/**
+
 
 server:
   port: 8080

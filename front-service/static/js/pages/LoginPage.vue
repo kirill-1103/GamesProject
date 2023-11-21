@@ -13,6 +13,7 @@ import {REGISTER_PAGE_NAME, LOGIN_PAGE_NAME, PROFILE_PAGE_PATH} from "../router/
 import Form from "../components/LoginForm.vue";
 import router from "../router/router";
 import {AUTHORIZATION_PATH} from "../service/api/auth";
+import {playerApi} from "../service/openapi/config/player_openapi_config";
 
 export default {
   name: "LoginPage",

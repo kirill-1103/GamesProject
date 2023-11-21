@@ -1,0 +1,390 @@
+openapi: "3.0.2"
+info:
+  title: API Title
+  version: "1.0"
+servers:
+  - url: http://localhost:8080/api/player
+    description: user server
+paths:
+  /{id}:
+    get:
+      security:
+        - bearerAuth: [ ]
+      summary: Player Info
+      tags:
+        - Player
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            format: int64
+            minimum: 1
+      operationId: getById
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PlayerOpenApi"
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+        '404':
+          description: User not found!
+
+  /login/{login}:
+    get:
+      security:
+        - bearerAuth: [ ]
+      summary: Player Info
+      tags:
+        - Player
+      parameters:
+        - in: path
+          name: login
+          required: true
+          schema:
+            type: string
+      operationId: getByLogin
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PlayerOpenApi"
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+        '404':
+          description: User not found!
+
+  /new:
+    post:
+      summary: Create player
+      tags:
+        - Player
+      operationId: createPlayer
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/NewPlayerRequestOpenApi'
+      responses:
+        '201':
+          description: Player has been created
+        '400':
+          description: Bad request!
+        '409':
+          description: Account with such username or email is already in use!
+
+  /authenticated:
+    get:
+      security:
+        - bearerAuth: [ ]
+      summary: Current player info
+      tags:
+        - Player
+      operationId: getAuthenticatedUser
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PlayerOpenApi"
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+
+  /update:
+    post:
+      security:
+        - bearerAuth: [ ]
+      summary: Update player
+      tags:
+        - Player
+      operationId: updatePlayer
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UpdatePlayerRequestOpenApi'
+      responses:
+        '200':
+          description: Successfully updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/JwtResponseOpenApi"
+        '400':
+          description: Updated error!
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+        '403':
+          description: Forbidden error!
+        '409':
+          description: Account with such username or email is already in use!
+
+  /currentGameCode/{player_id}:
+    get:
+      summary: Get current game code
+      tags:
+        - Player
+      operationId: getCurrentGameCode
+      parameters:
+        - in: path
+          name: player_id
+          required: true
+          schema:
+            type: integer
+            format: int64
+            minimum: 1
+      responses:
+        '200':
+          description: Current game code
+          content:
+            application/json:
+              schema:
+                type: integer
+                format: int64
+        '400':
+          description: Bad request!
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+        '404':
+          description: Player not found!
+
+  /currentGameId/{player_id}:
+    get:
+      summary: Get current game id
+      tags:
+        - Player
+      operationId: getCurrentGameId
+      parameters:
+        - in: path
+          name: player_id
+          required: true
+          schema:
+            type: integer
+            format: int64
+            minimum: 1
+      responses:
+        '200':
+          description: Current game id
+          content:
+            application/json:
+              schema:
+                type: integer
+                format: int64
+        '400':
+          description: Bad request!
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+        '404':
+          description: Player not found!
+
+  /rating/{from}/{to}:
+    get:
+      summary: Get players sorting by rating step by step
+      tags:
+        - Player
+      operationId: getAllOrderedByRatingStepByStep
+      parameters:
+        - in: path
+          name: from
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - in: path
+          name: to
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Players array
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/PlayerOpenApi"
+        '400':
+          description: Bad request!
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+
+  /top/{id}:
+    get:
+      summary: Get player position in top by player id
+      tags:
+        - Player
+      operationId: getPlayerTop
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: integer
+                format: int64
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+        '404':
+          description: User not found!
+
+  /search:
+    get:
+      summary: Search players
+      tags:
+        - Player
+      operationId: searchPlayers
+      parameters:
+        - in: query
+          name: search_query
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: from
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - in: query
+          name: to
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/PlayerOpenApi"
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+        '404':
+          description: User not found!
+  /update-active:
+    post:
+      security:
+        - bearerAuth: [ ]
+      summary: Update active
+      tags:
+        - Player
+      operationId: updateActive
+      responses:
+        '200':
+          description: Successfully active updated
+        '400':
+          description: Updated error!
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  responses:
+    UnauthorizedError:
+      description: Access token is missing or invalid
+  schemas:
+    PlayerOpenApi:
+      type: object
+      required:
+        - login
+        - email
+        - id
+      properties:
+        login:
+          type: string
+        email:
+          type: string
+        id:
+          type: integer
+          format: int64
+        password:
+          type: string
+        signUpTime:
+          type: string
+          format: date-time
+        lastSignInTime:
+          type: string
+          format: date-time
+        rating:
+          type: integer
+        photo:
+          type: string
+        enabled:
+          type: boolean
+        role:
+          type: string
+        lastGameCode:
+          type: integer
+
+    NewPlayerRequestOpenApi:
+      type: object
+      required:
+        - player
+      properties:
+        player:
+          $ref: "#/components/schemas/PlayerOpenApi"
+        img:
+          type: string
+          format: binary
+          description: Image's file
+
+
+    UpdatePlayerRequestOpenApi:
+      type: object
+      required:
+        - login
+        - email
+        - id
+      properties:
+        login:
+          type: string
+        email:
+          type: string
+        id:
+          type: integer
+          format: int64
+        password:
+          type: string
+        img:
+          type: string
+          format: binary
+          description: Image's file
+
+    JwtResponseOpenApi:
+      type: object
+      required:
+        - accessToken
+        - user
+      properties:
+        accessToken:
+          type: string
+          pattern: ^Bearer\s.+$
+        user:
+          $ref: "#/components/schemas/PlayerOpenApi"

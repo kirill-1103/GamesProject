@@ -1,18 +1,19 @@
 import axios from "axios";
 import {UPDATE_TOKEN_PATH} from "./api/auth";
+import apiClient from "./openapi/generated_sources/player/src/ApiClient";
 
-export function tokenIsExpired(token){
-    const tokenT =tokenTime(token)
+export function tokenIsExpired(token) {
+    const tokenT = tokenTime(token)
     return tokenT == null || tokenT <= 0;
 }
 
-export function tokenTime(token){
+export function tokenTime(token) {
     const tokenParts = token.split('.');
-    if(tokenParts.length !== 3){
+    if (tokenParts.length !== 3) {
         return null;
     }
     const encodedPayload = tokenParts[1];
-    try{
+    try {
         const decodedPayload = atob(encodedPayload);
         const payloadObj = JSON.parse(decodedPayload);
 
@@ -21,17 +22,17 @@ export function tokenTime(token){
         }
         const tokenExpiration = payloadObj.exp * 1000;
         const currentTimeStamp = Date.now();
-        return (tokenExpiration-currentTimeStamp);
-    }catch (err){
+        return (tokenExpiration - currentTimeStamp);
+    } catch (err) {
         return null;
     }
 }
 
-export function updateToken(){
+export function updateToken() {
     axios.post(UPDATE_TOKEN_PATH)
-        .then((data)=>{
+        .then((data) => {
             localStorage['jwtToken'] = data.data;
-        }).catch((err)=>{
-            console.log(err);
+        }).catch((err) => {
+        console.log(err);
         })
 }

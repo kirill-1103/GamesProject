@@ -2,33 +2,32 @@ package ru.krey.games.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.krey.games.controller.TttMoveController;
-import ru.krey.games.dao.interfaces.PlayerDao;
 import ru.krey.games.dao.interfaces.TttGameDao;
 import ru.krey.games.dao.interfaces.TttMoveDao;
 import ru.krey.games.domain.Player;
 import ru.krey.games.domain.games.ttt.TttGame;
-import ru.krey.games.domain.games.ttt.TttMove;
-import ru.krey.games.dto.TttGameDto;
 import ru.krey.games.dto.TttMoveDto;
 import ru.krey.games.error.BadRequestException;
 import ru.krey.games.error.NotFoundException;
 import ru.krey.games.logic.ttt.TttField;
+import ru.krey.games.mapper.PlayerMapper;
+import ru.krey.games.openapi.model.PlayerOpenApi;
 import ru.krey.games.utils.GameUtils;
 
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
-import java.util.Random;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
 public class TttGameService {
     private final TttGameDao gameDao;
-    private final PlayerDao playerDao;
+    private final PlayerService playerService;
 
     private final TttMoveDao moveDao;
+
+    private final PlayerMapper playerMapper;
 
     public TttGame newGame(Long player1Id, Long player2Id,
                                Integer fieldSize, Long minutes,
@@ -47,8 +46,8 @@ public class TttGameService {
             }
         }
 
-        Player player1 = playerDao.getOneById(player1Id).orElseThrow(NotFoundException::new);
-        Player player2 = player2Id == null ? null : playerDao.getOneById(player2Id).orElseThrow(NotFoundException::new);
+        Player player1 = playerService.getOneByIdOpt(player1Id).orElseThrow(NotFoundException::new);
+        Player player2 = player2Id == null ? null : playerService.getOneByIdOpt(player2Id).orElseThrow(NotFoundException::new);
 
         Long time = TttGame.getGameTimeFromMinutes(minutes.intValue());
 
@@ -69,10 +68,10 @@ public class TttGameService {
         }
         TttGame savedGame = gameDao.saveOrUpdate(newGame);
         player1.setLastGameCode(GameUtils.TTT_GAME_CODE);
-        playerDao.saveOrUpdate(player1);
+        playerService.update(player1);
         if (player2 != null) {
             player2.setLastGameCode(GameUtils.TTT_GAME_CODE);
-            playerDao.saveOrUpdate(player2);
+            playerService.update(player2);
         }
         savedGame.setField(new TttField(fieldSize));
         return savedGame;
@@ -86,8 +85,8 @@ public class TttGameService {
         game.setEndTime(LocalDateTime.now());
         gameDao.saveOrUpdate(game);
         if(game.changeRating()){
-            playerDao.saveOrUpdate(game.getPlayer1());
-            playerDao.saveOrUpdate(game.getPlayer2());
+            playerService.update(game.getPlayer1());
+            playerService.update(game.getPlayer2());
         }
     }
 
@@ -95,8 +94,28 @@ public class TttGameService {
         return gameDao.getCurrentGameByPlayerId(id);
     }
 
+    public Optional<Long> getCurrentGameIdByPlayerId(Long id){
+        return gameDao.getCurrentGameIdByPlayerId(id);
+    }
+
     public Set<TttGame> getAllGamesByPlayerId(Long id){
-        return gameDao.getAllGamesWithPlayersByPlayerId(id);
+        Set<TttGame> games = gameDao.getAllGamesWithPlayersByPlayerId(id);
+        Set<Long> playersIds = games.stream()
+                .flatMap(game-> Stream.of(game.getPlayer1Id(),game.getPlayer2Id()))
+                .collect(Collectors.toSet());
+        Map<Long, PlayerOpenApi> idsToPlayer = playerService.getPlayersByIds(playersIds);
+        games.forEach(game->{
+            game.setPlayer1(playerMapper.toPlayer(idsToPlayer.get(game.getPlayer1Id())));
+            if(game.getPlayer2Id() != null){
+                game.setPlayer2(playerMapper.toPlayer(idsToPlayer.get(game.getPlayer2Id())));
+            }
+            if(game.getWinnerId() != null){
+                game.setWinner(game.getWinnerId().equals(game.getPlayer1Id())
+                        ? game.getPlayer1()
+                        : game.getPlayer2());
+            }
+        });
+        return games;
     }
 
     public List<TttMoveDto> getGameMoves(Long gameId){

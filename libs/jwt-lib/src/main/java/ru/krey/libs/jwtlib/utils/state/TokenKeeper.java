@@ -19,7 +19,11 @@ public class TokenKeeper {
     }
 
     public String getToken(String serviceName, List<String> rolesList){
-        if(Objects.isNull(token) || jwtUtils.getTimeLeftMs(token) < timeForUpdateMs){
+        try{
+            if(Objects.isNull(token) || jwtUtils.getTimeLeftMs(token) < timeForUpdateMs){
+                this.token = jwtUtils.generateToken(serviceName, rolesList);
+            }
+        }catch (Exception e){
             this.token = jwtUtils.generateToken(serviceName, rolesList);
         }
         return token;

@@ -17,7 +17,11 @@ public class Message {
 
     private Player recipient;
 
+    private Long recipientId;
+
     private Player sender;
+
+    private Long senderId;
 
     private LocalDateTime readingTime;
 

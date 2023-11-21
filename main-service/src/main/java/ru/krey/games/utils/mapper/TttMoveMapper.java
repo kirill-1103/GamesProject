@@ -3,12 +3,12 @@ package ru.krey.games.utils.mapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
-import ru.krey.games.dao.interfaces.PlayerDao;
 import ru.krey.games.dao.interfaces.TttGameDao;
 import ru.krey.games.domain.Player;
 import ru.krey.games.domain.games.ttt.TttGame;
 import ru.krey.games.domain.games.ttt.TttMove;
 import ru.krey.games.error.NotFoundException;
+import ru.krey.games.service.PlayerService;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -16,7 +16,7 @@ import java.sql.SQLException;
 @RequiredArgsConstructor
 @Component
 public class TttMoveMapper implements RowMapper<TttMove> {
-    private final PlayerDao playerDao;
+    private final PlayerService playerService;
     private final TttGameDao gameDao;
 
     @Override
@@ -33,7 +33,8 @@ public class TttMoveMapper implements RowMapper<TttMove> {
     }
 
     private Player getPlayerById(Long id) {
-        return playerDao.getOneById(id).orElse(null);
+
+        return playerService.getOneByIdOrNull(id);
     }
 
     private TttGame getGameById(Long id) {

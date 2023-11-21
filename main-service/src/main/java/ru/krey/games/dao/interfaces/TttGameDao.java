@@ -22,4 +22,6 @@ public interface TttGameDao {
     Set<TttGame> getAllGamesWithPlayersByPlayerId(Long playerId);
 
     Set<TttGame> getAllGamesWithPlayers();
+
+    Optional<Long> getCurrentGameIdByPlayerId(Long playerId);
 }

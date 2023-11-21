@@ -77,12 +77,13 @@
 <script>
 import axios from "axios";
 import updateAuthUserInStorage from "../service/auth.js";
-import {fromArrayToDate, fromArrayToDateWithTime} from "../service/datetime";
+import {fromArrayToDateWithTime} from "../service/datetime";
 import EditProfileModal from "../components/EditProfileModal.vue";
 import ShowGameModal from "../components/ShowGameModal.vue";
 import {TTT_GAME_CODE} from "../service/TttGameHelper"
-import {IMAGE_PATH, topPlayerByIdPath} from "../service/api/player";
+import {img_path} from "../service/api/player";
 import {GAME_BY_PLAYER_PATH} from "../service/api/game";
+import {playerApi} from "../service/openapi/config/player_openapi_config";
 
 export default {
   name: "ProfilePage",
@@ -117,10 +118,10 @@ export default {
   created() {
     updateAuthUserInStorage(this.$store).then(() => {//get player
       this.player = this.$store.state.player;
-      this.signUpTime = fromArrayToDate(this.player.signUpTime);
+      this.signUpTime  = this.player.signUpTime.toLocaleDateString();
       if (this.player.photo && this.player.photo !== '') {
-        axios.post(IMAGE_PATH, {img_name: this.player.photo}, this.config).then((result) => {
-          this.imgSrc = "data:image/;base64, " + result.data;
+        axios.get(img_path(this.player.photo), this.config).then((result) => {
+          this.imgSrc = "data:image/;base64, " + result.data.base64;
           let img = document.getElementById("player_photo");
           img['src'] = this.imgSrc;
         }).catch(err => {
@@ -194,8 +195,12 @@ export default {
     getPlayerTop() {
       let interval = setInterval(() => {
         if (this.player.login !== null) {
-          axios.get(topPlayerByIdPath(this.player.id)).then(res=>{
-            this.playerTop = res.data;
+          playerApi.getPlayerTop(this.player.id,(error,data,response)=>{
+            if(!error){
+              this.playerTop = data;
+            }else{
+              console.error(error)
+            }
           })
           clearInterval(interval);
         }

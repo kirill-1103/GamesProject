@@ -3,9 +3,9 @@ package ru.krey.games.utils.mapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
-import ru.krey.games.dao.interfaces.PlayerDao;
 import ru.krey.games.domain.Player;
 import ru.krey.games.domain.games.ttt.TttGame;
+import ru.krey.games.service.PlayerService;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 @Component
 public class TttGameMapper implements RowMapper<TttGame> {
 
-    private final PlayerDao playerDao;
+    private final PlayerService playerService;
 
     @Override
     public TttGame mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -41,6 +41,6 @@ public class TttGameMapper implements RowMapper<TttGame> {
     }
 
     private Player getPlayerById(Long id){
-        return playerDao.getOneById(id).orElse(null);
+        return playerService.getOneByIdOrNull(id);
     }
 }

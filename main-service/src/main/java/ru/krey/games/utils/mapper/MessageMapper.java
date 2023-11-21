@@ -13,14 +13,14 @@ import java.time.LocalDateTime;
 public class MessageMapper implements RowMapper<Message> {
     @Override
     public Message mapRow(ResultSet rs, int rowNum) throws SQLException {
-        Player sender = MapperUtils.getPlayerFromRsByPrefix(rs,"p1_");
-        Player recipient = MapperUtils.getPlayerFromRsByPrefix(rs,"p2_");
+//        Player sender = MapperUtils.getPlayerFromRsByPrefix(rs,"p1_");
+//        Player recipient = MapperUtils.getPlayerFromRsByPrefix(rs,"p2_");
         LocalDateTime readingTime = rs.getTimestamp("reading_time") == null ? null : rs.getTimestamp("reading_time").toLocalDateTime();
 
         return Message.builder()
                 .id(rs.getLong("id"))
-                .sender(sender)
-                .recipient(recipient)
+                .senderId(rs.getLong("sender_id"))
+                .recipientId(rs.getLong("recipient_id"))
                 .sendingTime(rs.getTimestamp("sending_time").toLocalDateTime())
                 .readingTime(readingTime)
                 .messageText(rs.getString("message_text"))

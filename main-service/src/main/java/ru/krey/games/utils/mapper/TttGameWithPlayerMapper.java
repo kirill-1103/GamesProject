@@ -15,23 +15,26 @@ public class TttGameWithPlayerMapper implements RowMapper<TttGame> {
     public TttGame mapRow(ResultSet rs, int rowNum) throws SQLException {
         LocalDateTime endTime = rs.getTimestamp("end_time") == null ? null : rs.getTimestamp("end_time").toLocalDateTime();
 
-        Player player1 = MapperUtils.getPlayerFromRsByPrefix(rs, "p1_");
-        Player player2 = MapperUtils.getPlayerFromRsByPrefix(rs, "p2_");
-        Player winner;
-        if(rs.getObject("winner_id") == null){
-            winner = null;
-        }else if(rs.getLong("winner_id") == player1.getId()){
-            winner = player1;
-        }else{
-            winner = player2;
-        }
+//        Player player1 = MapperUtils.getPlayerFromRsByPrefix(rs, "p1_");
+//        Player player2 = MapperUtils.getPlayerFromRsByPrefix(rs, "p2_");
+//        Player winner;
+//        if(rs.getObject("winner_id") == null){
+//            winner = null;
+//        }else if(rs.getLong("winner_id") == player1.getId()){
+//            winner = player1;
+//        }else{
+//            winner = player2;
+//        }
         return TttGame.builder()
                 .id(rs.getLong("id"))
-                .player1(player1)
-                .player2(player2)
+                .player1Id(rs.getLong("player1_id"))
+                .player2Id(rs.getLong("player2_id"))
+                .winnerId(rs.getLong("winner_id"))
+//                .player1(player1)
+//                .player2(player2)
                 .startTime(rs.getTimestamp("start_time").toLocalDateTime())
                 .endTime(endTime)
-                .winner(winner)
+//                .winner(winner)
                 .sizeField(rs.getInt("size_field"))
                 .player1Time(rs.getLong("player1_time"))
                 .player2Time(rs.getLong("player2_time"))

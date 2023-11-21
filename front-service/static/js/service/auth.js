@@ -1,5 +1,6 @@
 import axios from "axios";
-import {AUTHENTICATED_PATH, CURRENT_GAME_CODE_PATH, CURRENT_GAME_ID_PATH, IMAGE_PATH} from "./api/player";
+import {img_path} from "./api/player";
+import {playerApi} from "./openapi/config/player_openapi_config";
 
 let config = {
     headers: {
@@ -8,30 +9,45 @@ let config = {
     }
 };
 
-export default function updateAuthUserInStorage(store,callback=null){
-    store.commit("setPlayerGameCode",null)
-    store.commit("setPlayerGameId",null)
-    return axios.get(AUTHENTICATED_PATH).then(response=>{
-        // console.log(response.data);
-        if(response.data.error){
-            // localStorage.removeItem("player");
-            store.commit("setPlayer",null);
-        }else{
-            // localStorage.setItem("player",JSON.stringify(response.data));
-            store.commit("setPlayer",response.data)
-            // console.log("STORE:",store.state.player)
-        }
 
-    }).catch((err)=>{
-        console.log(err.message)
-    }).then(()=>getPhoto(store)).then(()=>getGameCodeAndId(store,callback))
+export default  function updateAuthUserInStorage(store, callback = null) {
+    store.commit("setPlayerGameCode", null)
+    store.commit("setPlayerGameId", null)
+    return  new Promise(async (resolve,reject) => {
+        playerApi
+            .getAuthenticatedUser((error, data, response) => {
+                if (error) {
+                    store.commit("setPlayer", null);
+                    reject(error)
+                } else {
+                    store.commit("setPlayer", data);
+                    getPhoto(store)
+                    getGameCodeAndId(store, callback)
+                    resolve(data)
+                }
+            })
+    })
+    // return axios.get(AUTHENTICATED_PATH).then(response => {
+    //     // console.log(response.data);
+    //     if (response.data.error) {
+    //         // localStorage.removeItem("player");
+    //         store.commit("setPlayer", null);
+    //     } else {
+    //         // localStorage.setItem("player",JSON.stringify(response.data));
+    //         store.commit("setPlayer", response.data)
+    //         // console.log("STORE:",store.state.player)
+    //     }
+    //
+    // }).catch((err) => {
+    //     console.log(err.message)
+    // }).then(() => getPhoto(store)).then(() => getGameCodeAndId(store, callback))
 }
 
-function getPhoto(store){
-    if(store.state.player){
-        if(store.state.player.photo){
-            axios.post(IMAGE_PATH, {img_name: store.state.player.photo}, config).then((result) => {
-                store.commit("setPlayerPhoto","data:image/;base64, " + result.data)
+export function getPhoto(store) {
+    if (store.state.player) {
+        if (store.state.player.photo) {
+            axios.get(img_path(store.state.player.photo), config).then((result) => {
+                store.commit("setPlayerPhoto", "data:image/;base64, " + result.data.base64)
             }).catch(err => {
                 console.log("ERR:");
                 console.log(err)
@@ -40,28 +56,24 @@ function getPhoto(store){
     }
 }
 
-function getGameCodeAndId(store,callback){
-    if(store.state.player){
-        axios.post(CURRENT_GAME_CODE_PATH,{id:store.state.player.id},config)
-            .then((result)=>{
-                if(result.data){
-                    store.commit("setPlayerGameCode",result.data);
-                }
-            }).then(()=>{
-                if(store.state.player ){
-                    axios.post(CURRENT_GAME_ID_PATH,{id:store.state.player.id},config)
-                        .then(result=>{
-                            if(!result.data){
-                                store.commit("setPlayerGameId",-1);
-                            }
-                            if(result.data){
-                                store.commit("setPlayerGameId",result.data)
-                                if(callback){
-                                    callback();
-                                }
-                            }
-                        })
-                }
+function getGameCodeAndId(store, callback) {
+    if (store.state.player) {
+        playerApi.getCurrentGameCode(store.state.player.id,(err,data,resp)=>{
+            if(data){
+                store.commit("setPlayerGameCode", data);
+            }
+            if(store.state.player){
+                playerApi.getCurrentGameId(store.state.player.id,(err,data,resp)=>{
+                    if(!data){
+                        store.commit("setPlayerGameId", -1);
+                    }else{
+                        store.commit("setPlayerGameId", data)
+                        if (callback) {
+                            callback();
+                        }
+                    }
+                })
+            }
         })
     }
 }

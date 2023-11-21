@@ -37,7 +37,7 @@
 <script>
 import axios from "axios";
 import {reformatTime} from "../../service/datetime";
-import {IMAGE_PATH} from "../../service/api/player";
+import {img_path} from "../../service/api/player";
 import {TETRIS_SURRENDER_PATH} from "../../service/api/tetris";
 
 export default {
@@ -70,9 +70,9 @@ export default {
     },
     getPhoto() {
       if(this.player.photo){
-        axios.post(IMAGE_PATH, {img_name: this.player.photo}, this.config)
+        axios.get(img_path(this.player.photo),  this.config)
             .then((result)=>{
-              this.imgData = "data:image/;base64, "+result.data;
+              this.imgData = "data:image/;base64, "+result.data.base64;
               console.log(this.imgData)
             })
       }

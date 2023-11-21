@@ -130,6 +130,7 @@ export default {
         base_player_time: this.settings.time,
         complexity: this.settings.complexity,
       }
+      console.log(this.$store.state.player)
       axios.post(TTT_NEW_PATH, data, this.config).then((response) => {
         console.log(response.data);
         this.setSettingsAndStartGame(response.data.id)
@@ -152,11 +153,10 @@ export default {
     setSettingsAndStartGame(game) {
       this.gameStarting = true;
       this.$store.commit("setPlayerGameCode", TTT_GAME_CODE);
-      this.$store.commit("setPlayerGameId", game.id);
+      this.$store.commit("setPlayerGameId", game);
       this.$store.commit("setInSearch", false);
       this.alreadyStart = false;
       location.reload();
-
       // this.startGame(game);
     },
     stopSearch() {

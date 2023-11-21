@@ -12,27 +12,32 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.multipart.MultipartFile;
-import ru.krey.games.authservice.constant.ServicesNames;
-import ru.krey.games.authservice.domain.UserDetailsImpl;
+import ru.krey.games.authservice.exception.BadRequestException;
 import ru.krey.games.authservice.exception.SecurityAuthenticationException;
 import ru.krey.games.authservice.service.interfaces.UserService;
+import ru.krey.games.authservice.utils.mapper.UserDetailsMapper;
+import ru.krey.games.openapi.api.PlayerApi;
+import ru.krey.games.openapi.model.PlayerOpenApi;
+
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Objects;
 
 @Service
 @JsonDeserialize
 @RequiredArgsConstructor
 @Slf4j
 public class UserServiceImpl implements UserService {
-    private final static String URL_CREATE_PLAYER = String.format("http://%s/api/player/new", ServicesNames.MAIN_SERVICE);
-    private final static String URL_GET_USER = String.format("http://%s/api/player/login/{login}", ServicesNames.MAIN_SERVICE);
-
-    private final RestTemplate restTemplate;
+    private final PlayerApi playerApi;
+    private final UserDetailsMapper mapper;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         try {
-            return restTemplate.getForObject(URL_GET_USER, UserDetailsImpl.class, username);
+            return mapper.toUserDetails(playerApi.getByLogin(username));
         } catch (Exception e) {
             throw new SecurityAuthenticationException("Cannot load user by username.", e);
         }
@@ -40,10 +45,28 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ResponseEntity<?> createUser(MultipartFile image, String login, String email, String password) {
-
-        return restTemplate.postForEntity(URL_CREATE_PLAYER,
-                registrationHttpEntity(image, login, email, password),
-                Object.class);
+        PlayerOpenApi playerOpenApi = new PlayerOpenApi();
+        playerOpenApi.setLogin(login);
+        playerOpenApi.setEmail(email);
+        playerOpenApi.setPassword(password);
+        try {
+            Path path = null;
+            if (!Objects.isNull(image)) {
+                path = Paths.get("./", image.getOriginalFilename());
+                image.transferTo(path);
+            }
+            if (Objects.nonNull(path)) {
+                playerApi.createPlayer(playerOpenApi, path.toFile());
+            } else {
+                playerApi.createPlayer(playerOpenApi, null);
+            }
+            return ResponseEntity.ok().build();
+        } catch (RestClientException e) {
+            log.error(e.getMessage());
+            throw new BadRequestException("Не удалось создать игрока");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private HttpEntity<MultiValueMap<String, Object>> registrationHttpEntity(MultipartFile image, String login, String email, String password) {

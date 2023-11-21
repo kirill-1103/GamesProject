@@ -3,7 +3,6 @@ package ru.krey.games.dao;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.relational.core.sql.SQL;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -17,12 +16,9 @@ import ru.krey.games.utils.mapper.MessageMapper;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.sql.Timestamp;
-import java.sql.Types;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 @Component
 @RequiredArgsConstructor
@@ -35,23 +31,13 @@ public class MessageJdbcTemplate implements MessageDao {
 
     private final MessageMapper mapper;
 
-    private final static String getAllMessagesWithPlayersInfo = "SELECT m.*," +
-            "p1.id AS p1_id, p1.last_game_code AS p1_last_game_code, p1.login AS p1_login, " +
-            "p1.password AS p1_password, p1.email as p1_email, p1.enabled as p1_enabled, " +
-            "p1.last_sign_in_time as p1_last_sign_in_time, p1.photo AS p1_photo, p1.rating AS p1_rating, " +
-            "p1.role AS p1_role, p1.sign_up_time AS p1_sign_up_time, " +
-            "p2.id AS p2_id, p2.last_game_code AS p2_last_game_code, p2.login AS p2_login, " +
-            "p2.password AS p2_password, p2.email as p2_email, p2.enabled as p2_enabled, " +
-            "p2.last_sign_in_time as p2_last_sign_in_time, p2.photo as p2_photo, p2.rating as p2_rating," +
-            "p2.role as p2_role, p2.sign_up_time as p2_sign_up_time " +
-            "FROM message as m " +
-            "INNER JOIN player AS p1 ON m.sender_id = p1.id " +
-            "LEFT OUTER JOIN player AS p2 ON m.recipient_id = p2.id ";
+    private final static String getAllMessages = "SELECT m.* FROM message as m ";
+
 
     @Override
     public List<Message> getAllMessagesByPlayerId(Long id) {
         String condition = "WHERE m.sender_id = ? OR m.recipient_id = ?";
-        String query = getAllMessagesWithPlayersInfo + condition;
+        String query = getAllMessages + condition;
         return new ArrayList<>(jdbcTemplate.query(query, mapper, id, id));
     }
 
@@ -63,7 +49,7 @@ public class MessageJdbcTemplate implements MessageDao {
                 "WHERE (sender_id = m.sender_id AND recipient_id = m.recipient_id) " +
                 "OR (sender_id = m.recipient_id AND recipient_id = m.sender_id)" +
                 ")";
-        String query = getAllMessagesWithPlayersInfo + condition;
+        String query = getAllMessages + condition;
         return new ArrayList<>(jdbcTemplate.query(query, mapper, id, id));
     }
 
@@ -71,13 +57,13 @@ public class MessageJdbcTemplate implements MessageDao {
     public List<Message> getAllMessagesBetweenPlayers(Long player1Id, Long player2Id) {
         String condition = "WHERE m.sender_id = ? AND m.recipient_id = ? OR m.sender_id = ? AND m.recipient_id = ? " +
                 "ORDER BY m.sending_time";
-        String query = getAllMessagesWithPlayersInfo + condition;
+        String query = getAllMessages + condition;
         return new ArrayList<>(jdbcTemplate.query(query, mapper, player1Id, player2Id, player2Id, player1Id));
     }
 
     @Override
     public List<Message> getAll() {
-        String query = getAllMessagesWithPlayersInfo;
+        String query = getAllMessages;
         return new ArrayList<>(jdbcTemplate.query(query, mapper));
     }
 
@@ -127,15 +113,15 @@ public class MessageJdbcTemplate implements MessageDao {
     }
 
     @Override
-    public void updateReadingTime(List<Long> ids){
-        if(ids.isEmpty()){
+    public void updateReadingTime(List<Long> ids) {
+        if (ids.isEmpty()) {
             return;
         }
         String sql = "UPDATE message SET reading_time = (:time) WHERE message.id in (:ids)";
         MapSqlParameterSource parameters = new MapSqlParameterSource();
-        parameters.addValue("ids",ids);
-        parameters.addValue("time",Timestamp.valueOf(LocalDateTime.now()));
-        namedParameterJdbcTemplate.update(sql,parameters);
-        log.info("Messages reading_time updated. Ids: "+ids);
+        parameters.addValue("ids", ids);
+        parameters.addValue("time", Timestamp.valueOf(LocalDateTime.now()));
+        namedParameterJdbcTemplate.update(sql, parameters);
+        log.info("Messages reading_time updated. Ids: " + ids);
     }
 }

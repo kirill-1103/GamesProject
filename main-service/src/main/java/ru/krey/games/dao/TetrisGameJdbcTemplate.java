@@ -29,22 +29,11 @@ public class TetrisGameJdbcTemplate implements TetrisGameDao {
 
     private final TetrisGameMapper gameMapper;
 
-    private final String getAllGamesWithFullPlayersInfo =
-            "SELECT  g.*," +
-                    "p1.id AS p1_id, p1.last_game_code AS p1_last_game_code, p1.login AS p1_login, " +
-                    "p1.password AS p1_password, p1.email as p1_email, p1.enabled as p1_enabled, " +
-                    "p1.last_sign_in_time as p1_last_sign_in_time, p1.photo AS p1_photo, p1.rating AS p1_rating, " +
-                    "p1.role AS p1_role, p1.sign_up_time AS p1_sign_up_time, " +
-                    "p2.id AS p2_id, p2.last_game_code AS p2_last_game_code, p2.login AS p2_login, " +
-                    "p2.password AS p2_password, p2.email as p2_email, p2.enabled as p2_enabled, " +
-                    "p2.last_sign_in_time as p2_last_sign_in_time, p2.photo as p2_photo, p2.rating as p2_rating," +
-                    "p2.role as p2_role, p2.sign_up_time as p2_sign_up_time " +
-                    "FROM tetris_game AS g " +
-                    "INNER JOIN player AS p1 ON g.player1_id = p1.id " +
-                    "LEFT OUTER JOIN player AS p2 ON g.player2_id = p2.id ";
+    private final String getAllGames =
+            "SELECT  g.* FROM tetris_game AS g";
 
     @Override
-    public TetrisGame saveOrUpdate(TetrisGame game)  {
+    public TetrisGame saveOrUpdate(TetrisGame game) {
         if (game == null) throw new IllegalArgumentException("Tetris object is null");
 
         final Long player2Id = game.getPlayer2() == null ? null : game.getPlayer2().getId();
@@ -61,7 +50,7 @@ public class TetrisGameJdbcTemplate implements TetrisGameDao {
             int rows = 0;
             try {
                 rows = jdbcTemplate.update(query, game.getPlayer1().getId(), player2Id,
-                        game.getStartTime(), game.getEndTime(), winnerId, TetrisField.toJson(game.getField1()),TetrisField.toJson(game.getField2()),
+                        game.getStartTime(), game.getEndTime(), winnerId, TetrisField.toJson(game.getField1()), TetrisField.toJson(game.getField2()),
                         game.getPlayer1Time(), game.getPlayer2Time(), game.getPlayer1Points(), game.getPlayer2Points(),
                         game.getDuration(), game.getId());
             } catch (JsonProcessingException e) {
@@ -101,20 +90,20 @@ public class TetrisGameJdbcTemplate implements TetrisGameDao {
                 } else {
                     ps.setLong(index++, winnerId);
                 }
-                try{
+                try {
                     ps.setString(index++, TetrisField.toJson(game.getField1()));
-                    if(game.getField2() == null){
+                    if (game.getField2() == null) {
                         ps.setObject(index++, null);
-                    }else{
+                    } else {
                         ps.setString(index++, TetrisField.toJson(game.getField2()));
                     }
-                }catch(JsonProcessingException e){
+                } catch (JsonProcessingException e) {
                     throw new RuntimeException("Bad converting tetris field to json");
                 }
                 ps.setLong(index++, game.getPlayer1Time());
-                if(game.getPlayer1Time() == null){
-                    ps.setObject(index++,null);
-                }else{
+                if (game.getPlayer1Time() == null) {
+                    ps.setObject(index++, null);
+                } else {
                     ps.setLong(index++, game.getPlayer2Time());
                 }
                 ps.setInt(index++, game.getPlayer1Points());
@@ -130,7 +119,7 @@ public class TetrisGameJdbcTemplate implements TetrisGameDao {
     public Optional<TetrisGame> getCurrentGameByPlayerId(Long playerId) {
         String condition = " WHERE (g.player1_id = ? OR g.player2_id = ?) AND end_time IS NULL";
 
-        String query = this.getAllGamesWithFullPlayersInfo + condition;
+        String query = this.getAllGames + condition;
 
         return jdbcTemplate.query(query, this.gameMapper, playerId, playerId)
                 .stream().findAny();
@@ -139,7 +128,7 @@ public class TetrisGameJdbcTemplate implements TetrisGameDao {
     @Override
     public Optional<TetrisGame> getOneById(Long gameId) {
         String condition = " WHERE g.id = ?";
-        String query = this.getAllGamesWithFullPlayersInfo + condition;
+        String query = this.getAllGames + condition;
         return jdbcTemplate.query(query, this.gameMapper, gameId)
                 .stream()
                 .findAny();
@@ -152,9 +141,18 @@ public class TetrisGameJdbcTemplate implements TetrisGameDao {
     }
 
     @Override
-    public Set<TetrisGame> getAllGamesWithPlayersByPlayerId(Long playerId){
+    public Set<TetrisGame> getAllGamesWithPlayersByPlayerId(Long playerId) {
         String condition = "WHERE g.player1_id = ? OR g.player2_id = ?";
-        String query = this.getAllGamesWithFullPlayersInfo+condition;
-        return new HashSet<>(jdbcTemplate.query(query,this.gameMapper,playerId,playerId));
+        String query = this.getAllGames + condition;
+        return new HashSet<>(jdbcTemplate.query(query, this.gameMapper, playerId, playerId));
+    }
+
+    @Override
+    public Optional<Long> getCurrentGameIdByPlayerId(Long playerId) {
+        String query = "SELECT id FROM tetris_game " +
+                "WHERE (player1_id = ? OR player2_id = ?) AND end_time IS NULL";
+
+        return jdbcTemplate.query(query, (rs, rowNum) -> rs.getLong("id"), playerId, playerId)
+                .stream().findAny();
     }
 }

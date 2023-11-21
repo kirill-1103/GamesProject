@@ -7,7 +7,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import ru.krey.games.dao.interfaces.PlayerDao;
 import ru.krey.games.domain.Player;
 import ru.krey.games.error.BadRequestException;
 import ru.krey.games.error.NotFoundException;
@@ -26,16 +25,15 @@ import java.util.List;
 public class LocalImageService implements ImageService {
     public static final int max_size = 50000000;
     private final Environment env;
-    private final PlayerDao playerDao;
+
+    private final PlayerService playerService;
 
     private final static Logger log = LoggerFactory.getLogger(LocalImageService.class);
 
     @Override
     public void savePlayerImage(MultipartFile img, Long playerId) throws IOException {
         File uploadDir = getUploadDir();
-        Player player = playerDao.getOneById(playerId)
-                .orElseThrow(() -> new NotFoundException("Не удалось найти пользователя"));
-
+        Player player = playerService.getOneById(playerId);
 
         LocalDateTime time = LocalDateTime.now();
         String fileName = "img_" + time.getYear() + "_" + time.getMonth() + "_" + time.getDayOfMonth()
@@ -52,7 +50,7 @@ public class LocalImageService implements ImageService {
         log.debug(fileToSave.toString());
         img.transferTo(fileToSave);
         player.setPhoto(fileName);
-        Player playerFromDb = playerDao.saveOrUpdate(player);
+        Player playerFromDb = playerService.update(player);
         if(playerFromDb.getPhoto()==null){
             throw new BadRequestException("Не удалось загрузить фото!");
         }

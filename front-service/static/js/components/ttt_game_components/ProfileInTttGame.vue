@@ -42,6 +42,7 @@
   export default {
     name:"ProfileInTttGame",
     props:['player', 'surrender', "player_time", "end", "field","game"],
+
     data:function(){
       return {
         config: {

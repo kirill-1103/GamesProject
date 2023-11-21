@@ -67,7 +67,6 @@ export default {
 	methods: {
 		goto_ttt() {
       console.log(this.intervalHasBeenKilled);
-
 			if (this.canGo() && this.intervalHasBeenKilled){
         this.$router.push({ name: TTT_GAME_PAGE_NAME })
       }

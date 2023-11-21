@@ -34,6 +34,9 @@ public class AuthServiceImpl implements AuthService {
             log.info(String.format("USER %s has logged in", authDto.getLogin()));
         } catch (BadCredentialsException e) {
             throw new BadRequestException("Неверный логин или пароль.");
+        } catch (Exception e){
+//            e.printStackTrace();
+            throw new BadRequestException("Не удалось авторизоваться");
         }
         return createAuthToken(authDto);
     }
@@ -41,6 +44,11 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public ResponseEntity<?> createAuthToken(AuthDto authDto) {
         UserDetails userDetails = userService.loadUserByUsername(authDto.getLogin());
+        return createAuthToken(userDetails);
+    }
+
+    @Override
+    public ResponseEntity<?> createAuthToken(UserDetails userDetails){
         String token = jwtUtils.generateToken(userDetails.getUsername(),
                 userDetails.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()));
         return new ResponseEntity<>(token, HttpStatus.OK);

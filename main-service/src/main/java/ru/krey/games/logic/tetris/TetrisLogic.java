@@ -54,7 +54,7 @@ public class TetrisLogic {
     public void move(int moveCode){
         if(moveCode == TetrisField.MOVE_DOWN && field.moveDownIsPossible()){
             this.lastIterationTime = LocalDateTime.now();
-            System.out.println("MOVE DOWN");
+//            System.out.println("MOVE DOWN");
         }
         field.move(moveCode);
     }

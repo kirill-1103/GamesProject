@@ -265,8 +265,9 @@
 import axios from 'axios'
 import updateAuthUserInStorage from '../service/auth'
 import { fromArrayToDate, fromArrayToDateWithTime } from '../service/datetime'
-import {IMAGE_PATH, IMAGES_PATH, oneByIdPath} from "../service/api/player";
+import {IMAGE_PATH, IMAGES_PATH, img_path} from "../service/api/player";
 import {DIALOG_PATH, INFO_LIST_PATH, ONLINE_PATH, SEND_PATH, SET_READING_TIME_PATH} from "../service/api/message";
+import {playerApi} from "../service/openapi/config/player_openapi_config";
 
 export default {
 	name: 'ChatPage',
@@ -297,16 +298,15 @@ export default {
 			.then(() => {
 				//get player
 				this.player = this.$store.state.player
-				this.signUpTime = fromArrayToDate(this.player.signUpTime)
+				this.signUpTime = this.player.signUpTime.toLocaleDateString()
 				if (this.player.photo && this.player.photo !== '') {
 					axios
-						.post(
-							IMAGE_PATH,
-							{ img_name: this.player.photo },
+						.get(
+							img_path(this.player.photo),
 							this.config
 						)
 						.then(result => {
-							this.imgSrc = 'data:image/;base64, ' + result.data
+							this.imgSrc = 'data:image/;base64, ' + result.data.base64
 							// let img = document.getElementById("player_photo");
 							// img['src'] = this.imgSrc;
 						})
@@ -364,9 +364,9 @@ export default {
 				console.log(res.data)
 				for (let i = 0; i < res.data.length; i++) {
 					if (res.data[i] !== null) {
-						res.data[i] = 'data:image/;base64, ' + res.data[i]
+						res.data[i] = 'data:image/;base64, ' + res.data[i].base64
+            this.dialogs[i].companion.imageUrl = res.data[i].base64
 					}
-					this.dialogs[i].companion.imageUrl = res.data[i]
 				}
 				this.photosIsLoaded = true
 			})
@@ -559,15 +559,31 @@ export default {
 				})
 			} else {
 				if (sender == null) {
-					return axios.get(oneByIdPath(message.senderId)).then(res => {
-						message.sender = res.data
-						message.recipient = recipient
-					})
+          return new Promise((resolve,reject)=>{
+            playerApi.getById(message.sender,(error,data,response)=>{
+              if(error){
+                console.log(error)
+                reject(error)
+              }else{
+                message.sender = data
+                message.recipient = recipient
+                resolve(data)
+              }
+            })
+          })
 				} else if (recipient == null) {
-					return axios.get(oneByIdPath( message.recipient)).then(res => {
-						message.sender = sender
-						message.recipient = res.data
-					})
+          return new Promise((resolve,reject)=>{
+            playerApi.getById(message.recipient,(error,data,response)=>{
+              if(error){
+                console.log(error)
+                reject(error)
+              }else{
+                message.recipient = data
+                message.sender = sender
+                resolve(data)
+              }
+            })
+          })
 				}
 			}
 		},
@@ -665,6 +681,7 @@ export default {
 		},
 		getNewCompanion() {
 			let interval = setInterval(() => {
+        console.log(this.photosIsLoaded)
 				if (this.player && this.photosIsLoaded) {
 					axios
 						.get(DIALOG_PATH, {
@@ -688,16 +705,15 @@ export default {
 								} else {
 									if (dialogCompanion.photo) {
 										axios
-											.post(
-												IMAGE_PATH,
-												{ img_name: dialogCompanion.photo },
+											.get(
+												img_path(this.player.photo),
 												this.config
 											)
 											.then(res => {
 												console.log(res)
 												if (!res.data.error) {
 													dialogCompanion.imageUrl =
-														'data:image/;base64, ' + res.data
+														'data:image/;base64, ' + res.data.base64
 												}
 												this.addDialog(dialogCompanion, [], false, null, true)
 												this.openDialog(

@@ -65,7 +65,8 @@
 
 <script>
 import axios from "axios";
-import {IMAGES_PATH, SEARCH_PATH} from "../service/api/player";
+import {IMAGES_PATH} from "../service/api/player";
+import {playerApi} from "../service/openapi/config/player_openapi_config";
 
 export default {
   name: "PlayersListPage",
@@ -107,42 +108,21 @@ export default {
       if (this.stopTable){
         return
       }
-      axios.post(SEARCH_PATH, {
-        search: this.stringSearch,
-        from: this.from,
-        to: this.to
-      }, this.config).then((res) => {
-        console.log(res)
+      playerApi.searchPlayers(this.stringSearch,this.from, this.to,(err,data,resp)=>{
         if (this.players.length === 0) {
-          this.players = res.data
+          this.players = data
         } else {
-          this.players = this.players.concat(res.data);
+          this.players = this.players.concat(data);
         }
-        if(res.data.length < this.batchSize){
+        if(data.length < this.batchSize){
           this.stopTable = true;
         }
         this.from = this.to;
         this.to += this.batchSize;
         this.waitingTable = false;
         this.searchProcessing = false
-      }).then(() => {
-        let names = [];
-        for (let player of this.players) {
-          names.push(player.photo);
-        }
-        axios.post(IMAGES_PATH, names.slice(this.from - this.batchSize, this.to - this.batchSize)).then((res) => {
-          for (let i = 0; i < res.data.length; i++) {
-            if (res.data[i] !== null) {
-              res.data[i] = "data:image/;base64, " + res.data[i];
-            }
-          }
-          if (this.photos.length === 0) {
-            this.photos = res.data;
-          } else {
-            this.photos = this.photos.concat(res.data)
-          }
-          this.readyPhotos += res.data.length
-        })
+
+        this.setPhotos()
       })
     },
     goToPlayer(id) {
@@ -155,6 +135,25 @@ export default {
           console.log('here')
           this.startSearch();
         }
+      })
+    },
+    setPhotos(){
+      let names = [];
+      for (let player of this.players) {
+        names.push(player.photo);
+      }
+      axios.post(IMAGES_PATH, names.slice(this.from - this.batchSize, this.to - this.batchSize)).then((res) => {
+        for (let i = 0; i < res.data.length; i++) {
+          if (res.data[i] !== null) {
+            res.data[i] = "data:image/;base64, " + res.data[i].base64;
+          }
+        }
+        if (this.photos.length === 0) {
+          this.photos = res.data;
+        } else {
+          this.photos = this.photos.concat(res.data)
+        }
+        this.readyPhotos += res.data.length
       })
     }
   }

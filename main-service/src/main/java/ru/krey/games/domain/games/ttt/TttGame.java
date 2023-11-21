@@ -23,10 +23,15 @@ public class TttGame implements Game, StorableGame {
     private final static String RUSSIAN_NAME = "Крестики нолики";
     private Long id;
 
-    @NonNull
     private Player player1;
 
     private Player player2;
+
+    private Long player1Id;
+
+    private Long player2Id;
+
+    private Long winnerId;
 
     @NonNull
     private LocalDateTime startTime;

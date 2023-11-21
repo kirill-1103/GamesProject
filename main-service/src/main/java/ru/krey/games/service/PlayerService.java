@@ -1,183 +1,96 @@
 package ru.krey.games.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
-import ru.krey.games.dao.interfaces.PlayerDao;
 import ru.krey.games.domain.Player;
-import ru.krey.games.domain.interfaces.Game;
 import ru.krey.games.error.BadRequestException;
 import ru.krey.games.error.NotFoundException;
-import ru.krey.games.service.interfaces.ImageService;
-import ru.krey.games.utils.GameUtils;
-import ru.krey.libs.securitylib.utils.RoleUtils;
+import ru.krey.games.mapper.PlayerMapper;
+import ru.krey.games.openapi.ApiException;
+import ru.krey.games.openapi.ApiResponse;
+import ru.krey.games.openapi.api.PlayerApi;
+import ru.krey.games.openapi.model.PlayerOpenApi;
+import ru.krey.games.utils.http.HttpStatusChecker;
 
-import java.io.IOException;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.function.Consumer;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class PlayerService {
+    private final PlayerApi playerApi;
 
-    private final PlayerDao playerDao;
-
-    private final PasswordEncoder passwordEncoder;
-
-    private final ImageService imageService;
-
-    private final TttGameService tttGameService;
-
-    private final TetrisService tetrisService;
-
-
-    public void updateActive(String username) {
-        playerDao.updateActive(username);
-    }
+    private final PlayerMapper playerMapper;
 
     public List<Player> getActivePlayers() {
-        return playerDao.getActivePlayersByTimeDiff(30);
+
+        try {
+            return playerMapper.toPlayer(playerApi.getActivePlayers());
+        } catch (ApiException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public Player getOneById(Long id) {
-        Player player = playerDao.getOneById(id)
-                .orElseThrow(() -> new NotFoundException("Игрока с таким id не существует!"));
-        player.setPassword(null);
-        return player;
-    }
-
-    public Player getOneByLogin(String login) {
-        Player player = playerDao.getOneByLogin(login)
-                .orElseThrow(() -> new BadRequestException("Авторизованного игрока нет!"));
-        return player;
-    }
-
-    public Optional<? extends Game> getCurrentGame(Long playerId) {
-        Player player = getOneById(playerId);
-        return getCurrentGame(player);
-    }
-
-    public Optional<? extends Game> getCurrentGame(Player player) {
-        if (player.getLastGameCode() == GameUtils.TTT_GAME_CODE) {
-            return tttGameService.getCurrentGameByPlayerId(player.getId());
-        }
-
-        if (player.getLastGameCode() == GameUtils.TETRIS_GAME_CODE) {
-            return tetrisService.getCurrentGameByPlayerId(player.getId());
-        }
-
-        return Optional.empty();
-    }
-
-    public List<Player> getAllOrderedByRating() {
-        return playerDao.getAllOrderByRating();
-    }
-
-    public List<Player> getPartOrderedByRating(Long from, Long to) {
-        List<Player> players = getAllOrderedByRating();
-        if (from >= players.size()) {
-            return new ArrayList<>();
-        }
-        return players.subList(Math.min(players.size() - 1, from.intValue()), Math.min(players.size(), to.intValue()));
-    }
-
-    public Long getPlayerTopById(Long id) {
-        return playerDao.getPlayerTopById(id);
-    }
-
-    public List<Player> search(String search, int from, int to) {
-        List<Player> result = new ArrayList<>();
-
-        Consumer<Player> addIfNotContains = (player) -> {
-            if (!result.contains(player)) {
-                result.add(player);
+        try {
+            ApiResponse<PlayerOpenApi> response =playerApi.getByIdWithHttpInfo(id);
+            if(response.getStatusCode() == HttpStatus.NOT_FOUND.value()){
+                throw new NotFoundException("Игрока с таким id не существует!");
             }
-        };
-
-        playerDao.getOneByLogin(search).ifPresent(addIfNotContains);
-        playerDao.getOneByEmail(search).ifPresent(addIfNotContains);
-
-        playerDao.getPlayersWithNameStarts(search.toLowerCase()).forEach(addIfNotContains);
-        playerDao.getPlayersByPartOfName(search.toLowerCase()).forEach(addIfNotContains);
-        playerDao.getPlayersByPartOfEmail(search.toLowerCase()).forEach(addIfNotContains);
-
-        if (result.isEmpty()) {
-            return result;
+            return playerMapper.toPlayer(response.getData());
+        } catch (ApiException e) {
+            throw new RuntimeException(e);
         }
-        return result.subList(Math.min(result.size() - 1, from), Math.min(result.size(), to));
     }
 
-    public Player updatePlayer(String login, String email, String password, Long id, MultipartFile img) {
-        Player playerFromDb = getOneById(id);
-
-        checkAlreadyExists(login, email);
-
-        playerFromDb.setLogin(login);
-        playerFromDb.setEmail(email);
-
-        if (password != null && !password.isBlank()) {
-            playerFromDb.setPassword(passwordEncoder.encode(password));
-        }
-
-        Player player = playerDao.saveOrUpdate(playerFromDb);
-        playerFromDb.setPassword(null);
-
-        if (img != null && !img.isEmpty()) {
-            try {
-                imageService.savePlayerImage(img, playerFromDb.getId());
-            } catch (IOException e) {
-                throw new RuntimeException("Не удалось загрузить фото. Попробуйте снова в профиле.", e);
+    public Player getOneByIdOrNull(Long id){
+        try {
+            ApiResponse<PlayerOpenApi> response =playerApi.getByIdWithHttpInfo(id);
+            if(response.getStatusCode() == HttpStatus.NOT_FOUND.value()){
+                return null;
             }
+            return playerMapper.toPlayer(response.getData());
+        } catch (ApiException e) {
+            return null;
         }
-        player.setPassword(null);
-        return player;
     }
 
-    public Player createPlayer(MultipartFile image, String login, String email, String password) {
-
-        Player player = buildPlayer(image, login, email, password);
-
-        checkAlreadyExists(login, email);
-
-        player = playerDao.saveOrUpdate(player);
-
-        if (Objects.nonNull(image)) {
-            try {
-                imageService.savePlayerImage(image, player.getId());
-            } catch (IOException e) {
-                throw new RuntimeException("Не удалось загрузить фото. Попробуйте снова в профиле.", e);
+    public Optional<Player> getOneByIdOpt(Long id){
+        try {
+            ApiResponse<PlayerOpenApi> response =playerApi.getByIdWithHttpInfo(id);
+            if(response.getStatusCode() == HttpStatus.NOT_FOUND.value()){
+                return Optional.empty();
             }
+            return Optional.of(playerMapper.toPlayer(response.getData()));
+        } catch (ApiException e) {
+            throw new RuntimeException(e);
         }
-        player.setPassword(null);
-
-        return player;
     }
 
-    private Player buildPlayer(MultipartFile image, String login, String email, String password) {
-        return Player.builder()
-                .login(login)
-                .email(email)
-                .password(passwordEncoder.encode(password))
-                .lastSignInTime(LocalDateTime.now())
-                .signUpTime(LocalDateTime.now())
-                .enabled(true)
-                .rating(0)
-                .role(RoleUtils.ROLE_USER)
-                .build();
+    public Player update(Player player){
+        try{
+            ApiResponse<PlayerOpenApi> response =
+                    playerApi.savePlayerWithHttpInfo(playerMapper.toOpenApi(player));
+            if(!HttpStatusChecker.isSuccessful(response.getStatusCode())){
+                throw new RuntimeException();
+            }
+            return playerMapper.toPlayer(response.getData());
+        }catch (ApiException e){
+            throw new RuntimeException(e);
+        }
     }
 
-    private void checkAlreadyExists(String login, String email) {
-        List<Player> playerList = playerDao.getPlayersByLoginOrEmail(login, email);
-        playerList.stream().findAny().ifPresent((pl) -> {
-            if (pl.getLogin().equals(login))
-                throw new BadRequestException("Пользователь с таким логином уже существует!");
-            else throw new BadRequestException("Пользователь с таким email уже существует!");
-        });
+
+    public Map<Long, PlayerOpenApi> getPlayersByIds(Set<Long> playersIds) {
+        try {
+            Map<String,PlayerOpenApi> map =  playerApi.getPlayersByIds(new ArrayList<>(playersIds));
+            Map<Long, PlayerOpenApi> resultMap = new HashMap<>();
+            map.forEach((key, value) -> resultMap.put(Long.valueOf(key), value));
+            return resultMap;
+        } catch (ApiException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

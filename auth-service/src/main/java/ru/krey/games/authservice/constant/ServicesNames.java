@@ -4,4 +4,6 @@ public class ServicesNames {
 
     public static String ME = "auth-service";
     public final static String MAIN_SERVICE = "main-service";
+
+    public final static String PLAYER_SERVICE = "player-service";
 }

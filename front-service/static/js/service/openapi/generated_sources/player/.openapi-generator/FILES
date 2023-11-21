@@ -1,0 +1,15 @@
+.babelrc
+.gitignore
+.travis.yml
+README.md
+docs/JwtResponseOpenApi.md
+docs/PlayerApi.md
+docs/PlayerOpenApi.md
+git_push.sh
+mocha.opts
+package.json
+src/ApiClient.js
+src/api/PlayerApi.js
+src/index.js
+src/model/JwtResponseOpenApi.js
+src/model/PlayerOpenApi.js

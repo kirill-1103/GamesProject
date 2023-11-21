@@ -75,7 +75,7 @@ router.beforeEach((to,from,next)=>{
         axios.defaults.headers.common['Access-Control-Allow-Credentials'] = 'true'
         axios.defaults.headers.common['Access-Control-Allow-Headers'] = "Origin, X-Requested-With, Content-Type, Accept, Key, Authorization, Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers"
     }else{
-        if(to.fullPath  != REGISTER_PAGE_PATH && to.fullPath !=LOGIN_PAGE_PATH){
+        if(to.fullPath  != REGISTER_PAGE_PATH && to.fullPath != LOGIN_PAGE_PATH){
             console.log(to.fullPath)
             next(LOGIN_PAGE_PATH);
             return;

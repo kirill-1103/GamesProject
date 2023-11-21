@@ -47,10 +47,10 @@
 </template>
 
 <script>
-import {checkLogin, checkEmail, checkPasswordEmptyOk} from "../service/correct_form.js";
+import {checkEmail, checkLogin, checkPasswordEmptyOk} from "../service/correct_form.js";
 import axios from "axios";
-import {UPDATE_PATH} from "../service/api/player";
 import {IMG_SIZE_PATH} from "../service/api/settings";
+import {playerApi, setToken} from "../service/openapi/config/player_openapi_config";
 
 
 export default {
@@ -92,21 +92,21 @@ export default {
       }
       let img = this.form.photo;
       this.form.photo = null;
-      axios.post(UPDATE_PATH,
-          {login:this.form.login,password:this.form.password,email:this.form.email,player_img:img,id:this.form.id}
-          , this.config).then(response => {
-            if(response.data && response.data.error){
-              this.errorMessage = 'Failed to updated from server. '+response.data.message
-              return;
-            }else{
-              localStorage["jwtToken"] = response.data;
+      let opts = {
+        "password": this.form.password,
+        "img": img
+      }
+      playerApi.updatePlayer(this.form.login, this.form.email, this.form.id, opts, (error, data, resp) => {
+            if (error || data.error) {
+              this.errorMessage = 'Failed to updated from server. '
+              console.log(data)
+            } else {
+              localStorage["jwtToken"] = data.accessToken;
+              setToken();
               location.reload()
             }
           }
-      ).catch(error=>{
-        console.log(error)
-        this.errorMessage = 'Failed to register from server. '+error.response.data.message
-      })
+      )
     }
   },
   created() {
@@ -126,7 +126,7 @@ export default {
         password: '',
         email: '',
         photo: '',
-        id:-1
+        id: -1
       },
       config: {
         headers: {

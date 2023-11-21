@@ -50,18 +50,22 @@ import ProfileInTttGame from "../../components/ttt_game_components/ProfileInTttG
 import updateAuthUserInStorage from "../../service/auth.js";
 import GameChatComponent from "../../components/GameChatComponent.vue";
 import TttCanvas from "../../components/ttt_game_components/TttCanvas.vue";
-import {sendMessageToConnectWithTime, connectToTttGame, connectToGameMessages} from "../../service/ws.js";
+import {connectToGameMessages, connectToTttGame} from "../../service/ws.js";
 import axios from "axios";
 import {
-  VICTORY_REASON_DRAW, VICTORY_REASON_PLAYER1_LOSE,
+  VICTORY_REASON_DRAW,
+  VICTORY_REASON_PLAYER1_LOSE,
   VICTORY_REASON_PLAYER1_TIME_WIN,
-  VICTORY_REASON_PLAYER1_WIN, VICTORY_REASON_PLAYER2_LOSE,
-  VICTORY_REASON_PLAYER2_WIN, VICTORY_REASON_PLAYER2_TIME_WIN
+  VICTORY_REASON_PLAYER1_WIN,
+  VICTORY_REASON_PLAYER2_LOSE,
+  VICTORY_REASON_PLAYER2_TIME_WIN,
+  VICTORY_REASON_PLAYER2_WIN
 } from "../../service/TttGameHelper";
 import {fromArrayToHoursMinutesSeconds, fromStringToHoursMinutesSeconds} from "../../service/datetime";
-import {IMAGE_PATH, oneByIdPath} from "../../service/api/player";
+import {img_path} from "../../service/api/player";
 import {gameMessagesByCodeAndIdPath} from "../../service/api/game_message";
 import {TTT_MAKE_MOVE_PATH, tttOneByPlayerIdPath} from "../../service/api/ttt";
+import {playerApi} from "../../service/openapi/config/player_openapi_config";
 
 export default {
   name: "TttGamePage",
@@ -100,7 +104,15 @@ export default {
     } else {
       updateAuthUserInStorage(this.$store).then(() => {
         this.player = this.$store.state.player;
-        this.player.img_data = this.$store.state.playerPhoto;
+        if(this.player.photo){
+          let interval =
+              setInterval(()=> {
+                if(this.$store.state.playerPhoto){
+                  this.player.img_data = this.$store.state.playerPhoto;
+                  clearInterval(interval)
+                }
+              },100)
+        }
         this.startGame();
       })
     }
@@ -133,6 +145,7 @@ export default {
     updateGameFromDb() {
       axios.get(tttOneByPlayerIdPath(this.$store.state.playerGameId)).then((response) => {
         this.game = response.data;
+        console.log(this.game)
         connectToTttGame(this.game.id, this.updateState, this.$store);
       }).catch((error) => {
         console.log(error)
@@ -165,15 +178,19 @@ export default {
         }else{
           id = game.player2Id
         }
-        axios.get(oneByIdPath(id)).then(result=>{
-          this.player_2 = result.data
-          if(this.player_2.photo){
-            axios.post(IMAGE_PATH, {img_name: this.player_2.photo}, this.config).then((result) => {
-              this.player_2.img_data = "data:image/;base64, " + result.data;
-            }).catch(err => {
-              console.log("ERR:");
-              console.log(err)
-            })
+        playerApi.getById(id, (error, data, response) => {
+          if (error) {
+            console.log(error)
+          } else {
+            this.player_2 = data
+            if (this.player_2.photo) {
+              axios.get(img_path(this.player_2.photo), this.config).then((result) => {
+                this.player_2.img_data = "data:image/;base64, " + result.data.base64;
+              }).catch(err => {
+                console.log("ERR:");
+                console.log(err)
+              })
+            }
           }
         })
       }

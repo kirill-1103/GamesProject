@@ -2,7 +2,6 @@ package ru.krey.games.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.krey.games.dao.interfaces.PlayerDao;
 import ru.krey.games.dao.interfaces.TetrisGameDao;
 import ru.krey.games.domain.Player;
 import ru.krey.games.domain.games.tetris.TetrisGame;
@@ -20,7 +19,7 @@ import java.util.Random;
 public class TetrisService {
     private final TetrisGameDao tetrisDao;
 
-    private final PlayerDao playerDao;
+    private final PlayerService playerService;
 
     public TetrisGame newGame(Long player1Id, Long player2Id) {
         if (player1Id == null) {
@@ -37,8 +36,8 @@ public class TetrisService {
             }
         }
 
-        Player player1 = playerDao.getOneById(player1Id).orElseThrow(NotFoundException::new);
-        Player player2 = player2Id == null ? null : playerDao.getOneById(player2Id).orElseThrow(NotFoundException::new);
+        Player player1 = playerService.getOneByIdOpt(player1Id).orElseThrow(NotFoundException::new);
+        Player player2 = player2Id == null ? null : playerService.getOneByIdOpt(player2Id).orElseThrow(NotFoundException::new);
 
         TetrisGame tetrisGame = TetrisGame.builder()
                 .duration(0)
@@ -52,11 +51,13 @@ public class TetrisService {
                 .build();
         TetrisGame savedGame = tetrisDao.saveOrUpdate(tetrisGame);
         player1.setLastGameCode(GameUtils.TETRIS_GAME_CODE);
-        playerDao.saveOrUpdate(player1);
+        playerService.update(player1);
         if (player2 != null) {
             player2.setLastGameCode(GameUtils.TETRIS_GAME_CODE);
-            playerDao.saveOrUpdate(player2);
+            playerService.update(player2);
         }
+        savedGame.setPlayer1(player1);
+        savedGame.setPlayer2(player2);
         return savedGame;
     }
 
@@ -93,14 +94,31 @@ public class TetrisService {
             }
         }
         if (game.changeRating()) {
-            playerDao.saveOrUpdate(game.getPlayer1());
-            playerDao.saveOrUpdate(game.getPlayer2());
+            playerService.update(game.getPlayer1());
+            playerService.update(game.getPlayer2());
         }
         tetrisDao.saveOrUpdate(game);
     }
 
     public Optional<TetrisGame> getCurrentGameByPlayerId(Long id){
-        return tetrisDao.getCurrentGameByPlayerId(id);
+        Optional<TetrisGame> tetrisGameOpt = tetrisDao.getCurrentGameByPlayerId(id);
+        if(tetrisGameOpt.isEmpty()){
+            return tetrisGameOpt;
+        }
+        TetrisGame tetrisGame = tetrisGameOpt.get();
+        tetrisGame.setPlayer1(playerService.getOneByIdOrNull(tetrisGame.getPlayer1Id()));
+        if(tetrisGame.getPlayer2Id() != null){
+            tetrisGame.setPlayer2(playerService.getOneByIdOrNull(tetrisGame.getPlayer2Id()));
+        }
+        if(tetrisGame.getWinnerId() != null){
+            tetrisGame.setWinner(tetrisGame.getWinnerId().equals(tetrisGame.getPlayer1Id())
+                    ? tetrisGame.getPlayer1()
+                    : tetrisGame.getPlayer2());
+        }
+        return Optional.of(tetrisGame);
     }
 
+    public Optional<Long> getCurrentGameIdByPlayerId(Long id){
+        return tetrisDao.getCurrentGameIdByPlayerId(id);
+    }
 }

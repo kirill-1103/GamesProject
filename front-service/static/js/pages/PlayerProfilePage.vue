@@ -81,8 +81,9 @@ import {fromArrayToDate, fromArrayToDateWithTime} from "../service/datetime";
 import {TTT_GAME_CODE} from "../service/TttGameHelper";
 import updateAuthUserInStorage from "../service/auth";
 import {CHAT_PAGE_NAME} from "../router/component_names";
-import {IMAGE_PATH, oneByIdPath, topPlayerByIdPath} from "../service/api/player";
+import {img_path} from "../service/api/player";
 import {GAME_BY_PLAYER_PATH} from "../service/api/game";
+import {playerApi} from "../service/openapi/config/player_openapi_config";
 
 export default {
   name: 'PlayerProfilePage',
@@ -132,27 +133,27 @@ export default {
   },
   methods: {
     getUser(id) {
-      console.log(id)
-      axios.get(oneByIdPath(id)).then((result) => {
-        this.player = result.data
-        this.signUpTime = fromArrayToDate(this.player.signUpTime)
-        if (this.player.photo && this.player.photo !== '') {
-          axios.post(IMAGE_PATH, {img_name: this.player.photo}, this.config).then((result) => {
-            if(result.data.error == true){
-              this.player.photo = null;
-            }else{
-              this.imgSrc = "data:image/;base64, " + result.data;
-              let img = document.getElementById("player_photo");
-              img['src'] = this.imgSrc;
-            }
-          }).catch(err => {
-            console.log("ERR:");
-            console.log(err)
-          })
+      playerApi.getById(id, (error, data, response) => {
+        if (error) {
+          this.notFound = true
+        } else {
+          this.player = data
+          this.signUpTime = this.player.signUpTime.toLocaleDateString()
+          if (this.player.photo && this.player.photo !== '') {
+            axios.get(img_path(this.player.photo), this.config).then((result) => {
+              if(result.data.error == true){
+                this.player.photo = null;
+              }else{
+                this.imgSrc = "data:image/;base64, " + result.data.base64;
+                let img = document.getElementById("player_photo");
+                img['src'] = this.imgSrc;
+              }
+            }).catch(err => {
+              console.log("ERR:");
+              console.log(err)
+            })
+          }
         }
-      }).catch(err => {
-        console.log('err')
-        this.notFound = true;
       })
     },
     getGamesTable() {
@@ -215,8 +216,14 @@ export default {
             clearInterval(interval)
             return;
           }
-          axios.get(topPlayerByIdPath(this.$route.params.id)).then(res => {
-            this.playerTop = res.data;
+          console.log(playerApi)
+          playerApi.getPlayerTop(this.$route.params.id,(response,data,error)=>{
+            if(error){
+              console.log(error)
+            }else{
+              console.log(data)
+              this.playerTop = data;
+            }
           })
           clearInterval(interval);
         }

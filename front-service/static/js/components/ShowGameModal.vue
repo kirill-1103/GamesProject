@@ -26,8 +26,8 @@
 import axios from "axios";
 import {TTT_GAME_CODE} from "../service/TttGameHelper";
 import ShowTttGameComponent from "./ttt_game_components/ShowTttGameComponent.vue";
-import {oneByIdPath} from "../service/api/player";
 import {TTT_MOVE_ALL} from "../service/api/ttt";
+import {playerApi} from "../service/openapi/config/player_openapi_config";
 
 export default {
   name: "ShowGame",
@@ -86,8 +86,12 @@ export default {
             console.log(this.game.game)
 
             if (entityId !== -1) {
-              axios.get(oneByIdPath(entityId)).then((result) => {
-                this.entity = result.data;
+              playerApi.getById(entityId,(error,data,response)=>{
+                if(error){
+                  console.log(error)
+                }else{
+                  this.entity = data
+                }
               })
             }else{
               this.entity = null;

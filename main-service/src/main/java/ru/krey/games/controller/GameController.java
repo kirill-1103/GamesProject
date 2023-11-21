@@ -1,10 +1,8 @@
 package ru.krey.games.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 import ru.krey.games.domain.interfaces.Game;
 import ru.krey.games.dto.GameStatisticDto;
 import ru.krey.games.service.GameService;
@@ -26,5 +24,10 @@ public class GameController {
             String entityName = game.getEntityNameByPlayerId(id);
             return GameStatisticDto.byInfo(game, entityName, gameResult);
         }).collect(Collectors.toList());
+    }
+
+    @GetMapping("/current/{player_id}/{game_code}")
+    public ResponseEntity<?> getCurrentGameId(@PathVariable("player_id")  Long playerId, @PathVariable("game_code") Integer gameCode){
+        return gameService.getCurrentGameId(playerId,gameCode);
     }
 }

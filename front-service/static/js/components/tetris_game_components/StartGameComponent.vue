@@ -21,10 +21,9 @@
 <script>
 import axios from "axios";
 import SearchGameModal from "../SearchGameModal.vue";
-import {connectToSearchResult, connectToTetrisSearchResult} from "../../service/ws";
+import {connectToTetrisSearchResult} from "../../service/ws";
 import {TETRIS_GAME_CODE} from "../../service/GameHelper";
-import {COMPUTER_PATH, TETRIS_SEARCH_STOP_PATH} from "../../service/api/tetris";
-import {SEARCH_PATH} from "../../service/api/player";
+import {COMPUTER_PATH, TETRIS_SEARCH_PATH, TETRIS_SEARCH_STOP_PATH} from "../../service/api/tetris";
 
 export default {
   name: "StartGameComponent",
@@ -80,7 +79,7 @@ export default {
       let data = {
         player_id: this.$store.state.player.id,
       }
-      axios.post(SEARCH_PATH, {player_id: this.$store.state.player.id,}, this.config)
+      axios.post(TETRIS_SEARCH_PATH, {player_id: this.$store.state.player.id,}, this.config)
           .then(()=>{      this.$store.commit("setInSearch", true);})
       connectToTetrisSearchResult(data.player_id, this.setSettingsAndStartGame)
     },

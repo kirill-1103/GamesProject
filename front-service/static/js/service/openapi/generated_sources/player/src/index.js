@@ -13,8 +13,11 @@
 
 
 import ApiClient from './ApiClient';
+import FriendRequestOpenApi from './model/FriendRequestOpenApi';
+import FriendResponseEnumOpenApi from './model/FriendResponseEnumOpenApi';
 import JwtResponseOpenApi from './model/JwtResponseOpenApi';
 import PlayerOpenApi from './model/PlayerOpenApi';
+import FriendsApi from './api/FriendsApi';
 import PlayerApi from './api/PlayerApi';
 
 
@@ -57,6 +60,18 @@ export {
     ApiClient,
 
     /**
+     * The FriendRequestOpenApi model constructor.
+     * @property {module:model/FriendRequestOpenApi}
+     */
+    FriendRequestOpenApi,
+
+    /**
+     * The FriendResponseEnumOpenApi model constructor.
+     * @property {module:model/FriendResponseEnumOpenApi}
+     */
+    FriendResponseEnumOpenApi,
+
+    /**
      * The JwtResponseOpenApi model constructor.
      * @property {module:model/JwtResponseOpenApi}
      */
@@ -67,6 +82,12 @@ export {
      * @property {module:model/PlayerOpenApi}
      */
     PlayerOpenApi,
+
+    /**
+    * The FriendsApi service constructor.
+    * @property {module:api/FriendsApi}
+    */
+    FriendsApi,
 
     /**
     * The PlayerApi service constructor.

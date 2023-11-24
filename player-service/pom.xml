@@ -181,6 +181,7 @@
                             <modelPackage>ru.krey.games.playerservice.openapi.model</modelPackage>
                             <generateModelTests>false</generateModelTests>
                             <generateApiTests>false</generateApiTests>
+
                             <supportingFilesToGenerate>
                                 ApiUtil.java
                             </supportingFilesToGenerate>

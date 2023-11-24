@@ -367,6 +367,207 @@ paths:
         '401':
           $ref: "#/components/responses/UnauthorizedError"
 
+  /friends:
+    get:
+      summary: Get friends
+      tags:
+        - Friends
+      operationId: getFriends
+      parameters:
+        - in: query
+          name: id
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - in: query
+          name: from
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - in: query
+          name: to
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: List of friends
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/PlayerOpenApi"
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+
+  /friends/{player_id}/{friend_id}:
+    delete:
+      summary: remove friend
+      tags:
+        - Friends
+      operationId: removeFriend
+      parameters:
+        - in: path
+          name: friend_id
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - in: path
+          name: player_id
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Successfully
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+        '404':
+          description: Friend or player not found
+
+  /friends/request:
+    post:
+      summary: send friend request
+      tags:
+        - Friends
+      operationId: sendFriendRequest
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/FriendRequestOpenApi"
+      responses:
+        '200':
+          description: Successfully
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+        '404':
+          description: Player not found
+
+  /friends/request/{request_id}:
+    delete:
+      summary: revoke friend request
+      tags:
+        - Friends
+      operationId: revokeFriendRequest
+      parameters:
+        - in: path
+          name: request_id
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Successfully
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+        '404':
+          description: Request not found
+
+  /friends/request/accept/{request_id}:
+    put:
+      summary: accept friend request
+      tags:
+        - Friends
+      operationId: acceptFriendRequest
+      parameters:
+        - in: path
+          name: request_id
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Successfully
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+        '404':
+          description: Request not found
+
+  /friends/request/reject/{request_id}:
+    put:
+      summary: reject friend request
+      tags:
+        - Friends
+      operationId: rejectFriendRequest
+      parameters:
+        - in: path
+          name: request_id
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Successfully
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+        '404':
+          description: Request not found
+
+  /friends/request/sent/{player_id}:
+    get:
+      summary: get sent friend requests
+      tags:
+        - Friends
+      operationId: getSentFriendRequest
+      parameters:
+        - in: path
+          name: player_id
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: List of sent requests
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/FriendRequestOpenApi"
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+        '404':
+          description: player not found
+
+  /friends/request/received/{player_id}:
+    get:
+      summary: get received friend requests
+      tags:
+        - Friends
+      operationId: getReceivedFriendRequest
+      parameters:
+        - in: path
+          name: player_id
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: List of received requests
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/FriendRequestOpenApi"
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+        '404':
+          description: player not found
+
 
 components:
   securitySchemes:
@@ -457,3 +658,35 @@ components:
           pattern: ^Bearer\s.+$
         user:
           $ref: "#/components/schemas/PlayerOpenApi"
+
+    FriendRequestOpenApi:
+      type: object
+      required:
+        - sender_id
+        - receiver_id
+      properties:
+        id:
+          type: integer
+          format: int64
+        sender_id:
+          type: integer
+          format: int64
+        receiver_id:
+          type: integer
+          format: int64
+        response:
+          $ref: "#/components/schemas/FriendResponseEnumOpenApi"
+        request_date:
+          type: string
+          format: date-time
+        response_date:
+          type: string
+          format: date-time
+
+    FriendResponseEnumOpenApi:
+      type: string
+      enum:
+        - ACCEPT
+        - REJECT
+        - PENDING
+        - REVOKED

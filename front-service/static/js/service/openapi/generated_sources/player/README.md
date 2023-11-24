@@ -101,11 +101,8 @@ Please follow the [installation](#installation) instruction and execute the foll
 var ApiTitle = require('api_title');
 
 
-var api = new ApiTitle.PlayerApi()
-var player = new ApiTitle.PlayerOpenApi(); // {PlayerOpenApi} 
-var opts = {
-  'img': "/path/to/file" // {File} Image's file
-};
+var api = new ApiTitle.FriendsApi()
+var requestId = 789; // {Number} 
 var callback = function(error, data, response) {
   if (error) {
     console.error(error);
@@ -113,17 +110,26 @@ var callback = function(error, data, response) {
     console.log('API called successfully.');
   }
 };
-api.createPlayer(player, opts, callback);
+api.acceptFriendRequest(requestId, callback);
 
 ```
 
 ## Documentation for API Endpoints
 
-All URIs are relative to *http://localhost:8080/api/player*
+All URIs are relative to *http://localhost:8084/api/player*
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
+*ApiTitle.FriendsApi* | [**acceptFriendRequest**](docs/FriendsApi.md#acceptFriendRequest) | **PUT** /friends/request/accept/{request_id} | accept friend request
+*ApiTitle.FriendsApi* | [**getFriends**](docs/FriendsApi.md#getFriends) | **GET** /friends | Get friends
+*ApiTitle.FriendsApi* | [**getReceivedFriendRequest**](docs/FriendsApi.md#getReceivedFriendRequest) | **GET** /friends/request/received/{player_id} | get received friend requests
+*ApiTitle.FriendsApi* | [**getSentFriendRequest**](docs/FriendsApi.md#getSentFriendRequest) | **GET** /friends/request/sent/{player_id} | get sent friend requests
+*ApiTitle.FriendsApi* | [**rejectFriendRequest**](docs/FriendsApi.md#rejectFriendRequest) | **PUT** /friends/request/reject/{request_id} | reject friend request
+*ApiTitle.FriendsApi* | [**removeFriend**](docs/FriendsApi.md#removeFriend) | **DELETE** /friends/{player_id}/{friend_id} | remove friend
+*ApiTitle.FriendsApi* | [**revokeFriendRequest**](docs/FriendsApi.md#revokeFriendRequest) | **DELETE** /friends/request/{request_id} | revoke friend request
+*ApiTitle.FriendsApi* | [**sendFriendRequest**](docs/FriendsApi.md#sendFriendRequest) | **POST** /friends/request | send friend request
 *ApiTitle.PlayerApi* | [**createPlayer**](docs/PlayerApi.md#createPlayer) | **POST** /new | Create player
+*ApiTitle.PlayerApi* | [**getActivePlayers**](docs/PlayerApi.md#getActivePlayers) | **GET** /active | Get all online users
 *ApiTitle.PlayerApi* | [**getAllOrderedByRatingStepByStep**](docs/PlayerApi.md#getAllOrderedByRatingStepByStep) | **GET** /rating/{from}/{to} | Get players sorting by rating step by step
 *ApiTitle.PlayerApi* | [**getAuthenticatedUser**](docs/PlayerApi.md#getAuthenticatedUser) | **GET** /authenticated | Current player info
 *ApiTitle.PlayerApi* | [**getById**](docs/PlayerApi.md#getById) | **GET** /{id} | Player Info
@@ -131,6 +137,8 @@ Class | Method | HTTP request | Description
 *ApiTitle.PlayerApi* | [**getCurrentGameCode**](docs/PlayerApi.md#getCurrentGameCode) | **GET** /currentGameCode/{player_id} | Get current game code
 *ApiTitle.PlayerApi* | [**getCurrentGameId**](docs/PlayerApi.md#getCurrentGameId) | **GET** /currentGameId/{player_id} | Get current game id
 *ApiTitle.PlayerApi* | [**getPlayerTop**](docs/PlayerApi.md#getPlayerTop) | **GET** /top/{id} | Get player position in top by player id
+*ApiTitle.PlayerApi* | [**getPlayersByIds**](docs/PlayerApi.md#getPlayersByIds) | **POST** /ids | get players by ids
+*ApiTitle.PlayerApi* | [**savePlayer**](docs/PlayerApi.md#savePlayer) | **POST** /save | Save player
 *ApiTitle.PlayerApi* | [**searchPlayers**](docs/PlayerApi.md#searchPlayers) | **GET** /search | Search players
 *ApiTitle.PlayerApi* | [**updateActive**](docs/PlayerApi.md#updateActive) | **POST** /update-active | Update active
 *ApiTitle.PlayerApi* | [**updatePlayer**](docs/PlayerApi.md#updatePlayer) | **POST** /update | Update player
@@ -138,6 +146,8 @@ Class | Method | HTTP request | Description
 
 ## Documentation for Models
 
+ - [ApiTitle.FriendRequestOpenApi](docs/FriendRequestOpenApi.md)
+ - [ApiTitle.FriendResponseEnumOpenApi](docs/FriendResponseEnumOpenApi.md)
  - [ApiTitle.JwtResponseOpenApi](docs/JwtResponseOpenApi.md)
  - [ApiTitle.PlayerOpenApi](docs/PlayerOpenApi.md)
 

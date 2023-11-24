@@ -2,6 +2,9 @@
 .gitignore
 .travis.yml
 README.md
+docs/FriendRequestOpenApi.md
+docs/FriendResponseEnumOpenApi.md
+docs/FriendsApi.md
 docs/JwtResponseOpenApi.md
 docs/PlayerApi.md
 docs/PlayerOpenApi.md
@@ -9,7 +12,13 @@ git_push.sh
 mocha.opts
 package.json
 src/ApiClient.js
+src/api/FriendsApi.js
 src/api/PlayerApi.js
 src/index.js
+src/model/FriendRequestOpenApi.js
+src/model/FriendResponseEnumOpenApi.js
 src/model/JwtResponseOpenApi.js
 src/model/PlayerOpenApi.js
+test/api/FriendsApi.spec.js
+test/model/FriendRequestOpenApi.spec.js
+test/model/FriendResponseEnumOpenApi.spec.js

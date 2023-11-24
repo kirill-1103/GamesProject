@@ -1,10 +1,11 @@
 # ApiTitle.PlayerApi
 
-All URIs are relative to *http://localhost:8080/api/player*
+All URIs are relative to *http://localhost:8084/api/player*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**createPlayer**](PlayerApi.md#createPlayer) | **POST** /new | Create player
+[**getActivePlayers**](PlayerApi.md#getActivePlayers) | **GET** /active | Get all online users
 [**getAllOrderedByRatingStepByStep**](PlayerApi.md#getAllOrderedByRatingStepByStep) | **GET** /rating/{from}/{to} | Get players sorting by rating step by step
 [**getAuthenticatedUser**](PlayerApi.md#getAuthenticatedUser) | **GET** /authenticated | Current player info
 [**getById**](PlayerApi.md#getById) | **GET** /{id} | Player Info
@@ -12,6 +13,8 @@ Method | HTTP request | Description
 [**getCurrentGameCode**](PlayerApi.md#getCurrentGameCode) | **GET** /currentGameCode/{player_id} | Get current game code
 [**getCurrentGameId**](PlayerApi.md#getCurrentGameId) | **GET** /currentGameId/{player_id} | Get current game id
 [**getPlayerTop**](PlayerApi.md#getPlayerTop) | **GET** /top/{id} | Get player position in top by player id
+[**getPlayersByIds**](PlayerApi.md#getPlayersByIds) | **POST** /ids | get players by ids
+[**savePlayer**](PlayerApi.md#savePlayer) | **POST** /save | Save player
 [**searchPlayers**](PlayerApi.md#searchPlayers) | **GET** /search | Search players
 [**updateActive**](PlayerApi.md#updateActive) | **POST** /update-active | Update active
 [**updatePlayer**](PlayerApi.md#updatePlayer) | **POST** /update | Update player
@@ -63,6 +66,45 @@ No authorization required
 
 - **Content-Type**: multipart/form-data
 - **Accept**: Not defined
+
+
+## getActivePlayers
+
+> [PlayerOpenApi] getActivePlayers()
+
+Get all online users
+
+### Example
+
+```javascript
+import ApiTitle from 'api_title';
+
+let apiInstance = new ApiTitle.PlayerApi();
+apiInstance.getActivePlayers((error, data, response) => {
+  if (error) {
+    console.error(error);
+  } else {
+    console.log('API called successfully. Returned data: ' + data);
+  }
+});
+```
+
+### Parameters
+
+This endpoint does not need any parameter.
+
+### Return type
+
+[**[PlayerOpenApi]**](PlayerOpenApi.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: application/json
 
 
 ## getAllOrderedByRatingStepByStep
@@ -373,6 +415,96 @@ No authorization required
 ### HTTP request headers
 
 - **Content-Type**: Not defined
+- **Accept**: application/json
+
+
+## getPlayersByIds
+
+> {String: PlayerOpenApi} getPlayersByIds(requestBody)
+
+get players by ids
+
+### Example
+
+```javascript
+import ApiTitle from 'api_title';
+
+let apiInstance = new ApiTitle.PlayerApi();
+let requestBody = [null]; // [Number] | 
+apiInstance.getPlayersByIds(requestBody, (error, data, response) => {
+  if (error) {
+    console.error(error);
+  } else {
+    console.log('API called successfully. Returned data: ' + data);
+  }
+});
+```
+
+### Parameters
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **requestBody** | [**[Number]**](Number.md)|  | 
+
+### Return type
+
+[**{String: PlayerOpenApi}**](PlayerOpenApi.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+
+## savePlayer
+
+> PlayerOpenApi savePlayer(playerOpenApi)
+
+Save player
+
+### Example
+
+```javascript
+import ApiTitle from 'api_title';
+let defaultClient = ApiTitle.ApiClient.instance;
+// Configure Bearer (JWT) access token for authorization: bearerAuth
+let bearerAuth = defaultClient.authentications['bearerAuth'];
+bearerAuth.accessToken = "YOUR ACCESS TOKEN"
+
+let apiInstance = new ApiTitle.PlayerApi();
+let playerOpenApi = new ApiTitle.PlayerOpenApi(); // PlayerOpenApi | 
+apiInstance.savePlayer(playerOpenApi, (error, data, response) => {
+  if (error) {
+    console.error(error);
+  } else {
+    console.log('API called successfully. Returned data: ' + data);
+  }
+});
+```
+
+### Parameters
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **playerOpenApi** | [**PlayerOpenApi**](PlayerOpenApi.md)|  | 
+
+### Return type
+
+[**PlayerOpenApi**](PlayerOpenApi.md)
+
+### Authorization
+
+[bearerAuth](../README.md#bearerAuth)
+
+### HTTP request headers
+
+- **Content-Type**: application/json
 - **Accept**: application/json
 
 

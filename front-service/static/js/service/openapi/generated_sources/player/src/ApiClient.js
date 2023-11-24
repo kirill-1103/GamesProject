@@ -33,11 +33,11 @@ class ApiClient {
      * Overrides the default value set in spec file if present
      * @param {String} basePath
      */
-    constructor(basePath = 'http://localhost:8080/api/player') {
+    constructor(basePath = 'http://localhost:8084/api/player') {
         /**
          * The base URL against which to resolve every API call's (relative) path.
          * @type {String}
-         * @default http://localhost:8080/api/player
+         * @default http://localhost:8084/api/player
          */
         this.basePath = basePath.replace(/\/+$/, '');
 
@@ -593,7 +593,7 @@ class ApiClient {
     hostSettings() {
         return [
             {
-              'url': "http://localhost:8080/api/player",
+              'url': "http://localhost:8084/api/player",
               'description': "user server",
             }
       ];

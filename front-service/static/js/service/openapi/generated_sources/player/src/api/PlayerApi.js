@@ -81,6 +81,42 @@ export default class PlayerApi {
     }
 
     /**
+     * Callback function to receive the result of the getActivePlayers operation.
+     * @callback module:api/PlayerApi~getActivePlayersCallback
+     * @param {String} error Error message, if any.
+     * @param {Array.<module:model/PlayerOpenApi>} data The data returned by the service call.
+     * @param {String} response The complete HTTP response.
+     */
+
+    /**
+     * Get all online users
+     * @param {module:api/PlayerApi~getActivePlayersCallback} callback The callback function, accepting three arguments: error, data, response
+     * data is of type: {@link Array.<module:model/PlayerOpenApi>}
+     */
+    getActivePlayers(callback) {
+      let postBody = null;
+
+      let pathParams = {
+      };
+      let queryParams = {
+      };
+      let headerParams = {
+      };
+      let formParams = {
+      };
+
+      let authNames = [];
+      let contentTypes = [];
+      let accepts = ['application/json'];
+      let returnType = [PlayerOpenApi];
+      return this.apiClient.callApi(
+        '/active', 'GET',
+        pathParams, queryParams, headerParams, formParams, postBody,
+        authNames, contentTypes, accepts, returnType, null, callback
+      );
+    }
+
+    /**
      * Callback function to receive the result of the getAllOrderedByRatingStepByStep operation.
      * @callback module:api/PlayerApi~getAllOrderedByRatingStepByStepCallback
      * @param {String} error Error message, if any.
@@ -369,6 +405,88 @@ export default class PlayerApi {
       let returnType = 'Number';
       return this.apiClient.callApi(
         '/top/{id}', 'GET',
+        pathParams, queryParams, headerParams, formParams, postBody,
+        authNames, contentTypes, accepts, returnType, null, callback
+      );
+    }
+
+    /**
+     * Callback function to receive the result of the getPlayersByIds operation.
+     * @callback module:api/PlayerApi~getPlayersByIdsCallback
+     * @param {String} error Error message, if any.
+     * @param {Object.<String, module:model/{String: PlayerOpenApi}>} data The data returned by the service call.
+     * @param {String} response The complete HTTP response.
+     */
+
+    /**
+     * get players by ids
+     * @param {Array.<Number>} requestBody 
+     * @param {module:api/PlayerApi~getPlayersByIdsCallback} callback The callback function, accepting three arguments: error, data, response
+     * data is of type: {@link Object.<String, module:model/{String: PlayerOpenApi}>}
+     */
+    getPlayersByIds(requestBody, callback) {
+      let postBody = requestBody;
+      // verify the required parameter 'requestBody' is set
+      if (requestBody === undefined || requestBody === null) {
+        throw new Error("Missing the required parameter 'requestBody' when calling getPlayersByIds");
+      }
+
+      let pathParams = {
+      };
+      let queryParams = {
+      };
+      let headerParams = {
+      };
+      let formParams = {
+      };
+
+      let authNames = [];
+      let contentTypes = ['application/json'];
+      let accepts = ['application/json'];
+      let returnType = {'String': PlayerOpenApi};
+      return this.apiClient.callApi(
+        '/ids', 'POST',
+        pathParams, queryParams, headerParams, formParams, postBody,
+        authNames, contentTypes, accepts, returnType, null, callback
+      );
+    }
+
+    /**
+     * Callback function to receive the result of the savePlayer operation.
+     * @callback module:api/PlayerApi~savePlayerCallback
+     * @param {String} error Error message, if any.
+     * @param {module:model/PlayerOpenApi} data The data returned by the service call.
+     * @param {String} response The complete HTTP response.
+     */
+
+    /**
+     * Save player
+     * @param {module:model/PlayerOpenApi} playerOpenApi 
+     * @param {module:api/PlayerApi~savePlayerCallback} callback The callback function, accepting three arguments: error, data, response
+     * data is of type: {@link module:model/PlayerOpenApi}
+     */
+    savePlayer(playerOpenApi, callback) {
+      let postBody = playerOpenApi;
+      // verify the required parameter 'playerOpenApi' is set
+      if (playerOpenApi === undefined || playerOpenApi === null) {
+        throw new Error("Missing the required parameter 'playerOpenApi' when calling savePlayer");
+      }
+
+      let pathParams = {
+      };
+      let queryParams = {
+      };
+      let headerParams = {
+      };
+      let formParams = {
+      };
+
+      let authNames = ['bearerAuth'];
+      let contentTypes = ['application/json'];
+      let accepts = ['application/json'];
+      let returnType = PlayerOpenApi;
+      return this.apiClient.callApi(
+        '/save', 'POST',
         pathParams, queryParams, headerParams, formParams, postBody,
         authNames, contentTypes, accepts, returnType, null, callback
       );

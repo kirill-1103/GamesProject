@@ -1,12 +1,11 @@
-package ru.krey.games.playerservice.controller;
+package ru.krey.games.playerservice.delegate;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 import ru.krey.games.playerservice.domain.Player;
 import ru.krey.games.playerservice.error.BadRequestException;
@@ -16,16 +15,13 @@ import ru.krey.games.playerservice.openapi.model.PlayerOpenApi;
 import ru.krey.games.playerservice.service.PlayerServiceImpl;
 import ru.krey.games.playerservice.service.interfaces.AuthService;
 import ru.krey.games.playerservice.utils.mapper.mapstruct.PlayerMapper;
-import ru.krey.libs.securitylib.filter.JwtRequestFilter;
 
-import java.time.LocalDateTime;
 import java.util.*;
 
-@RestController
-@RequestMapping("/api/player/")
+@Component
 @RequiredArgsConstructor
 @Slf4j
-public class PlayerController implements PlayerApiDelegate {
+public class PlayerDelegateImpl implements PlayerApiDelegate {
 
     private final PlayerServiceImpl playerService;
 
@@ -34,9 +30,8 @@ public class PlayerController implements PlayerApiDelegate {
     private final PlayerMapper playerMapper;
 
     @Override
-    @PostMapping(value="/new")
-    public ResponseEntity<Void> createPlayer(@RequestPart(value = "player",required = false) PlayerOpenApi player,
-                                             @RequestPart(required = false) MultipartFile img) {
+    public ResponseEntity<Void> createPlayer( PlayerOpenApi player,
+                                              MultipartFile img) {
         if (player.getLogin() == null || player.getLogin().isBlank() ||
                 player.getEmail() == null || player.getEmail().isBlank() ||
                 player.getPassword() == null || player.getPassword().isBlank()) {
@@ -47,12 +42,11 @@ public class PlayerController implements PlayerApiDelegate {
     }
 
     @Override
-    @PostMapping("/update")
-    public ResponseEntity<JwtResponseOpenApi> updatePlayer(@RequestPart("login") String login,
-                                                           @RequestPart("email") String email,
-                                                           @RequestPart("id") Long id,
-                                                           @RequestPart(value = "password", required = false) String password,
-                                                           @RequestPart(value = "img", required = false) MultipartFile img) {
+    public ResponseEntity<JwtResponseOpenApi> updatePlayer(String login,
+                                                           String email,
+                                                           Long id,
+                                                           String password,
+                                                           MultipartFile img) {
         String playerName = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (login == null || login.isBlank() ||
                 email == null || email.isBlank()) {
@@ -81,8 +75,7 @@ public class PlayerController implements PlayerApiDelegate {
     }
 
     @Override
-    @GetMapping("/rating/{from}/{to}")
-    public ResponseEntity<List<PlayerOpenApi>> getAllOrderedByRatingStepByStep(@PathVariable Long from, @PathVariable Long to) {
+    public ResponseEntity<List<PlayerOpenApi>> getAllOrderedByRatingStepByStep(Long from, Long to) {
         return ResponseEntity.ok(
                 playerService.getPartOrderedByRating(from, to)
                         .stream()
@@ -92,7 +85,6 @@ public class PlayerController implements PlayerApiDelegate {
     }
 
     @Override
-    @GetMapping("/authenticated")
     public ResponseEntity<PlayerOpenApi> getAuthenticatedUser() {
         String userName = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (userName == null) {
@@ -106,24 +98,21 @@ public class PlayerController implements PlayerApiDelegate {
     private final PasswordEncoder passwordEncoder;
 
     @Override
-    @GetMapping("/{id}")
-    public ResponseEntity<PlayerOpenApi> getById(@PathVariable Long id) {
+    public ResponseEntity<PlayerOpenApi> getById(Long id) {
         return ResponseEntity.ok(
                 playerMapper.toOpenApi(playerService.getOneById(id))
         );
     }
 
     @Override
-    @GetMapping("/login/{login}")
-    public ResponseEntity<PlayerOpenApi> getByLogin(@PathVariable String login) {
+    public ResponseEntity<PlayerOpenApi> getByLogin(String login) {
         return ResponseEntity.ok(
                 playerMapper.toOpenApi(playerService.getOneByLogin(login))
         );
     }
 
     @Override
-    @GetMapping("/currentGameCode/{player_id}")
-    public ResponseEntity<Long> getCurrentGameCode(@PathVariable("player_id") Long playerId) {
+    public ResponseEntity<Long> getCurrentGameCode(Long playerId) {
         return ResponseEntity.ok(
                 playerService.getOneById(playerId).getLastGameCode().longValue()
         );
@@ -131,26 +120,23 @@ public class PlayerController implements PlayerApiDelegate {
 
 
     @Override
-    @GetMapping("/currentGameId/{player_id}")
-    public ResponseEntity<Long> getCurrentGameId(@PathVariable("player_id") Long playerId) {
+    public ResponseEntity<Long> getCurrentGameId(Long playerId) {
         return ResponseEntity.ok(
                 playerService.getCurrentGameId(playerId)
         );
     }
 
     @Override
-    @GetMapping("/top/{id}")
-    public ResponseEntity<Long> getPlayerTop(@PathVariable Long id) {
+    public ResponseEntity<Long> getPlayerTop(Long id) {
         return ResponseEntity.ok(
                 playerService.getPlayerTopById(id)
         );
     }
 
     @Override
-    @GetMapping("/search")
-    public ResponseEntity<List<PlayerOpenApi>> searchPlayers(@RequestParam("search_query") String searchQuery,
-                                                             @RequestParam Long from,
-                                                             @RequestParam Long to) {
+    public ResponseEntity<List<PlayerOpenApi>> searchPlayers(String searchQuery,
+                                                             Long from,
+                                                             Long to) {
         if (from > to) {
             throw new BadRequestException("from>to");
         }
@@ -167,13 +153,11 @@ public class PlayerController implements PlayerApiDelegate {
     }
 
     @Override
-    @GetMapping("/active")
     public ResponseEntity<List<PlayerOpenApi>> getActivePlayers() {
         return ResponseEntity.ok(playerMapper.toOpenApi(playerService.getActivePlayers()));
     }
 
     @Override
-//    @PostMapping("/update-active")
     public ResponseEntity<Void> updateActive() {
         String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (username == null) {
@@ -184,8 +168,7 @@ public class PlayerController implements PlayerApiDelegate {
     }
 
     @Override
-    @PostMapping("/ids")
-    public ResponseEntity<Map<String, PlayerOpenApi>> getPlayersByIds(@RequestBody List<Long> ids) {
+    public ResponseEntity<Map<String, PlayerOpenApi>> getPlayersByIds(List<Long> ids) {
         Set<PlayerOpenApi> players = playerMapper.toOpenApi(playerService.getPlayersByIds(ids));
         Map<String, PlayerOpenApi> map = new HashMap<>();
         players.forEach(player->map.put(player.getId().toString(), player));

@@ -64,7 +64,7 @@ public class TttGameController {
                 TttGameDto.class);
     }
 
-    //TODO: все schedule вынести в отдельные классы
+
     @Scheduled(fixedRate = 100)
     private void gameProcessing() {
         gameKeeper.forEach((g) -> {
